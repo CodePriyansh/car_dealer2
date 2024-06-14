@@ -17,7 +17,6 @@ import styles from "./styles.module.css";
 import Image from "next/image"; // Import Image from next/image
 import { Images } from "@/assets/Images";
 import Button from "@/components/Common/Button/index";
-// import { FaPlus } from "react-icons/fa6";
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
