@@ -15,6 +15,7 @@ import axios from "axios";
 import { useState } from "react";
 import styles from "./styles.module.css";
 import Image from "next/image"; // Import Image from next/image
+import Button from "../Button/page";
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -183,7 +184,7 @@ export default function SignupForm() {
               </div>
 
               <div className={styles.field_wrapper}>
-                <label className={styles.label_Style}>name</label>
+                <label className={styles.label_Style}>shop address</label>
                 <Field
                   name="shopAddress"
                   placeholder="Enter Shop Address"
@@ -247,14 +248,15 @@ export default function SignupForm() {
                   className="text-red-500 text-sm"
                 />
               </div>
-
+{/* 
               <button
                 type="submit"
                 className="w-full p-2 bg-orange-500 text-white rounded"
                 disabled={isSubmitting}
               >
                 {loading ? "Loading..." : "Get OTP"}
-              </button>
+              </button> */}
+              <Button text="Get OTP" className="w-1/2"/>
             </Form>
           )}
         </Formik>
