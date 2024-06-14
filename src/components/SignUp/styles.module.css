@@ -1,23 +1,23 @@
 .wrapper{
-    @apply w-full flex  lg:flex-row flex-col;
+    @apply w-full flex px-4  lg:flex-row flex-col;
 }
 .left_wrapper{
-    @apply flex lg:w-1/2 w-full
+    @apply md:flex hidden  lg:w-1/2 w-full bg-[#f7f7f7]
 }
 .right_wrapper{
-    @apply flex lg:w-1/2 w-full flex-col py-16 justify-center items-center px-4 lg:px-8
+    @apply flex lg:w-1/2 w-full flex-col py-16 justify-center items-center px-4 md:px-8  bg-white;
 }
 .subheading{
-    @apply text-secondary
+    @apply text-secondary font-bold capitalize
 }
 .heading{
-    @apply text-primary text-48 pb-8;
+    @apply text-primary sm:text-[48px] text-[34px] font-bold pb-8 flex justify-center;
 }
 .field_style{
-    @apply py-5 px-6 border border-primary rounded-[50px] w-[280px] w-full
+    @apply py-4 px-6 border border-primary rounded-[50px] sm:w-[280px] w-full placeholder:text-[14px] placeholder:text-greyy outline-none;
 }
 .label_Style{
-    @apply text-base text-black uppercase pb-[10px];
+    @apply text-base text-para uppercase pb-[10px] font-medium;
 }
 .signup_img{
     @apply w-[80%] ;
@@ -25,3 +25,12 @@
 .field_wrapper{
     @apply flex flex-col w-full;
 }
+.info_text{
+    @apply capitalize text-base py-1 text-para;
+
+}
+.dotted_box{
+    @apply my-[10px] rounded border cursor-pointer border-dotted border-greyy w-full flex flex-col justify-center items-center py-14;
+}
+
+

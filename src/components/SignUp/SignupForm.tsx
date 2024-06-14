@@ -12,10 +12,12 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import axios from "axios";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import styles from "./styles.module.css";
 import Image from "next/image"; // Import Image from next/image
-import Button from "../Button/page";
+import { Images } from "@/assets/Images";
+import Button from "@/components/Common/Button/index";
+import { FaPlus } from "react-icons/fa6";
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -76,9 +78,24 @@ export default function SignupForm() {
       setSubmitting(false);
     }
   };
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleDivClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      console.log("Selected file:", file);
+      // Handle the file as needed (e.g., upload, preview, etc.)
+    }
+  };
 
   return (
-    <div className="flex flex-col justify-center items-center w-full bg-white">
+    <div className="flex flex-col justify-center items-center w-full sm:max-w-[584px] max-w-full bg-white">
       <div className="w-full">
         <Formik
           initialValues={initialValues}
@@ -87,7 +104,7 @@ export default function SignupForm() {
         >
           {({ setFieldValue, isSubmitting }) => (
             <Form className="space-y-4">
-              <div className="w-full flex  gap-8">
+              <div className="w-full flex sm:flex-row flex-col gap-8">
                 <div className="flex full flex-col gap-6">
                   <div className={styles.field_wrapper}>
                     <label className={styles.label_Style}>name</label>
@@ -136,7 +153,7 @@ export default function SignupForm() {
                   </div>
                 </div>
 
-                <div className="flex w-1/2 flex-col gap-4">
+                <div className="flex sm:w-1/2 w-full flex-col gap-4">
                   <div className={styles.field_wrapper}>
                     <label className={styles.label_Style}>Mobile Number</label>
 
@@ -188,7 +205,7 @@ export default function SignupForm() {
                 <Field
                   name="shopAddress"
                   placeholder="Enter Shop Address"
-                  className={styles.field_style}
+                  className={`${styles.field_style} !max-w-[584px] !w-full`}
                 />
                 <ErrorMessage
                   name="shopAddress"
@@ -197,7 +214,7 @@ export default function SignupForm() {
                 />
               </div>
 
-              <div>
+              {/* <div>
                 <label className="block">Cover Image</label>
                 <input
                   type="file"
@@ -212,9 +229,9 @@ export default function SignupForm() {
                   component="p"
                   className="text-red-500 text-sm"
                 />
-              </div>
+              </div> */}
 
-              <div>
+              {/* <div>
                 <label className="block">Profile Image</label>
                 <input
                   type="file"
@@ -230,25 +247,63 @@ export default function SignupForm() {
                   component="p"
                   className="text-red-500 text-sm"
                 />
-              </div>
+              </div> */}
 
               <div>
-                <label className="block">Shop Image</label>
-                <input
-                  type="file"
-                  name="shopImage"
-                  onChange={(event) => {
-                    setFieldValue("shopImage", event.currentTarget.files[0]);
-                  }}
-                  className={styles.field_style}
-                />
-                <ErrorMessage
-                  name="shopImage"
-                  component="p"
-                  className="text-red-500 text-sm"
-                />
+                <label className={styles.label_Style}>Add Cover Image</label>
+                <div className={styles.dotted_box}>
+                  <Image src={Images.uploadImg} alt="img" className="w-8 h-8" />
+                  <Button otherStyles="mt-[50px]">
+                    <FaPlus color="#ffffff" />
+                    Add Cover Image
+                  </Button>
+                </div>
               </div>
-{/* 
+
+              <div className="flex w-full sm:flex-row flex-col gap-6">
+                <div className="sm:w-1/2 w-full">
+                  <label className={styles.label_Style}>
+                    Add Profile Image
+                  </label>
+                  <div className={styles.dotted_box}>
+                    <Image
+                      src={Images.uploadImg}
+                      alt="img"
+                      className="w-8 h-8"
+                    />
+                    <Button otherStyles="mt-[50px]">
+                      <FaPlus color="#ffffff" />
+                      Add Profile Image
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="sm:w-1/2 w-full">
+                  <label className={styles.label_Style}>Add Shop Image</label>
+                  <div
+                    className={styles.dotted_box}
+                    onClick={handleDivClick}
+                  >
+                    <Image
+                      src={Images.uploadImg}
+                      alt="img"
+                      className="w-8 h-8"
+                    />
+                    <Button otherStyles="mt-[50px]">
+                      <FaPlus color="#ffffff" />
+                      Add Shop Image
+                    </Button>
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={handleFileChange}
+                      style={{ display: "none" }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* 
               <button
                 type="submit"
                 className="w-full p-2 bg-orange-500 text-white rounded"
@@ -256,7 +311,8 @@ export default function SignupForm() {
               >
                 {loading ? "Loading..." : "Get OTP"}
               </button> */}
-              <Button text="Get OTP" className="w-1/2"/>
+
+              <Button otherStyles="sm:w-[430px] w-full mx-auto">get otp</Button>
             </Form>
           )}
         </Formik>

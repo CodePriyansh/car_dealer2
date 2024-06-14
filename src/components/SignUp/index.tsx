@@ -2,9 +2,10 @@ import React from 'react'
 import styles from './styles.module.css'
 import SignupForm from './SignupForm'
 // import  {Images } from '@/assets/Images'
-import signup from '../../assets/signup_login_image.png'
+import signup from '../../assets/signup_login.png'
 import Image from 'next/image'
 import { url } from 'inspector'
+import { Images } from '@/assets/Images'
 
 export default function Signup() {
   return (
@@ -12,16 +13,22 @@ export default function Signup() {
         <div className={styles.left_wrapper}>
             <div className='w-full h-full'  style={{
                     backgroundImage: `url(${signup.src})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'left'
+                    backgroundSize: 'contain',
+                    backgroundPosition: 'top',
+                    backgroundRepeat:"no-repeat"
                 }}></div>
         </div>
         <div className={styles.right_wrapper}>
-            <img src='' alt='logo'/>
+          <Image src={Images.myCar} alt='logo' width={32} height={32} className='w-8 h-8 sm:w-12 sm:h-12'/>
             <p className={styles.subheading}>My Car</p>
             <p className={styles.heading}>Signup Account</p>
             <SignupForm/>
+            <div className='flex items-center flex-col mt-6'>
+          <p className={styles.info_text}>Have an Account?</p>
+          <p className={styles.info_text}>login</p>
         </div>
+        </div>
+       
     </div>
   )
 }

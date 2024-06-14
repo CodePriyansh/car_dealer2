@@ -19,7 +19,9 @@ const config: Config = {
       // },
       colors:{
         primary:"#EF6E0B",
-        secondary:"#0059A3"
+        secondary:"#0059A3",
+        greyy:'rgba(0, 0, 0, 0.3)',
+        para:'rgba(0, 0, 0, 1)'
       },
       fontSize: {
         48:"48"
