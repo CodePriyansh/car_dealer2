@@ -17,7 +17,6 @@ import styles from "./styles.module.css";
 import Image from "next/image"; // Import Image from next/image
 import { Images } from "@/assets/Images";
 import Button from "@/components/Common/Button/index";
-// import { FaPlus } from "react-icons/fa6";
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
   mobileNumber: yup.string().required("Mobile Number is required"),
@@ -254,6 +253,7 @@ export default function SignupForm() {
                   <Image src={Images.uploadImg} alt="img" className="w-8 h-8" />
                   <Button otherStyles="mt-[50px]">
                     {/* <FaPlus color="#ffffff" /> */}
+                    <Image src={Images.plus} alt="plus" width={20} height={20}/>
                     Add Cover Image
                   </Button>
                 </div>
@@ -272,6 +272,9 @@ export default function SignupForm() {
                     />
                     <Button otherStyles="mt-[50px]">
                       {/* <FaPlus color="#ffffff" /> */}
+                    <Image src={Images.plus} alt="plus" width={20} height={20}/>
+
+
                       Add Profile Image
                     </Button>
                   </div>
@@ -290,6 +293,8 @@ export default function SignupForm() {
                     />
                     <Button otherStyles="mt-[50px]">
                       {/* <FaPlus color="#ffffff" /> */}
+                    <Image src={Images.plus} alt="plus" width={20} height={20}/>
+
                       Add Shop Image
                     </Button>
                     <input
@@ -311,7 +316,7 @@ export default function SignupForm() {
                 {loading ? "Loading..." : "Get OTP"}
               </button> */}
 
-              <Button otherStyles="sm:w-[430px] w-full mx-auto">get otp</Button>
+              <Button otherStyles="sm:w-[430px] w-full mx-auto"  >get otp</Button>
             </Form>
           )}
         </Formik>
