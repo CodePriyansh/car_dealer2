@@ -77,115 +77,113 @@ export default function SignupForm() {
   };
 
   return (
-    <div className="flex bg-gray-100">
-      <div className="flex flex-col justify-center items-center w-full  bg-white">
-        <div className="w-full max-w-md">
-          <Formik
-            initialValues={initialValues}
-            validationSchema={schema}
-            onSubmit={onSubmit}
-          >
-            {({ setFieldValue, isSubmitting }) => (
-              <Form className="space-y-4">
-                <div className="w-full flex  gap-8">
-                  <div className="flex w-1/2 flex-col gap-4">
-                    <div>
-                      <label className={styles.label_Style}>name</label>
-                      <Field
-                        name="name"
-                        placeholder="Enter Your Name"
-                        className={styles.field_style}
-                      />
-                      <ErrorMessage
-                        name="name"
-                        component="p"
-                        className="text-red-500 text-sm"
-                      />
-                    </div>
-
-                    <div>
-                      <label className={styles.label_Style}>
-                        Telephone Number
-                      </label>
-
-                      <Field
-                        name="telephoneNumber"
-                        placeholder="Enter Telephone Number"
-                        className={styles.field_style}
-                      />
-                      <ErrorMessage
-                        name="telephoneNumber"
-                        component="p"
-                        className="text-red-500 text-sm"
-                      />
-                    </div>
-
-                    <div>
-                      <label className={styles.label_Style}>city</label>
-
-                      <Field
-                        name="city"
-                        placeholder="Enter City"
-                        className={styles.field_style}
-                      />
-                      <ErrorMessage
-                        name="city"
-                        component="p"
-                        className="text-red-500 text-sm"
-                      />
-                    </div>
+    <div className="flex flex-col justify-center items-center w-full bg-white">
+      <div className="w-full">
+        <Formik
+          initialValues={initialValues}
+          validationSchema={schema}
+          onSubmit={onSubmit}
+        >
+          {({ setFieldValue, isSubmitting }) => (
+            <Form className="space-y-4">
+              <div className="w-full flex  gap-8">
+                <div className="flex full flex-col gap-6">
+                  <div className={styles.field_wrapper}>
+                    <label className={styles.label_Style}>name</label>
+                    <Field
+                      name="name"
+                      placeholder="Enter Your Name"
+                      className={styles.field_style}
+                    />
+                    <ErrorMessage
+                      name="name"
+                      component="p"
+                      className="text-red-500 text-sm"
+                    />
                   </div>
 
-                  <div className="flex w-1/2 flex-col gap-4">
-                    <div>
-                      <label className={styles.label_Style}>
-                        Mobile Number
-                      </label>
+                  <div className={styles.field_wrapper}>
+                    <label className={styles.label_Style}>
+                      Telephone Number
+                    </label>
 
-                      <Field
-                        name="mobileNumber"
-                        placeholder="Enter Mobile Number"
-                        className={styles.field_style}
-                      />
-                      <ErrorMessage
-                        name="mobileNumber"
-                        component="p"
-                        className="text-red-500 text-sm"
-                      />
-                    </div>
+                    <Field
+                      name="telephoneNumber"
+                      placeholder="Enter Telephone Number"
+                      className={styles.field_style}
+                    />
+                    <ErrorMessage
+                      name="telephoneNumber"
+                      component="p"
+                      className="text-red-500 text-sm"
+                    />
+                  </div>
 
-                    <div>
-                      <label className={styles.label_Style}>email</label>
+                  <div className={styles.field_wrapper}>
+                    <label className={styles.label_Style}>city</label>
 
-                      <Field
-                        name="email"
-                        placeholder="Enter Email Address"
-                        className={styles.field_style}
-                      />
-                      <ErrorMessage
-                        name="email"
-                        component="p"
-                        className="text-red-500 text-sm"
-                      />
-                    </div>
-
-                    <div>
-                      <label className={styles.label_Style}>State</label>
-                      <Field
-                        name="state"
-                        placeholder="Enter State"
-                        className={styles.field_style}
-                      />
-                      <ErrorMessage
-                        name="state"
-                        component="p"
-                        className="text-red-500 text-sm"
-                      />
-                    </div>
+                    <Field
+                      name="city"
+                      placeholder="Enter City"
+                      className={styles.field_style}
+                    />
+                    <ErrorMessage
+                      name="city"
+                      component="p"
+                      className="text-red-500 text-sm"
+                    />
                   </div>
                 </div>
-                <label className={styles.label_Style}>name</label>
 
+                <div className="flex w-1/2 flex-col gap-4">
+                  <div className={styles.field_wrapper}>
+                    <label className={styles.label_Style}>Mobile Number</label>
+
+                    <Field
+                      name="mobileNumber"
+                      placeholder="Enter Mobile Number"
+                      className={styles.field_style}
+                    />
+                    <ErrorMessage
+                      name="mobileNumber"
+                      component="p"
+                      className="text-red-500 text-sm"
+                    />
+                  </div>
+
+                  <div className={styles.field_wrapper}>
+                    <label className={styles.label_Style}>email</label>
+
+                    <Field
+                      name="email"
+                      placeholder="Enter Email Address"
+                      className={styles.field_style}
+                    />
+                    <ErrorMessage
+                      name="email"
+                      component="p"
+                      className="text-red-500 text-sm"
+                    />
+                  </div>
+
+                  <div className={styles.field_wrapper}>
+                    <label className={styles.label_Style}>State</label>
+                    <Field
+                      name="state"
+                      placeholder="Enter State"
+                      className={styles.field_style}
+                    />
+                    <ErrorMessage
+                      name="state"
+                      component="p"
+                      className="text-red-500 text-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className={styles.field_wrapper}>
+                <label className={styles.label_Style}>name</label>
                 <Field
                   name="shopAddress"
                   placeholder="Enter Shop Address"
@@ -196,76 +194,71 @@ export default function SignupForm() {
                   component="p"
                   className="text-red-500 text-sm"
                 />
+              </div>
 
-                <div>
-                  <label className="block">Cover Image</label>
-                  <input
-                    type="file"
-                    name="coverImage"
-                    onChange={(event) => {
-                      setFieldValue("coverImage", event.currentTarget.files[0]);
-                    }}
-                    className={styles.field_style}
-                  />
-                  <ErrorMessage
-                    name="coverImage"
-                    component="p"
-                    className="text-red-500 text-sm"
-                  />
-                </div>
+              <div>
+                <label className="block">Cover Image</label>
+                <input
+                  type="file"
+                  name="coverImage"
+                  onChange={(event) => {
+                    setFieldValue("coverImage", event.currentTarget.files[0]);
+                  }}
+                  className={styles.field_style}
+                />
+                <ErrorMessage
+                  name="coverImage"
+                  component="p"
+                  className="text-red-500 text-sm"
+                />
+              </div>
 
-                <div>
-                  <label className="block">Profile Image</label>
-                  <input
-                    type="file"
-                    name="profileImage"
-                    onChange={(event) => {
-                      setFieldValue(
-                        "profileImage",
-                        event.currentTarget.files[0]
-                      );
-                    }}
-                    className={styles.field_style}
-                  />
+              <div>
+                <label className="block">Profile Image</label>
+                <input
+                  type="file"
+                  name="profileImage"
+                  onChange={(event) => {
+                    setFieldValue("profileImage", event.currentTarget.files[0]);
+                  }}
+                  className={styles.field_style}
+                />
 
-                  <ErrorMessage
-                    name="profileImage"
-                    component="p"
-                    className="text-red-500 text-sm"
-                  />
-                </div>
+                <ErrorMessage
+                  name="profileImage"
+                  component="p"
+                  className="text-red-500 text-sm"
+                />
+              </div>
 
-                <div>
-                  <label className="block">Shop Image</label>
-                  <input
-                    type="file"
-                    name="shopImage"
-                    onChange={(event) => {
-                      setFieldValue("shopImage", event.currentTarget.files[0]);
-                    }}
-                    className={styles.field_style}
-                  />
-                  <ErrorMessage
-                    name="shopImage"
-                    component="p"
-                    className="text-red-500 text-sm"
-                  />
-                </div>
+              <div>
+                <label className="block">Shop Image</label>
+                <input
+                  type="file"
+                  name="shopImage"
+                  onChange={(event) => {
+                    setFieldValue("shopImage", event.currentTarget.files[0]);
+                  }}
+                  className={styles.field_style}
+                />
+                <ErrorMessage
+                  name="shopImage"
+                  component="p"
+                  className="text-red-500 text-sm"
+                />
+              </div>
 
-                <button
-                  type="submit"
-                  className="w-full p-2 bg-orange-500 text-white rounded"
-                  disabled={isSubmitting}
-                >
-                  {loading ? "Loading..." : "Get OTP"}
-                </button>
-              </Form>
-            )}
-          </Formik>
-          {message && (
-            <p className="mt-4 text-center text-red-500">{message}</p>
+              <button
+                type="submit"
+                className="w-full p-2 bg-orange-500 text-white rounded"
+                disabled={isSubmitting}
+              >
+                {loading ? "Loading..." : "Get OTP"}
+              </button>
+            </Form>
           )}
-        </div>
+        </Formik>
+        {message && <p className="mt-4 text-center text-red-500">{message}</p>}
       </div>
     </div>
   );
