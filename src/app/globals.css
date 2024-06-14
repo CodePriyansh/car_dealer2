@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* globals.css */
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -17,9 +19,11 @@
 }
 
 body {
+  width: 100%;
   margin: 0;
   padding: 0;
-  width: 100%;
+  line-height: normal;
+  font-weight: normal;
 }
 h1,
 h2,
