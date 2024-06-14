@@ -1,15 +1,21 @@
 .wrapper{
-    @apply w-full flex ;
+    @apply w-full flex  lg:flex-row flex-col;
 }
 .left_wrapper{
-    @apply flex w-1/2
+    @apply flex lg:w-1/2 w-full
 }
 .right_wrapper{
-    @apply flex w-1/2 flex-col py-16
+    @apply flex lg:w-1/2 w-full flex-col py-16 justify-center items-center px-4 lg:px-8
 }
 .subheading{
     @apply text-secondary
 }
 .heading{
-    @apply text-primary text-48;
+    @apply text-primary text-48 pb-8;
+}
+.field_style{
+    @apply w-full p-2 border border-primary rounded-[50px]
+}
+.label_Style{
+    @apply text-base text-black uppercase;
 }
