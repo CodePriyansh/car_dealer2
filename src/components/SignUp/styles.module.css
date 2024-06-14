@@ -8,10 +8,10 @@
     @apply flex lg:w-1/2 w-full flex-col py-16 justify-center items-center px-4 lg:px-8
 }
 .subheading{
-    @apply text-secondary
+    @apply text-secondary font-bold text-lg
 }
 .heading{
-    @apply text-primary text-48 pb-8;
+    @apply text-primary text-[48px] pb-8 font-bold;
 }
 .field_style{
     @apply py-5 px-6 border border-primary rounded-[50px] w-[280px] w-full
