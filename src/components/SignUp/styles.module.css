@@ -14,14 +14,14 @@
     @apply text-primary text-48 pb-8;
 }
 .field_style{
-    @apply py-5 px-6 border border-primary rounded-[50px] w-[280px]
+    @apply py-5 px-6 border border-primary rounded-[50px] w-[280px] w-full
 }
 .label_Style{
-    @apply text-base text-black uppercase;
+    @apply text-base text-black uppercase pb-[10px];
 }
 .signup_img{
     @apply w-[80%] ;
 }
 .field_wrapper{
-    @apply flex flex-col;
+    @apply flex flex-col w-full;
 }
