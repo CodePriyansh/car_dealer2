@@ -14,9 +14,9 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
-      //  fontFamily: {
-      //   Rajdhani:Rajdhani
-      // },
+      fontFamily: {
+        rajdhani: ['Rajdhani', 'sans-serif'],
+      },
       colors:{
         primary:"#EF6E0B",
         secondary:"#0059A3",
