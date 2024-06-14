@@ -1,3 +1,4 @@
+import { Rajdhani } from "next/font/google";
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -12,6 +13,16 @@ const config: Config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
+      //  fontFamily: {
+      //   Rajdhani:Rajdhani
+      // },
+      colors:{
+        primary:"#EF6E0B",
+        secondary:"#0059A3"
+      },
+      fontSize: {
+        48:"48"
       },
     },
   },

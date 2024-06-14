@@ -1,0 +1,15 @@
+.wrapper{
+    @apply w-full flex ;
+}
+.left_wrapper{
+    @apply flex w-1/2
+}
+.right_wrapper{
+    @apply flex w-1/2 flex-col py-16
+}
+.subheading{
+    @apply text-secondary
+}
+.heading{
+    @apply text-primary text-48;
+}
