@@ -5,7 +5,7 @@ import * as yup from "yup";
 import axios from "axios";
 import { useRef, useState } from "react";
 import styles from "./styles.module.css";
-import Image from "next/image"; 
+import Image from "next/image";
 import { Images } from "@/assets/Images";
 import Button from "@/components/Common/Button/index";
 import { useRouter } from "next/navigation";
@@ -73,18 +73,7 @@ export default function SignupForm() {
   const shopImageInputRef = useRef<HTMLInputElement | null>(null);
 
   return (
-    <div className={`mt-14 flex flex-col justify-center items-center`}>
-      {/* Top headings */}
-      <Image
-        src={Images.myCar}
-        alt="logo"
-        width={32}
-        height={32}
-        className="w-8 h-8 sm:w-12 sm:h-12"
-      />
-      <p className={styles.subheading}>My Car</p>
-      <p className={styles.heading}>Signup Account</p>
-
+    <div className={`flex flex-col justify-center items-center`}>
       {/* Form details */}
       <div className={`${styles.form_wrapper}`}>
         <Formik
@@ -93,7 +82,17 @@ export default function SignupForm() {
           onSubmit={onSubmit}
         >
           {({ setFieldValue, isSubmitting, values }) => (
-            <Form className="space-y-4">
+            <Form className={` ${styles.scrollbar} `}>
+              {/* Top headings */}
+              <Image
+                src={Images.myCar}
+                alt="logo"
+                width={32}
+                height={32}
+                className="w-8 h-8 sm:w-12 sm:h-12 mx-auto"
+              />
+              <p className={styles.subheading}>My Car</p>
+              <p className={styles.heading}>Signup Account</p>
               <div className="w-full flex sm:flex-row flex-col gap-8">
                 <div className="flex full flex-col gap-6">
                   <div className={styles.field_wrapper}>
@@ -203,8 +202,10 @@ export default function SignupForm() {
               {/* Cover image */}
               <div>
                 <label className={styles.label_Style}>Add Cover Image</label>
-                <div className={styles.dotted_box}
-                 onClick={() => coverImageInputRef.current?.click()}>
+                <div
+                  className={styles.dotted_box}
+                  onClick={() => coverImageInputRef.current?.click()}
+                >
                   <Image src={Images.uploadImg} alt="img" className="w-8 h-8" />
                   <Button otherStyles="mt-[50px]">
                     <Image
@@ -228,7 +229,9 @@ export default function SignupForm() {
                     name="coverImage"
                   />
                   {values.coverImage && (
-                    <p className={styles.selected_file}>{values.coverImage.name}</p>
+                    <p className={styles.selected_file}>
+                      {values.coverImage.name}
+                    </p>
                   )}
                 </div>
                 <ErrorMessage
@@ -240,8 +243,10 @@ export default function SignupForm() {
 
               {/* Profile image */}
               <div className="flex w-full sm:flex-row flex-col gap-6">
-                <div className="sm:w-1/2 w-full"
-                 onClick={() => profileImageInputRef.current?.click()}>
+                <div
+                  className="sm:w-1/2 w-full"
+                  onClick={() => profileImageInputRef.current?.click()}
+                >
                   <label className={styles.label_Style}>
                     Add Profile Image
                   </label>
@@ -264,7 +269,9 @@ export default function SignupForm() {
                       type="file"
                       ref={profileImageInputRef}
                       style={{ display: "none" }}
-                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      onChange={(
+                        event: React.ChangeEvent<HTMLInputElement>
+                      ) => {
                         const files = event.currentTarget.files;
                         if (files && files.length > 0) {
                           setFieldValue("profileImage", files[0]);
@@ -273,7 +280,9 @@ export default function SignupForm() {
                       name="profileImage"
                     />
                     {values.profileImage && (
-                      <p className={styles.selected_file}>{values.profileImage.name}</p>
+                      <p className={styles.selected_file}>
+                        {values.profileImage.name}
+                      </p>
                     )}
                   </div>
                   <ErrorMessage
@@ -307,7 +316,9 @@ export default function SignupForm() {
                     <input
                       type="file"
                       ref={shopImageInputRef}
-                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      onChange={(
+                        event: React.ChangeEvent<HTMLInputElement>
+                      ) => {
                         const files = event.currentTarget.files;
                         if (files && files.length > 0) {
                           setFieldValue("shopImage", files[0]);
@@ -317,7 +328,9 @@ export default function SignupForm() {
                       name="shopImage"
                     />
                     {values.shopImage && (
-                      <p className={styles.selected_file}>{values.shopImage.name}</p>
+                      <p className={styles.selected_file}>
+                        {values.shopImage.name}
+                      </p>
                     )}
                   </div>
                   <ErrorMessage
@@ -337,21 +350,20 @@ export default function SignupForm() {
                   Get OTP
                 </Button>
               </button>
+              {/* Bottom info */}
+              <div className="flex items-center flex-col mt-6">
+                <p className={styles.info_text}>Have an Account?</p>
+                <p
+                  className={`${styles.info_text} underline cursor-pointer`}
+                  onClick={handleLoginClick}
+                >
+                  Login
+                </p>
+              </div>
             </Form>
           )}
         </Formik>
         {message && <p className="mt-4 text-center text-red-500">{message}</p>}
-      </div>
-
-      {/* Bottom info */}
-      <div className="flex items-center flex-col mt-6">
-        <p className={styles.info_text}>Have an Account?</p>
-        <p
-          className={`${styles.info_text} underline cursor-pointer`}
-          onClick={handleLoginClick}
-        >
-          Login
-        </p>
       </div>
     </div>
   );

@@ -1,14 +1,14 @@
 .wrapper{
-    @apply w-full flex px-4  lg:flex-row flex-col ;
+    @apply w-full flex px-4  lg:flex-row flex-col h-screen;
 }
 .left_wrapper{
-    @apply md:flex hidden  lg:w-1/2 w-full bg-[#f7f7f7]
+    @apply md:flex hidden flex-1 lg:w-1/2 w-full bg-[#f7f7f7] h-full
 }
 .right_wrapper{
-    @apply flex lg:w-1/2 w-full flex-col  justify-center items-center px-4 md:px-8  bg-white ;
+    @apply flex lg:w-1/2 w-full flex-1 flex-col  justify-center items-center px-4 md:px-8 bg-white h-full;
 }
 .subheading{
-    @apply text-secondary font-bold capitalize font-rajdhani sm:text-[34px];
+    @apply text-secondary font-bold capitalize font-rajdhani sm:text-[34px] text-center;
 }
 .heading{
     @apply text-primary sm:text-[48px] text-[34px] font-bold pb-8 flex justify-center font-rajdhani;
@@ -34,9 +34,16 @@
 }
 
 .form_wrapper{
-    @apply flex flex-col justify-center items-center w-full sm:max-w-[584px] max-w-full bg-white;
+    @apply flex flex-col justify-center items-center max-w-full bg-white w-full ;
 }
 
 .selected_file{
     @apply pt-2 text-greyy text-black font-rajdhani font-medium
+}
+.scrollbar{
+    @apply space-y-4 h-[90vh]  justify-center items-center overflow-y-scroll;
+}
+.scrollbar::-webkit-scrollbar {
+    width: 0;
+    
 }
