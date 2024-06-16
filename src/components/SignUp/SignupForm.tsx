@@ -346,12 +346,12 @@ export default function SignupForm() {
                 className="w-full mx-auto"
                 disabled={isSubmitting}
               >
-                <Button otherStyles="sm:w-[430px] w-full mx-auto">
+                <Button otherStyles="sm:w-[430px] w-full mx-auto uppercase">
                   Get OTP
                 </Button>
               </button>
               {/* Bottom info */}
-              <div className="flex items-center flex-col mt-6">
+              <div className="flex items-center flex-col mt-6 ">
                 <p className={styles.info_text}>Have an Account?</p>
                 <p
                   className={`${styles.info_text} underline cursor-pointer`}

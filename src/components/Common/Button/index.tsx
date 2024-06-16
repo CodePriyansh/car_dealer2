@@ -13,7 +13,7 @@ interface ButtonProps {
 const Button: React.FC<ButtonProps> = ({ children, otherStyles = '', onclick, lightButton = false }) => {
   return (
     <div
-      className={`bg-primary rounded-[50px] py-3 justify-center cursor-pointer text-white text-base flex items-center px-4 gap-2 ${otherStyles}`}
+      className={`bg-primary rounded-[50px] py-3 justify-center font-rajdhani font-bold cursor-pointer text-white text-base flex items-center px-4 gap-2 ${otherStyles}`}
       onClick={onclick}
     >
       {children}
