@@ -1,11 +1,11 @@
 .wrapper{
-    @apply w-full flex px-4  lg:flex-row flex-col h-screen;
+    @apply w-full flex px-4  lg:flex-row flex-col ;
 }
 .left_wrapper{
     @apply md:flex hidden  lg:w-1/2 w-full bg-[#f7f7f7]
 }
 .right_wrapper{
-    @apply flex lg:w-1/2 w-full flex-col py-16 justify-center items-center px-4 md:px-8  bg-white h-screen overflow-y-auto;
+    @apply flex lg:w-1/2 w-full flex-col  justify-center items-center px-4 md:px-8  bg-white ;
 }
 .subheading{
     @apply text-secondary font-bold capitalize font-rajdhani sm:text-[34px];
@@ -33,4 +33,10 @@
     @apply my-[10px] rounded border cursor-pointer border-dashed border-greyy w-full flex flex-col justify-center items-center py-14;
 }
 
+.form_wrapper{
+    @apply flex flex-col justify-center items-center w-full sm:max-w-[584px] max-w-full bg-white;
+}
 
+.selected_file{
+    @apply pt-2 text-greyy text-black font-rajdhani font-medium
+}

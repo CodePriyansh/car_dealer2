@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -7,9 +5,11 @@ import * as yup from "yup";
 import axios from "axios";
 import { useRef, useState } from "react";
 import styles from "./styles.module.css";
-import Image from "next/image"; // Import Image from next/image
+import Image from "next/image"; 
 import { Images } from "@/assets/Images";
 import Button from "@/components/Common/Button/index";
+import { useRouter } from "next/navigation";
+
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
   mobileNumber: yup.string().required("Mobile Number is required"),
@@ -24,6 +24,7 @@ const schema = yup.object().shape({
 });
 
 export default function SignupForm() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -40,19 +41,16 @@ export default function SignupForm() {
     shopImage: null,
   };
 
+  const handleLoginClick = () => {
+    router.push("/login");
+  };
+
   const onSubmit = async (values, { setSubmitting }) => {
+    console.log(values, "values");
     setLoading(true);
     const formData = new FormData();
     for (const key in values) {
-      if (
-        key === "coverImage" ||
-        key === "profileImage" ||
-        key === "shopImage"
-      ) {
-        formData.append(key, values[key]);
-      } else {
-        formData.append(key, values[key]);
-      }
+      formData.append(key, values[key]);
     }
 
     try {
@@ -69,36 +67,37 @@ export default function SignupForm() {
       setSubmitting(false);
     }
   };
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleDivClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const file = event.target.files[0];
-      console.log("Selected file:", file);
-      // Handle the file as needed (e.g., upload, preview, etc.)
-    }
-  };
+  const coverImageInputRef = useRef<HTMLInputElement | null>(null);
+  const profileImageInputRef = useRef<HTMLInputElement | null>(null);
+  const shopImageInputRef = useRef<HTMLInputElement | null>(null);
 
   return (
-    <div className="flex flex-col justify-center items-center w-full sm:max-w-[584px] max-w-full bg-white">
-      <div className="w-full">
+    <div className={`mt-14 flex flex-col justify-center items-center`}>
+      {/* Top headings */}
+      <Image
+        src={Images.myCar}
+        alt="logo"
+        width={32}
+        height={32}
+        className="w-8 h-8 sm:w-12 sm:h-12"
+      />
+      <p className={styles.subheading}>My Car</p>
+      <p className={styles.heading}>Signup Account</p>
+
+      {/* Form details */}
+      <div className={`${styles.form_wrapper}`}>
         <Formik
           initialValues={initialValues}
           validationSchema={schema}
           onSubmit={onSubmit}
         >
-          {({ setFieldValue, isSubmitting }) => (
+          {({ setFieldValue, isSubmitting, values }) => (
             <Form className="space-y-4">
               <div className="w-full flex sm:flex-row flex-col gap-8">
                 <div className="flex full flex-col gap-6">
                   <div className={styles.field_wrapper}>
-                    <label className={styles.label_Style}>name</label>
+                    <label className={styles.label_Style}>Name</label>
                     <Field
                       name="name"
                       placeholder="Enter Your Name"
@@ -115,7 +114,6 @@ export default function SignupForm() {
                     <label className={styles.label_Style}>
                       Telephone Number
                     </label>
-
                     <Field
                       name="telephoneNumber"
                       placeholder="Enter Telephone Number"
@@ -129,8 +127,7 @@ export default function SignupForm() {
                   </div>
 
                   <div className={styles.field_wrapper}>
-                    <label className={styles.label_Style}>city</label>
-
+                    <label className={styles.label_Style}>City</label>
                     <Field
                       name="city"
                       placeholder="Enter City"
@@ -147,7 +144,6 @@ export default function SignupForm() {
                 <div className="flex sm:w-1/2 w-full flex-col gap-4">
                   <div className={styles.field_wrapper}>
                     <label className={styles.label_Style}>Mobile Number</label>
-
                     <Field
                       name="mobileNumber"
                       placeholder="Enter Mobile Number"
@@ -161,8 +157,7 @@ export default function SignupForm() {
                   </div>
 
                   <div className={styles.field_wrapper}>
-                    <label className={styles.label_Style}>email</label>
-
+                    <label className={styles.label_Style}>Email</label>
                     <Field
                       name="email"
                       placeholder="Enter Email Address"
@@ -192,7 +187,7 @@ export default function SignupForm() {
               </div>
 
               <div className={styles.field_wrapper}>
-                <label className={styles.label_Style}>shop address</label>
+                <label className={styles.label_Style}>Shop Address</label>
                 <Field
                   name="shopAddress"
                   placeholder="Enter Shop Address"
@@ -205,55 +200,48 @@ export default function SignupForm() {
                 />
               </div>
 
-              {/* <div>
-                <label className="block">Cover Image</label>
-                <input
-                  type="file"
-                  name="coverImage"
-                  onChange={(event) => {
-                    setFieldValue("coverImage", event.currentTarget.files[0]);
-                  }}
-                  className={styles.field_style}
-                />
-                <ErrorMessage
-                  name="coverImage"
-                  component="p"
-                  className="text-red-500 text-sm"
-                />
-              </div> */}
-
-              {/* <div>
-                <label className="block">Profile Image</label>
-                <input
-                  type="file"
-                  name="profileImage"
-                  onChange={(event) => {
-                    setFieldValue("profileImage", event.currentTarget.files[0]);
-                  }}
-                  className={styles.field_style}
-                />
-
-                <ErrorMessage
-                  name="profileImage"
-                  component="p"
-                  className="text-red-500 text-sm"
-                />
-              </div> */}
-
+              {/* Cover image */}
               <div>
                 <label className={styles.label_Style}>Add Cover Image</label>
-                <div className={styles.dotted_box}>
+                <div className={styles.dotted_box}
+                 onClick={() => coverImageInputRef.current?.click()}>
                   <Image src={Images.uploadImg} alt="img" className="w-8 h-8" />
                   <Button otherStyles="mt-[50px]">
-                    {/* <FaPlus color="#ffffff" /> */}
-                    <Image src={Images.plus} alt="plus" width={20} height={20}/>
+                    <Image
+                      src={Images.plus}
+                      alt="plus"
+                      width={20}
+                      height={20}
+                    />
                     Add Cover Image
                   </Button>
+                  <input
+                    type="file"
+                    ref={coverImageInputRef}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      const files = event.currentTarget.files;
+                      if (files && files.length > 0) {
+                        setFieldValue("coverImage", files[0]);
+                      }
+                    }}
+                    style={{ display: "none" }}
+                    name="coverImage"
+                  />
+                  {values.coverImage && (
+                    <p className={styles.selected_file}>{values.coverImage.name}</p>
+                  )}
                 </div>
+                <ErrorMessage
+                  name="coverImage"
+                  component="p"
+                  className="text-red-500 text-sm"
+                />
               </div>
 
+              {/* Profile image */}
               <div className="flex w-full sm:flex-row flex-col gap-6">
-                <div className="sm:w-1/2 w-full">
+                <div className="sm:w-1/2 w-full"
+                 onClick={() => profileImageInputRef.current?.click()}>
                   <label className={styles.label_Style}>
                     Add Profile Image
                   </label>
@@ -264,20 +252,43 @@ export default function SignupForm() {
                       className="w-8 h-8"
                     />
                     <Button otherStyles="mt-[50px]">
-                      {/* <FaPlus color="#ffffff" /> */}
-                    <Image src={Images.plus} alt="plus" width={20} height={20}/>
-
-
+                      <Image
+                        src={Images.plus}
+                        alt="plus"
+                        width={20}
+                        height={20}
+                      />
                       Add Profile Image
                     </Button>
+                    <input
+                      type="file"
+                      ref={profileImageInputRef}
+                      style={{ display: "none" }}
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        const files = event.currentTarget.files;
+                        if (files && files.length > 0) {
+                          setFieldValue("profileImage", files[0]);
+                        }
+                      }}
+                      name="profileImage"
+                    />
+                    {values.profileImage && (
+                      <p className={styles.selected_file}>{values.profileImage.name}</p>
+                    )}
                   </div>
+                  <ErrorMessage
+                    name="profileImage"
+                    component="p"
+                    className="text-red-500 text-sm"
+                  />
                 </div>
 
+                {/* Add shop image */}
                 <div className="sm:w-1/2 w-full">
                   <label className={styles.label_Style}>Add Shop Image</label>
                   <div
                     className={styles.dotted_box}
-                    onClick={handleDivClick}
+                    onClick={() => shopImageInputRef.current?.click()}
                   >
                     <Image
                       src={Images.uploadImg}
@@ -285,36 +296,62 @@ export default function SignupForm() {
                       className="w-8 h-8"
                     />
                     <Button otherStyles="mt-[50px]">
-                      {/* <FaPlus color="#ffffff" /> */}
-                    <Image src={Images.plus} alt="plus" width={20} height={20}/>
-
+                      <Image
+                        src={Images.plus}
+                        alt="plus"
+                        width={20}
+                        height={20}
+                      />
                       Add Shop Image
                     </Button>
                     <input
                       type="file"
-                      ref={fileInputRef}
-                      onChange={handleFileChange}
+                      ref={shopImageInputRef}
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        const files = event.currentTarget.files;
+                        if (files && files.length > 0) {
+                          setFieldValue("shopImage", files[0]);
+                        }
+                      }}
                       style={{ display: "none" }}
+                      name="shopImage"
                     />
+                    {values.shopImage && (
+                      <p className={styles.selected_file}>{values.shopImage.name}</p>
+                    )}
                   </div>
+                  <ErrorMessage
+                    name="shopImage"
+                    component="p"
+                    className="text-red-500 text-sm"
+                  />
                 </div>
               </div>
 
-              
               <button
                 type="submit"
-                // className="w-full p-2 bg-orange-500 text-white rounded"
+                className="w-full mx-auto"
                 disabled={isSubmitting}
               >
-                           <Button otherStyles="sm:w-[430px] w-full mx-auto"  >get otp</Button>
-
+                <Button otherStyles="sm:w-[430px] w-full mx-auto">
+                  Get OTP
+                </Button>
               </button>
-
-              {/* <Button otherStyles="sm:w-[430px] w-full mx-auto"  >get otp</Button> */}
             </Form>
           )}
         </Formik>
         {message && <p className="mt-4 text-center text-red-500">{message}</p>}
+      </div>
+
+      {/* Bottom info */}
+      <div className="flex items-center flex-col mt-6">
+        <p className={styles.info_text}>Have an Account?</p>
+        <p
+          className={`${styles.info_text} underline cursor-pointer`}
+          onClick={handleLoginClick}
+        >
+          Login
+        </p>
       </div>
     </div>
   );
