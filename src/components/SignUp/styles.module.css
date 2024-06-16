@@ -47,3 +47,6 @@
     width: 0;
     
 }
+.error_msg{
+    @apply text-red-500 text-sm font-rajdhani font-semibold py-1;
+}

@@ -105,7 +105,7 @@ export default function SignupForm() {
                     <ErrorMessage
                       name="name"
                       component="p"
-                      className="text-red-500 text-sm"
+                      className={styles.error_msg}
                     />
                   </div>
 
@@ -121,7 +121,7 @@ export default function SignupForm() {
                     <ErrorMessage
                       name="telephoneNumber"
                       component="p"
-                      className="text-red-500 text-sm"
+                      className={styles.error_msg}
                     />
                   </div>
 
@@ -135,7 +135,7 @@ export default function SignupForm() {
                     <ErrorMessage
                       name="city"
                       component="p"
-                      className="text-red-500 text-sm"
+                      className={styles.error_msg}
                     />
                   </div>
                 </div>
@@ -151,7 +151,7 @@ export default function SignupForm() {
                     <ErrorMessage
                       name="mobileNumber"
                       component="p"
-                      className="text-red-500 text-sm"
+                      className={styles.error_msg}
                     />
                   </div>
 
@@ -165,7 +165,7 @@ export default function SignupForm() {
                     <ErrorMessage
                       name="email"
                       component="p"
-                      className="text-red-500 text-sm"
+                      className={styles.error_msg}
                     />
                   </div>
 
@@ -179,7 +179,7 @@ export default function SignupForm() {
                     <ErrorMessage
                       name="state"
                       component="p"
-                      className="text-red-500 text-sm"
+                      className={styles.error_msg}
                     />
                   </div>
                 </div>
@@ -195,7 +195,7 @@ export default function SignupForm() {
                 <ErrorMessage
                   name="shopAddress"
                   component="p"
-                  className="text-red-500 text-sm"
+                  className={styles.error_msg}
                 />
               </div>
 
@@ -237,7 +237,7 @@ export default function SignupForm() {
                 <ErrorMessage
                   name="coverImage"
                   component="p"
-                  className="text-red-500 text-sm"
+                  className={styles.error_msg}
                 />
               </div>
 
@@ -288,7 +288,7 @@ export default function SignupForm() {
                   <ErrorMessage
                     name="profileImage"
                     component="p"
-                    className="text-red-500 text-sm"
+                    className={styles.error_msg}
                   />
                 </div>
 
@@ -336,7 +336,7 @@ export default function SignupForm() {
                   <ErrorMessage
                     name="shopImage"
                     component="p"
-                    className="text-red-500 text-sm"
+                    className={styles.error_msg}
                   />
                 </div>
               </div>

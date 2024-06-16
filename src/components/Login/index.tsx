@@ -34,14 +34,15 @@ export default function Login() {
               <p className={styles.subheading}>My Car</p>
               <p className={styles.heading}>Signup Account</p>
             <LoginForm/>
+            
             {/* Bottom info */}
             <div className="flex items-center flex-col mt-6 ">
                 <p className={styles.info_text}>Have an Account?</p>
                 <p
                   className={`${styles.info_text} underline cursor-pointer`}
-                  onClick={()=>Router.push('/')}
+                  onClick={()=>router.push('/signup')}
                 >
-                  Login
+                  SIGNUP
                 </p>
               </div>
         </div>
