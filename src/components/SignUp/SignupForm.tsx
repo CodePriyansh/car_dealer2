@@ -1,11 +1,4 @@
-// import React from 'react'
 
-// export default function SignupForm() {
-//   return (
-//     <div>SignupForm</div>
-//   )
-// }
-// //
 
 "use client";
 
@@ -307,16 +300,17 @@ export default function SignupForm() {
                 </div>
               </div>
 
-              {/* 
+              
               <button
                 type="submit"
-                className="w-full p-2 bg-orange-500 text-white rounded"
+                // className="w-full p-2 bg-orange-500 text-white rounded"
                 disabled={isSubmitting}
               >
-                {loading ? "Loading..." : "Get OTP"}
-              </button> */}
+                           <Button otherStyles="sm:w-[430px] w-full mx-auto"  >get otp</Button>
 
-              <Button otherStyles="sm:w-[430px] w-full mx-auto"  >get otp</Button>
+              </button>
+
+              {/* <Button otherStyles="sm:w-[430px] w-full mx-auto"  >get otp</Button> */}
             </Form>
           )}
         </Formik>

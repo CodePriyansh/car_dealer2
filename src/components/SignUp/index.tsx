@@ -1,3 +1,6 @@
+
+"use client"
+
 import React from 'react'
 import styles from './styles.module.css'
 import SignupForm from './SignupForm'
@@ -6,8 +9,14 @@ import signup from '../../assets/signup_login.png'
 import Image from 'next/image'
 import { url } from 'inspector'
 import { Images } from '@/assets/Images'
-
+import { useRouter } from 'next/navigation';
 export default function Signup() {
+
+  const router = useRouter();
+
+  const handleLoginClick = () => {
+    router.push('/login');
+  };
   return (
     <div className={styles.wrapper}>
         <div className={styles.left_wrapper}>
@@ -25,7 +34,7 @@ export default function Signup() {
             <SignupForm/>
             <div className='flex items-center flex-col mt-6'>
           <p className={styles.info_text}>Have an Account?</p>
-          <p className={styles.info_text}>login</p>
+          <p className={`${styles.info_text} underline cursor-pointer`} onClick={handleLoginClick} >login</p>
         </div>
         </div>
        
