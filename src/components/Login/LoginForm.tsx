@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import styles from "../SignUp/styles.module.css";
 import Button from "../Common/Button";
+import { useRouter } from 'next/navigation';
 
 // Validation schema using Yup
 const validationSchema = Yup.object({
@@ -14,6 +15,8 @@ const validationSchema = Yup.object({
 });
 
 export default function LoginForm() {
+    const router=useRouter()
+
   const formik = useFormik({
     initialValues: {
       mobileNumber: "",
@@ -41,8 +44,8 @@ export default function LoginForm() {
           <div className={styles.error_msg}>{formik.errors.mobileNumber}</div>
         ) : null}
       </div>
-      <button type="submit" className="w-full mx-auto mt-14">
-        <Button otherStyles="sm:w-[430px] w-full mx-auto uppercase">
+      <button type="submit" className="w-full mx-auto mt-14" onClick={()=>router.push('/otp')}>
+        <Button otherStyles="sm:w-[430px] w-full mx-auto uppercase"  >
           Get OTP
         </Button>
       </button>

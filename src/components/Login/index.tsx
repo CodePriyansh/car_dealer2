@@ -32,12 +32,12 @@ export default function Login() {
                 className="w-8 h-8 sm:w-12 sm:h-12 mx-auto"
               />
               <p className={styles.subheading}>My Car</p>
-              <p className={styles.heading}>Signup Account</p>
+              <p className={styles.heading}>Login Account</p>
             <LoginForm/>
             
             {/* Bottom info */}
             <div className="flex items-center flex-col mt-6 ">
-                <p className={styles.info_text}>Have an Account?</p>
+                <p className={styles.info_text}>Don&#39;t Have an Account?</p>
                 <p
                   className={`${styles.info_text} underline cursor-pointer`}
                   onClick={()=>router.push('/signup')}
