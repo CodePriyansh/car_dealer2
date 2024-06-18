@@ -9,6 +9,7 @@ import Image from "next/image";
 import { Images } from "@/assets/Images";
 import Button from "@/components/Common/Button/index";
 import { useRouter } from "next/navigation";
+import OtpVerification from "../Otp";
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -27,6 +28,8 @@ export default function SignupForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [otpSend, setOtpSend] = useState(false);
+
 
   const initialValues = {
     name: "",
@@ -60,12 +63,20 @@ export default function SignupForm() {
         },
       });
       setMessage("Dealer registered successfully!");
+      setOtpSend(true)
     } catch (error) {
       setMessage("Failed to register dealer.");
+      setOtpSend(false)
+
     } finally {
       setLoading(false);
       setSubmitting(false);
+      setOtpSend(false)
+
     }
+    // ye line comment kar dena jab api call sai chale tab
+    setOtpSend(true)
+
   };
 
   const coverImageInputRef = useRef<HTMLInputElement | null>(null);
@@ -76,6 +87,7 @@ export default function SignupForm() {
     <div className={`flex flex-col justify-center items-center`}>
       {/* Form details */}
       <div className={`${styles.form_wrapper}`}>
+     
         <Formik
           initialValues={initialValues}
           validationSchema={schema}
@@ -93,6 +105,8 @@ export default function SignupForm() {
               />
               <p className={styles.subheading}>My Car</p>
               <p className={styles.heading}>Signup Account</p>
+              {otpSend?<OtpVerification/>:
+              <div>
               <div className="w-full flex sm:flex-row flex-col gap-8">
                 <div className="flex full flex-col gap-6">
                   <div className={styles.field_wrapper}>
@@ -360,6 +374,7 @@ export default function SignupForm() {
                   Login
                 </p>
               </div>
+              </div>}
             </Form>
           )}
         </Formik>

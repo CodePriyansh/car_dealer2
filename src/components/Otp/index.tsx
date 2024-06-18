@@ -73,7 +73,7 @@ export default function OtpVerification() {
   };
 
   return (
-    <div className={styles.wrapper}>
+    <div className="flex flex-col">
       <form onSubmit={handleSubmit} className="flex flex-col items-center">
         <div className="flex gap-4 mb-4">
           {otp.map((digit, index) => (
