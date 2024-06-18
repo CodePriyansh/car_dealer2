@@ -1,3 +1,5 @@
+
+
 import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -5,8 +7,12 @@ import styles from "../SignUp/styles.module.css";
 import Button from "../Common/Button";
 import { sendOtp } from "@/services/firebase/firebaseAuthService";
 import OtpVerification from "../Otp";
+import Image from "next/image";
+import { Images } from "@/assets/Images";
+import { useRouter } from "next/navigation";
 
-// Validation schema using Yup
+
+
 const validationSchema = Yup.object({
   mobileNumber: Yup.string()
     .matches(/^[0-9]+$/, "Mobile number must be digits only")
@@ -15,29 +21,52 @@ const validationSchema = Yup.object({
     .required("Mobile number is required"),
 });
 
-export default function LoginForm() {
+const LoginForm= () => {
+  const router = useRouter();
   const [otpSend, setOtpSend] = useState(false);
+  const [backBtnStatus, setBackBtnStatus] = useState(true)
 
-  const handleSubmit = (values:any, { setSubmitting }) => {
+
+  const handleSubmit = (values: any, { setSubmitting }: any) => {
     console.log(values, "submitted values");
-    // sendOtp('+91'+values.mobileNumber)
-    //   .then((res) => {
-    //     console.log(res, "OTP sent response");
-    //     setOtpSend(true);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error sending OTP", error);
-    //   })
-    //   .finally(() => {
-    //     setSubmitting(false);
-    //   });
-        setOtpSend(true);
+    // Simulating OTP send
+    setOtpSend(true);
+    setSubmitting(false);
+    setBackBtnStatus(true);
 
   };
 
   return (
     <div>
-      {otpSend ? (
+      {otpSend && backBtnStatus &&(
+        <div
+          className="absolute left-16 flex gap-2 items-center cursor-pointer"
+          onClick={() => {
+            setBackBtnStatus(false);
+          }}
+        >
+          <Image
+            src={Images.backArrow}
+            alt="back-arrow"
+            width={32}
+            height={32}
+          />
+          <p className="text-secondary text-base font-rajdhani uppercase font-medium">
+            Back
+          </p>
+        </div>
+      )}
+
+      <Image
+        src={Images.myCar}
+        alt="logo"
+        width={32}
+        height={32}
+        className="w-8 h-8 sm:w-12 sm:h-12 mx-auto"
+      />
+      <p className={styles.subheading}>My Car</p>
+      <p className={styles.heading}>Login Account</p>
+      {otpSend && backBtnStatus? (
         <OtpVerification />
       ) : (
         <Formik
@@ -59,15 +88,30 @@ export default function LoginForm() {
                   {(msg) => <div className={styles.error_msg}>{msg}</div>}
                 </ErrorMessage>
               </div>
-              <button type="submit" className="w-full mx-auto mt-14" disabled={isSubmitting}>
+              <button
+                type="submit"
+                className="w-full mx-auto mt-14"
+                disabled={isSubmitting}
+              >
                 <Button otherStyles="sm:w-[430px] w-full mx-auto uppercase">
                   {isSubmitting ? "Sending..." : "Get OTP"}
                 </Button>
               </button>
+              <div className="flex items-center flex-col mt-6">
+                <p className={styles.info_text}>Don't Have an Account?</p>
+                <p
+                  className={`${styles.info_text} underline cursor-pointer`}
+                  onClick={() => router.push("/signup")}
+                >
+                  SIGNUP
+                </p>
+              </div>
             </Form>
           )}
         </Formik>
       )}
     </div>
   );
-}
+};
+
+export default LoginForm;

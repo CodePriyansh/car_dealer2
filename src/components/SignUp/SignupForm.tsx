@@ -29,7 +29,7 @@ export default function SignupForm() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [otpSend, setOtpSend] = useState(false);
-
+  const [backBtnStatus, setBackBtnStatus] = useState(true);
 
   const initialValues = {
     name: "",
@@ -49,6 +49,7 @@ export default function SignupForm() {
   };
 
   const onSubmit = async (values, { setSubmitting }) => {
+    setBackBtnStatus(true);
     console.log(values, "values");
     setLoading(true);
     const formData = new FormData();
@@ -63,20 +64,17 @@ export default function SignupForm() {
         },
       });
       setMessage("Dealer registered successfully!");
-      setOtpSend(true)
+      setOtpSend(true);
     } catch (error) {
       setMessage("Failed to register dealer.");
-      setOtpSend(false)
-
+      setOtpSend(false);
     } finally {
       setLoading(false);
       setSubmitting(false);
-      setOtpSend(false)
-
+      setOtpSend(false);
     }
     // ye line comment kar dena jab api call sai chale tab
-    setOtpSend(true)
-
+    setOtpSend(true);
   };
 
   const coverImageInputRef = useRef<HTMLInputElement | null>(null);
@@ -86,8 +84,8 @@ export default function SignupForm() {
   return (
     <div className={`flex flex-col justify-center items-center`}>
       {/* Form details */}
+
       <div className={`${styles.form_wrapper}`}>
-     
         <Formik
           initialValues={initialValues}
           validationSchema={schema}
@@ -95,6 +93,24 @@ export default function SignupForm() {
         >
           {({ setFieldValue, isSubmitting, values }) => (
             <Form className={` ${styles.scrollbar} `}>
+              {otpSend && backBtnStatus && (
+                <div
+                  className="absolute left-16 flex gap-2 items-center cursor-pointer"
+                  onClick={() => {
+                    setBackBtnStatus(false);
+                  }}
+                >
+                  <Image
+                    src={Images.backArrow}
+                    alt="back-arrow"
+                    width={32}
+                    height={32}
+                  />
+                  <p className="text-secondary text-base font-rajdhani uppercase font-medium">
+                    Back
+                  </p>
+                </div>
+              )}
               {/* Top headings */}
               <Image
                 src={Images.myCar}
@@ -105,276 +121,294 @@ export default function SignupForm() {
               />
               <p className={styles.subheading}>My Car</p>
               <p className={styles.heading}>Signup Account</p>
-              {otpSend?<OtpVerification/>:
-              <div>
-              <div className="w-full flex sm:flex-row flex-col gap-8">
-                <div className="flex full flex-col gap-6">
-                  <div className={styles.field_wrapper}>
-                    <label className={styles.label_Style}>Name</label>
-                    <Field
-                      name="name"
-                      placeholder="Enter Your Name"
-                      className={styles.field_style}
-                    />
-                    <ErrorMessage
-                      name="name"
-                      component="p"
-                      className={styles.error_msg}
-                    />
+              {otpSend && backBtnStatus ? (
+                <OtpVerification />
+              ) : (
+                <div>
+                  <div className="w-full flex sm:flex-row flex-col gap-8">
+                    <div className="flex full flex-col gap-6">
+                      <div className={styles.field_wrapper}>
+                        <label className={styles.label_Style}>Name</label>
+                        <Field
+                          name="name"
+                          placeholder="Enter Your Name"
+                          className={styles.field_style}
+                        />
+                        <ErrorMessage
+                          name="name"
+                          component="p"
+                          className={styles.error_msg}
+                        />
+                      </div>
+
+                      <div className={styles.field_wrapper}>
+                        <label className={styles.label_Style}>
+                          Telephone Number
+                        </label>
+                        <Field
+                          name="telephoneNumber"
+                          placeholder="Enter Telephone Number"
+                          className={styles.field_style}
+                        />
+                        <ErrorMessage
+                          name="telephoneNumber"
+                          component="p"
+                          className={styles.error_msg}
+                        />
+                      </div>
+
+                      <div className={styles.field_wrapper}>
+                        <label className={styles.label_Style}>City</label>
+                        <Field
+                          name="city"
+                          placeholder="Enter City"
+                          className={styles.field_style}
+                        />
+                        <ErrorMessage
+                          name="city"
+                          component="p"
+                          className={styles.error_msg}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex sm:w-1/2 w-full flex-col gap-6">
+                      <div className={styles.field_wrapper}>
+                        <label className={styles.label_Style}>
+                          Mobile Number
+                        </label>
+                        <Field
+                          name="mobileNumber"
+                          placeholder="Enter Mobile Number"
+                          className={styles.field_style}
+                        />
+                        <ErrorMessage
+                          name="mobileNumber"
+                          component="p"
+                          className={styles.error_msg}
+                        />
+                      </div>
+
+                      <div className={styles.field_wrapper}>
+                        <label className={styles.label_Style}>Email</label>
+                        <Field
+                          name="email"
+                          placeholder="Enter Email Address"
+                          className={styles.field_style}
+                        />
+                        <ErrorMessage
+                          name="email"
+                          component="p"
+                          className={styles.error_msg}
+                        />
+                      </div>
+
+                      <div className={styles.field_wrapper}>
+                        <label className={styles.label_Style}>State</label>
+                        <Field
+                          name="state"
+                          placeholder="Enter State"
+                          className={styles.field_style}
+                        />
+                        <ErrorMessage
+                          name="state"
+                          component="p"
+                          className={styles.error_msg}
+                        />
+                      </div>
+                    </div>
                   </div>
 
-                  <div className={styles.field_wrapper}>
-                    <label className={styles.label_Style}>
-                      Telephone Number
-                    </label>
-                    <Field
-                      name="telephoneNumber"
-                      placeholder="Enter Telephone Number"
-                      className={styles.field_style}
-                    />
-                    <ErrorMessage
-                      name="telephoneNumber"
-                      component="p"
-                      className={styles.error_msg}
-                    />
-                  </div>
+                  <div className="flex gap-6 my-6 flex-col">
 
-                  <div className={styles.field_wrapper}>
-                    <label className={styles.label_Style}>City</label>
-                    <Field
-                      name="city"
-                      placeholder="Enter City"
-                      className={styles.field_style}
-                    />
-                    <ErrorMessage
-                      name="city"
-                      component="p"
-                      className={styles.error_msg}
-                    />
-                  </div>
-                </div>
-
-                <div className="flex sm:w-1/2 w-full flex-col gap-4">
-                  <div className={styles.field_wrapper}>
-                    <label className={styles.label_Style}>Mobile Number</label>
-                    <Field
-                      name="mobileNumber"
-                      placeholder="Enter Mobile Number"
-                      className={styles.field_style}
-                    />
-                    <ErrorMessage
-                      name="mobileNumber"
-                      component="p"
-                      className={styles.error_msg}
-                    />
-                  </div>
-
-                  <div className={styles.field_wrapper}>
-                    <label className={styles.label_Style}>Email</label>
-                    <Field
-                      name="email"
-                      placeholder="Enter Email Address"
-                      className={styles.field_style}
-                    />
-                    <ErrorMessage
-                      name="email"
-                      component="p"
-                      className={styles.error_msg}
-                    />
-                  </div>
-
-                  <div className={styles.field_wrapper}>
-                    <label className={styles.label_Style}>State</label>
-                    <Field
-                      name="state"
-                      placeholder="Enter State"
-                      className={styles.field_style}
-                    />
-                    <ErrorMessage
-                      name="state"
-                      component="p"
-                      className={styles.error_msg}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className={styles.field_wrapper}>
-                <label className={styles.label_Style}>Shop Address</label>
-                <Field
-                  name="shopAddress"
-                  placeholder="Enter Shop Address"
-                  className={`${styles.field_style} !max-w-[584px] !w-full`}
-                />
-                <ErrorMessage
-                  name="shopAddress"
-                  component="p"
-                  className={styles.error_msg}
-                />
-              </div>
-
-              {/* Cover image */}
-              <div>
-                <label className={styles.label_Style}>Add Cover Image</label>
-                <div
-                  className={styles.dotted_box}
-                  onClick={() => coverImageInputRef.current?.click()}
-                >
-                  <Image src={Images.uploadImg} alt="img" className="w-8 h-8" />
-                  <Button otherStyles="mt-[50px]">
-                    <Image
-                      src={Images.plus}
-                      alt="plus"
-                      width={20}
-                      height={20}
-                    />
-                    Add Cover Image
-                  </Button>
-                  <input
-                    type="file"
-                    ref={coverImageInputRef}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                      const files = event.currentTarget.files;
-                      if (files && files.length > 0) {
-                        setFieldValue("coverImage", files[0]);
-                      }
-                    }}
-                    style={{ display: "none" }}
-                    name="coverImage"
-                  />
-                  {values.coverImage && (
-                    <p className={styles.selected_file}>
-                      {values.coverImage.name}
-                    </p>
-                  )}
-                </div>
-                <ErrorMessage
-                  name="coverImage"
-                  component="p"
-                  className={styles.error_msg}
-                />
-              </div>
-
-              {/* Profile image */}
-              <div className="flex w-full sm:flex-row flex-col gap-6">
-                <div
-                  className="sm:w-1/2 w-full"
-                  onClick={() => profileImageInputRef.current?.click()}
-                >
-                  <label className={styles.label_Style}>
-                    Add Profile Image
-                  </label>
-                  <div className={styles.dotted_box}>
-                    <Image
-                      src={Images.uploadImg}
-                      alt="img"
-                      className="w-8 h-8"
-                    />
-                    <Button otherStyles="mt-[50px]">
-                      <Image
-                        src={Images.plus}
-                        alt="plus"
-                        width={20}
-                        height={20}
+                    {/* shop Address */}
+                    <div className={styles.field_wrapper}>
+                      <label className={styles.label_Style}>Shop Address</label>
+                      <Field
+                        name="shopAddress"
+                        placeholder="Enter Shop Address"
+                        className={`${styles.field_style} !max-w-[584px] !w-full`}
                       />
-                      Add Profile Image
-                    </Button>
-                    <input
-                      type="file"
-                      ref={profileImageInputRef}
-                      style={{ display: "none" }}
-                      onChange={(
-                        event: React.ChangeEvent<HTMLInputElement>
-                      ) => {
-                        const files = event.currentTarget.files;
-                        if (files && files.length > 0) {
-                          setFieldValue("profileImage", files[0]);
-                        }
-                      }}
-                      name="profileImage"
-                    />
-                    {values.profileImage && (
-                      <p className={styles.selected_file}>
-                        {values.profileImage.name}
-                      </p>
-                    )}
-                  </div>
-                  <ErrorMessage
-                    name="profileImage"
-                    component="p"
-                    className={styles.error_msg}
-                  />
-                </div>
-
-                {/* Add shop image */}
-                <div className="sm:w-1/2 w-full">
-                  <label className={styles.label_Style}>Add Shop Image</label>
-                  <div
-                    className={styles.dotted_box}
-                    onClick={() => shopImageInputRef.current?.click()}
-                  >
-                    <Image
-                      src={Images.uploadImg}
-                      alt="img"
-                      className="w-8 h-8"
-                    />
-                    <Button otherStyles="mt-[50px]">
-                      <Image
-                        src={Images.plus}
-                        alt="plus"
-                        width={20}
-                        height={20}
+                      <ErrorMessage
+                        name="shopAddress"
+                        component="p"
+                        className={styles.error_msg}
                       />
-                      Add Shop Image
-                    </Button>
-                    <input
-                      type="file"
-                      ref={shopImageInputRef}
-                      onChange={(
-                        event: React.ChangeEvent<HTMLInputElement>
-                      ) => {
-                        const files = event.currentTarget.files;
-                        if (files && files.length > 0) {
-                          setFieldValue("shopImage", files[0]);
-                        }
-                      }}
-                      style={{ display: "none" }}
-                      name="shopImage"
-                    />
-                    {values.shopImage && (
-                      <p className={styles.selected_file}>
-                        {values.shopImage.name}
-                      </p>
-                    )}
-                  </div>
-                  <ErrorMessage
-                    name="shopImage"
-                    component="p"
-                    className={styles.error_msg}
-                  />
-                </div>
-              </div>
+                    </div>
+                    {/* Cover image */}
+                    <div>
+                      <label className={styles.label_Style}>
+                        Add Cover Image
+                      </label>
+                      <div
+                        className={styles.dotted_box}
+                        onClick={() => coverImageInputRef.current?.click()}
+                      >
+                        <Image
+                          src={Images.uploadImg}
+                          alt="img"
+                          className="w-8 h-8"
+                        />
+                        <Button otherStyles="mt-[50px]">
+                          <Image
+                            src={Images.plus}
+                            alt="plus"
+                            width={20}
+                            height={20}
+                          />
+                          Add Cover Image
+                        </Button>
+                        <input
+                          type="file"
+                          ref={coverImageInputRef}
+                          onChange={(
+                            event: React.ChangeEvent<HTMLInputElement>
+                          ) => {
+                            const files = event.currentTarget.files;
+                            if (files && files.length > 0) {
+                              setFieldValue("coverImage", files[0]);
+                            }
+                          }}
+                          style={{ display: "none" }}
+                          name="coverImage"
+                        />
+                        {values.coverImage && (
+                          <p className={styles.selected_file}>
+                            {values.coverImage.name}
+                          </p>
+                        )}
+                      </div>
+                      <ErrorMessage
+                        name="coverImage"
+                        component="p"
+                        className={styles.error_msg}
+                      />
+                    </div>
 
-              <button
-                type="submit"
-                className="w-full mx-auto"
-                disabled={isSubmitting}
-              >
-                <Button otherStyles="sm:w-[430px] w-full mx-auto uppercase">
-                  Get OTP
-                </Button>
-              </button>
-              {/* Bottom info */}
-              <div className="flex items-center flex-col mt-6 ">
-                <p className={styles.info_text}>Have an Account?</p>
-                <p
-                  className={`${styles.info_text} underline cursor-pointer`}
-                  onClick={handleLoginClick}
-                >
-                  Login
-                </p>
-              </div>
-              </div>}
+                    {/* Profile image */}
+                    <div className="flex w-full sm:flex-row flex-col gap-6">
+                      <div
+                        className="sm:w-1/2 w-full"
+                        onClick={() => profileImageInputRef.current?.click()}
+                      >
+                        <label className={styles.label_Style}>
+                          Add Profile Image
+                        </label>
+                        <div className={styles.dotted_box}>
+                          <Image
+                            src={Images.uploadImg}
+                            alt="img"
+                            className="w-8 h-8"
+                          />
+                          <Button otherStyles="mt-[50px]">
+                            <Image
+                              src={Images.plus}
+                              alt="plus"
+                              width={20}
+                              height={20}
+                            />
+                            Add Profile Image
+                          </Button>
+                          <input
+                            type="file"
+                            ref={profileImageInputRef}
+                            style={{ display: "none" }}
+                            onChange={(
+                              event: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                              const files = event.currentTarget.files;
+                              if (files && files.length > 0) {
+                                setFieldValue("profileImage", files[0]);
+                              }
+                            }}
+                            name="profileImage"
+                          />
+                          {values.profileImage && (
+                            <p className={styles.selected_file}>
+                              {values.profileImage.name}
+                            </p>
+                          )}
+                        </div>
+                        <ErrorMessage
+                          name="profileImage"
+                          component="p"
+                          className={styles.error_msg}
+                        />
+                      </div>
+
+                      {/* Add shop image */}
+                      <div className="sm:w-1/2 w-full">
+                        <label className={styles.label_Style}>
+                          Add Shop Image
+                        </label>
+                        <div
+                          className={styles.dotted_box}
+                          onClick={() => shopImageInputRef.current?.click()}
+                        >
+                          <Image
+                            src={Images.uploadImg}
+                            alt="img"
+                            className="w-8 h-8"
+                          />
+                          <Button otherStyles="mt-[50px]">
+                            <Image
+                              src={Images.plus}
+                              alt="plus"
+                              width={20}
+                              height={20}
+                            />
+                            Add Shop Image
+                          </Button>
+                          <input
+                            type="file"
+                            ref={shopImageInputRef}
+                            onChange={(
+                              event: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                              const files = event.currentTarget.files;
+                              if (files && files.length > 0) {
+                                setFieldValue("shopImage", files[0]);
+                              }
+                            }}
+                            style={{ display: "none" }}
+                            name="shopImage"
+                          />
+                          {values.shopImage && (
+                            <p className={styles.selected_file}>
+                              {values.shopImage.name}
+                            </p>
+                          )}
+                        </div>
+                        <ErrorMessage
+                          name="shopImage"
+                          component="p"
+                          className={styles.error_msg}
+                        />
+                      </div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="w-full mx-auto"
+                      disabled={isSubmitting}
+                    >
+                      <Button otherStyles="sm:w-[430px] w-full mx-auto uppercase">
+                        Get OTP
+                      </Button>
+                    </button>
+                    {/* Bottom info */}
+                    <div className="flex items-center flex-col mt-6 ">
+                      <p className={styles.info_text}>Have an Account?</p>
+                      <p
+                        className={`${styles.info_text} underline cursor-pointer`}
+                        onClick={handleLoginClick}
+                      >
+                        Login
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </Form>
           )}
         </Formik>
