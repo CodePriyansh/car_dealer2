@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -11,8 +9,6 @@ import Image from "next/image";
 import { Images } from "@/assets/Images";
 import { useRouter } from "next/navigation";
 
-
-
 const validationSchema = Yup.object({
   mobileNumber: Yup.string()
     .matches(/^[0-9]+$/, "Mobile number must be digits only")
@@ -21,24 +17,34 @@ const validationSchema = Yup.object({
     .required("Mobile number is required"),
 });
 
-const LoginForm= () => {
+const LoginForm = () => {
   const router = useRouter();
   const [otpSend, setOtpSend] = useState(false);
-  const [backBtnStatus, setBackBtnStatus] = useState(true)
-
+  const [backBtnStatus, setBackBtnStatus] = useState(true);
 
   const handleSubmit = (values: any, { setSubmitting }: any) => {
     console.log(values, "submitted values");
     // Simulating OTP send
-    setOtpSend(true);
-    setSubmitting(false);
-    setBackBtnStatus(true);
+    sendOtp(`+91${values.mobileNumber}`)
+      .then(() => {
+        console.log("OTP sent successfully");
+        setOtpSend(true);
+        setSubmitting(false);
+        setBackBtnStatus(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
+    // setOtpSend(true);
+    // setSubmitting(false);
+    // setBackBtnStatus(true);
   };
 
   return (
     <div>
-      {otpSend && backBtnStatus &&(
+      <div id="recaptcha-container"></div>
+      {otpSend && backBtnStatus && (
         <div
           className="absolute left-16 flex gap-2 items-center cursor-pointer"
           onClick={() => {
@@ -66,7 +72,7 @@ const LoginForm= () => {
       />
       <p className={styles.subheading}>My Car</p>
       <p className={styles.heading}>Login Account</p>
-      {otpSend && backBtnStatus? (
+      {otpSend && backBtnStatus ? (
         <OtpVerification />
       ) : (
         <Formik
@@ -98,7 +104,7 @@ const LoginForm= () => {
                 </Button>
               </button>
               <div className="flex items-center flex-col mt-6">
-                <p className={styles.info_text}>Don't Have an Account?</p>
+                <p className={styles.info_text}>Don&#39;t Have an Account?</p>
                 <p
                   className={`${styles.info_text} underline cursor-pointer`}
                   onClick={() => router.push("/signup")}

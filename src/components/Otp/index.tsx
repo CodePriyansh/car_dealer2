@@ -85,7 +85,7 @@ export default function OtpVerification() {
               onChange={(e) => handleChange(e, index)}
               onKeyDown={(e) => handleBackspace(e, index)}
               ref={(el) => (inputRefs.current[index] = el)}
-              className="w-12 h-12 text-xl text-center font-semibold border border-primary rounded"
+              className="w-12 h-12 text-xl text-center font-semibold border outline-none border-primary rounded"
             />
           ))}
         </div>
