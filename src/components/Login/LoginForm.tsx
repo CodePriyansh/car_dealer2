@@ -25,23 +25,6 @@ const LoginForm = () => {
   const [backBtnStatus, setBackBtnStatus] = useState(true);
   const [mobileNumber, setMobileNumber] = useState('');
 
-  useEffect(() => {
-    const container = document.getElementById('recaptcha-container');
-    if (!container) {
-      const div = document.createElement('div');
-      div.id = 'recaptcha-container';
-      document.body.appendChild(div);
-    }
-
-    return () => {
-      // Cleanup on component unmount
-      if (window.recaptchaVerifier) {
-        window.recaptchaVerifier.clear();
-        window.recaptchaVerifier = null;
-      }
-    };
-  }, []);
-
   const handleSubmit = (values, { setSubmitting }) => {
     console.log(values, "submitted values");
     sendOtp(`+91${values.mobileNumber}`)
@@ -51,7 +34,7 @@ const LoginForm = () => {
         setOtpSend(true);
         setSubmitting(false);
         setBackBtnStatus(true);
-        toast.success("OTP sent successfully!");
+        // toast.success("OTP sent successfully!");
       })
       .catch((err) => {
         console.log(err);
