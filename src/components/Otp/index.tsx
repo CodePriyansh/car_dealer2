@@ -1,15 +1,13 @@
-"use client";
-
 import React, { useRef, useState, useEffect } from "react";
-import signup from "../../assets/signup_login.png";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import { verifyOtp, sendOtp } from "@/services/firebase/firebaseAuthService"; // Import sendOtp and verifyOtp functions
 import styles from "../SignUp/styles.module.css";
-import Image from "next/image";
-import { Images } from "@/assets/Images";
 import { useRouter } from "next/navigation";
 import Button from "../Common/Button";
 
-export default function OtpVerification() {
-  const [otp, setOtp] = useState(["", "", "", ""]);
+const OtpVerification = ({ mobileNumber }) => {
+  const [otp, setOtp] = useState(["", "", "", "", "",``]);
   const [seconds, setSeconds] = useState(56);
   const [isOtpEntered, setIsOtpEntered] = useState(false);
   const inputRefs = useRef([]);
@@ -32,7 +30,8 @@ export default function OtpVerification() {
       newOtp[index] = value;
       setOtp(newOtp);
 
-      if (value && index < 3) {
+      if (value && index < 5) {
+        console.log(index )
         inputRefs.current[index + 1].focus();
       }
 
@@ -55,25 +54,44 @@ export default function OtpVerification() {
   };
 
   const handleResend = () => {
-    // Resend OTP logic
-    console.log("Resend OTP");
-    setSeconds(59);
-    setOtp(["", "", "", ""]);
-    setIsOtpEntered(false);
-    inputRefs.current[0].focus();
+    sendOtp(`+91${mobileNumber}`)
+      .then(() => {
+        console.log("OTP resent successfully");
+        setSeconds(59);
+        setOtp(["", "", "", "", "", ""]);
+        setIsOtpEntered(false);
+        inputRefs.current[0].focus();
+        toast.success("OTP resent successfully!");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Failed to resend OTP. Please try again.");
+      });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const otpValue = otp.join("");
-    // Verify OTP logic
-    console.log("OTP Value:", otpValue);
-    // Redirect to the next page
-    router.push("/");
+    try {
+      const user = await verifyOtp(otpValue);
+      console.log("OTP verified successfully", user);
+
+      // Call the login API here
+      // const response = await loginApi({ mobileNumber, user });
+      toast.success("OTP verified successfully!");
+      console.log("Login API called with mobile number:", mobileNumber);
+
+      // Redirect to the next page
+      router.push("/");
+    } catch (error) {
+      console.error("OTP verification failed", error);
+      toast.error("Failed to verify OTP. Please try again.");
+    }
   };
 
   return (
     <div className="flex flex-col">
+      <ToastContainer />
       <form onSubmit={handleSubmit} className="flex flex-col items-center">
         <div className="flex gap-4 mb-4">
           {otp.map((digit, index) => (
@@ -113,4 +131,6 @@ export default function OtpVerification() {
       </form>
     </div>
   );
-}
+};
+
+export default OtpVerification;
