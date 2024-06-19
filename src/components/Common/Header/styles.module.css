@@ -1,0 +1,3 @@
+.wrapper{
+    @apply h-[90px] bg-white border-b border-border-primary px-[60px]
+}

@@ -21,7 +21,10 @@ const config: Config = {
         primary:"#EF6E0B",
         secondary:"#0059A3",
         greyy:'rgba(0, 0, 0, 0.3)',
-        para:'rgba(0, 0, 0, 1)'
+        line:'rgba(0, 0, 0, 0.2)',
+        para:'rgba(0, 0, 0, 1)',
+        'border-primary':'#0000001A',
+        'f7f7f7':'#F7F7F7',
       },
       fontSize: {
         48:"48"

@@ -1,0 +1,21 @@
+.wrapper{
+@apply flex w-full justify-between items-center px-[60px] py-[45px] bg-f7f7f7;
+}
+
+.left{
+    @apply flex
+}
+
+.mid{
+    @apply flex
+}
+
+.right{
+    @apply flex gap-[14px]
+}
+.fill_btn{
+    @apply gap-2 items-center;
+}
+.clear_fil_btn{
+    @apply gap-2 items-center bg-transparent text-primary border-primary border;
+}
