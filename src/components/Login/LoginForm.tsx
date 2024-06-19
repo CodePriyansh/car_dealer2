@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import styles from "../SignUp/styles.module.css";
 import Button from "../Common/Button";
 import { sendOtp } from "@/services/firebase/firebaseAuthService";
@@ -21,29 +23,30 @@ const LoginForm = () => {
   const router = useRouter();
   const [otpSend, setOtpSend] = useState(false);
   const [backBtnStatus, setBackBtnStatus] = useState(true);
+  const [mobileNumber, setMobileNumber] = useState('');
 
-  const handleSubmit = (values: any, { setSubmitting }: any) => {
+  const handleSubmit = (values, { setSubmitting }) => {
     console.log(values, "submitted values");
-    // Simulating OTP send
     sendOtp(`+91${values.mobileNumber}`)
       .then(() => {
         console.log("OTP sent successfully");
+        setMobileNumber(values.mobileNumber);
         setOtpSend(true);
         setSubmitting(false);
         setBackBtnStatus(true);
+        // toast.success("OTP sent successfully!");
       })
       .catch((err) => {
         console.log(err);
+        setSubmitting(false);
+        toast.error("Failed to send OTP. Please try again.");
       });
-
-    // setOtpSend(true);
-    // setSubmitting(false);
-    // setBackBtnStatus(true);
   };
 
   return (
     <div>
-      <div id="recaptcha-container"></div>
+      <ToastContainer />
+      
       {otpSend && backBtnStatus && (
         <div
           className="absolute left-16 flex gap-2 items-center cursor-pointer"
@@ -73,7 +76,7 @@ const LoginForm = () => {
       <p className={styles.subheading}>My Car</p>
       <p className={styles.heading}>Login Account</p>
       {otpSend && backBtnStatus ? (
-        <OtpVerification />
+        <OtpVerification mobileNumber={mobileNumber} />
       ) : (
         <Formik
           initialValues={{ mobileNumber: "" }}

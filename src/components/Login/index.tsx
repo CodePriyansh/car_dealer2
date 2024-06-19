@@ -15,6 +15,8 @@ export default function Login() {
   
   return (
     <div className={styles.wrapper}>
+      <div id="recaptcha-container"></div>
+
         <div className={styles.left_wrapper}>
             <div className='w-full h-full'  style={{
                     backgroundImage: `url(${signup.src})`,
