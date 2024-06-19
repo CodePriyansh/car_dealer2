@@ -92,7 +92,9 @@ export default function SignupForm() {
           onSubmit={onSubmit}
         >
           {({ setFieldValue, isSubmitting, values }) => (
-            <Form className={` ${styles.scrollbar} `}>
+            <Form className={` ${styles.scrollbar} ${otpSend && backBtnStatus && 'flex flex-col justify-start'}`}>
+           
+           <div>
               {otpSend && backBtnStatus && (
                 <div
                   className="absolute left-16 flex gap-2 items-center cursor-pointer"
@@ -121,6 +123,9 @@ export default function SignupForm() {
               />
               <p className={styles.subheading}>My Car</p>
               <p className={styles.heading}>Signup Account</p>
+
+              </div>
+
               {otpSend && backBtnStatus ? (
                 <OtpVerification />
               ) : (
