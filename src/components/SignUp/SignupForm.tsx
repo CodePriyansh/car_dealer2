@@ -10,6 +10,7 @@ import { Images } from "@/assets/Images";
 import Button from "@/components/Common/Button/index";
 import { useRouter } from "next/navigation";
 import OtpVerification from "../Otp";
+import { toast } from "react-toastify";
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -63,8 +64,7 @@ export default function SignupForm() {
           "Content-Type": "multipart/form-data",
         },
       });
-      setMessage("Dealer registered successfully!");
-      setOtpSend(true);
+        toast.success("dealer added successfully")
     } catch (error) {
       setMessage("Failed to register dealer.");
       setOtpSend(false);

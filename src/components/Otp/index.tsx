@@ -1,13 +1,13 @@
 import React, { useRef, useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 import { verifyOtp, sendOtp } from "@/services/firebase/firebaseAuthService"; // Import sendOtp and verifyOtp functions
 import styles from "../SignUp/styles.module.css";
 import { useRouter } from "next/navigation";
 import Button from "../Common/Button";
+import axios from "axios";
 
 const OtpVerification = ({ mobileNumber }) => {
-  const [otp, setOtp] = useState(["", "", "", "", "",``]);
+  const [otp, setOtp] = useState(["", "", "", "", "", ``]);
   const [seconds, setSeconds] = useState(56);
   const [isOtpEntered, setIsOtpEntered] = useState(false);
   const inputRefs = useRef([]);
@@ -31,7 +31,7 @@ const OtpVerification = ({ mobileNumber }) => {
       setOtp(newOtp);
 
       if (value && index < 5) {
-        console.log(index )
+        console.log(index);
         inputRefs.current[index + 1].focus();
       }
 
@@ -75,9 +75,20 @@ const OtpVerification = ({ mobileNumber }) => {
     try {
       const user = await verifyOtp(otpValue);
       console.log("OTP verified successfully", user);
-
-      // Call the login API here
-      // const response = await loginApi({ mobileNumber, user });
+      try {
+        const response = await axios.post(
+          "http://localhost:8000/api/dealers/login",
+          { phoneNumber:mobileNumber },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
       toast.success("OTP verified successfully!");
       console.log("Login API called with mobile number:", mobileNumber);
 
