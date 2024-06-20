@@ -9,6 +9,10 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import styles from "./styles.module.css";
 
+interface Step1Props {
+  setShowActiveStep: () => void; // Replace `any` with the correct type if needed
+}
+
 const fields = [
   {
     name: "company",
@@ -124,7 +128,7 @@ const validationSchema = Yup.object().shape(
       return acc;
     }, {})
   );
-export default function Step1() {
+  const Step1: React.FC<Step1Props> = ({ setShowActiveStep }) => {
     const initialValues = fields.reduce((acc, field) => {
         acc[field.name] = "";
         return acc;
@@ -285,8 +289,9 @@ export default function Step1() {
           type="submit"
           className="mx-auto w-full"
           disabled={isSubmitting}
+
         >
-          <Button otherStyles={styles.next_btn}>
+          <Button otherStyles={styles.next_btn} onclick={()=>setShowActiveStep(2)}>
             {isSubmitting ? "Submitting..." : "Next"}
           </Button>
         </button>
@@ -295,3 +300,5 @@ export default function Step1() {
   </Formik></div>
   )
 }
+
+export default Step1;
