@@ -30,6 +30,7 @@ const LoginForm = () => {
       .then(() => {
         console.log("OTP sent successfully");
         setMobileNumber(values.mobileNumber);
+        
         setOtpSend(true);
         setSubmitting(false);
         setBackBtnStatus(true);
@@ -75,7 +76,7 @@ const LoginForm = () => {
       <p className={styles.subheading}>My Car</p>
       <p className={styles.heading}>Login Account</p>
       {otpSend && backBtnStatus ? (
-        <OtpVerification mobileNumber={mobileNumber} />
+        <OtpVerification mobileNumber={mobileNumber} formData={undefined}/>
       ) : (
         <Formik
           initialValues={{ mobileNumber: "" }}

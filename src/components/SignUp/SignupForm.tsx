@@ -33,7 +33,7 @@ export default function SignupForm() {
   const [otpSend, setOtpSend] = useState(false);
   const [backBtnStatus, setBackBtnStatus] = useState(true);
   const [mobileNumber, setMobileNumber] = useState('');
-
+  const [formData, setFormData] = useState<FormData | null>(null);
   const initialValues = {
     name: "",
     mobileNumber: "",
@@ -59,8 +59,8 @@ export default function SignupForm() {
     for (const key in values) {
       formData.append(key, values[key]);
     }
-
-
+console.log(formData.entries(),"signup form daat");
+    setFormData(formData); 
     sendOtp(`+91${values.mobileNumber}`)
       .then(() => {
         console.log("OTP sent successfully");
@@ -68,7 +68,7 @@ export default function SignupForm() {
         setOtpSend(true);
         setSubmitting(false);
         setBackBtnStatus(true);
-        // toast.success("OTP sent successfully!");
+        toast.success("OTP sent successfully!");
       })
       .catch((err) => {
         console.log(err);
@@ -148,7 +148,7 @@ export default function SignupForm() {
               </div>
 
               {otpSend && backBtnStatus ? (
-                <OtpVerification />
+                <OtpVerification mobileNumber={mobileNumber} formData={formData} />
               ) : (
                 <div>
                   <div className="w-full flex sm:flex-row flex-col gap-8">

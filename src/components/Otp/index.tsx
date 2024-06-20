@@ -4,9 +4,8 @@ import { verifyOtp, sendOtp } from "@/services/firebase/firebaseAuthService"; //
 import styles from "../SignUp/styles.module.css";
 import { useRouter } from "next/navigation";
 import Button from "../Common/Button";
-import axios from "axios";
-
-const OtpVerification = ({ mobileNumber }) => {
+import instance from "@/network/axios";
+const OtpVerification = ({ mobileNumber, formData }) => {
   const [otp, setOtp] = useState(["", "", "", "", "", ``]);
   const [seconds, setSeconds] = useState(56);
   const [isOtpEntered, setIsOtpEntered] = useState(false);
@@ -18,7 +17,7 @@ const OtpVerification = ({ mobileNumber }) => {
       const timer = setInterval(() => {
         setSeconds((prev) => prev - 1);
       }, 1000);
-
+      console.log(formData, "otp form data");
       return () => clearInterval(timer);
     }
   }, [seconds]);
@@ -74,26 +73,31 @@ const OtpVerification = ({ mobileNumber }) => {
     const otpValue = otp.join("");
     try {
       const user = await verifyOtp(otpValue);
-      console.log("OTP verified successfully", user);
-      try {
-        const response = await axios.post(
-          "http://localhost:8000/api/dealers/login",
-          { phoneNumber:mobileNumber },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        console.log(response);
-      } catch (error) {
-        console.log(error);
-      }
       toast.success("OTP verified successfully!");
       console.log("Login API called with mobile number:", mobileNumber);
+      try {
+
+        try {
+          const url = formData ? "/api/dealers/signup" : "/api/dealers/login";
+          const payload = formData
+            ? formData
+            : { phoneNumber: { mobileNumber } };
+          const response = await instance.post(url, payload);
+          console.log(
+            "Signup API called successfully with mobile number:",
+            mobileNumber
+          );
+           toast.success(response?.response?.data.message)
+        } catch (error) {
+          console.error("Failed to call signup API", error);
+          toast.error("Failed to call signup API. Please try again.");
+        }
+      } catch (error) {
+        console.error("OTP verification failed", error);
+        toast.error("Failed to verify OTP. Please try again.");
+      }
 
       // Redirect to the next page
-      router.push("/");
     } catch (error) {
       console.error("OTP verification failed", error);
       toast.error("Failed to verify OTP. Please try again.");
