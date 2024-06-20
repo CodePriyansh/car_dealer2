@@ -11,6 +11,7 @@ import Button from "@/components/Common/Button/index";
 import { useRouter } from "next/navigation";
 import OtpVerification from "../Otp";
 import { toast } from "react-toastify";
+import { sendOtp } from "@/services/firebase/firebaseAuthService";
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -31,6 +32,7 @@ export default function SignupForm() {
   const [message, setMessage] = useState("");
   const [otpSend, setOtpSend] = useState(false);
   const [backBtnStatus, setBackBtnStatus] = useState(true);
+  const [mobileNumber, setMobileNumber] = useState('');
 
   const initialValues = {
     name: "",
@@ -58,23 +60,42 @@ export default function SignupForm() {
       formData.append(key, values[key]);
     }
 
-    try {
-      const response = await axios.post("YOUR_API_ENDPOINT", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-        toast.success("dealer added successfully")
-    } catch (error) {
-      setMessage("Failed to register dealer.");
-      setOtpSend(false);
-    } finally {
-      setLoading(false);
+
+    sendOtp(`+91${values.mobileNumber}`)
+      .then(() => {
+        console.log("OTP sent successfully");
+        setMobileNumber(values.mobileNumber);
+        setOtpSend(true);
+        setSubmitting(false);
+        setBackBtnStatus(true);
+        // toast.success("OTP sent successfully!");
+      })
+      .catch((err) => {
+        console.log(err);
+        setSubmitting(false);
+        setLoading(false);
       setSubmitting(false);
       setOtpSend(false);
-    }
+        toast.error("Failed to send OTP. Please try again.");
+      });
+
+    // try {
+    //   const response = await axios.post("YOUR_API_ENDPOINT", formData, {
+    //     headers: {
+    //       "Content-Type": "multipart/form-data",
+    //     },
+    //   });
+    //     toast.success("dealer added successfully")
+    // } catch (error) {
+    //   setMessage("Failed to register dealer.");
+    //   setOtpSend(false);
+    // } finally {
+    //   setLoading(false);
+    //   setSubmitting(false);
+    //   setOtpSend(false);
+    // }
     // ye line comment kar dena jab api call sai chale tab
-    setOtpSend(true);
+    // setOtpSend(true);
   };
 
   const coverImageInputRef = useRef<HTMLInputElement | null>(null);

@@ -1,35 +1,49 @@
-.wrapper{
-    @apply bg-f7f7f7 w-full px-[60px] py-[44px]
-}
-.form_wrapper{
+/* styles.module.css */
+
+.wrapper {
+    @apply bg-f7f7f7 w-full px-[60px] py-[44px];
+  }
+  .form_wrapper {
     @apply flex bg-white p-8 flex-col;
     box-shadow: 0px 0px 20px 0px #0000000F;
-
-}
-.heading{
-    @apply text-primary sm:text-[36px] text-[32px] font-bold  text-center w-full font-rajdhani;
-}
-.basic_detail_heading{
-@apply flex w-full items-center mt-8;
-}
-.sub_heading{
-@apply font-rajdhani whitespace-nowrap text-black font-bold text-[24px] pr-1
-}
-.line{
-@apply w-full h-[1px] bg-line ;
-}
-.field_wrapper{
+  }
+  .heading {
+    @apply text-primary sm:text-[36px] text-[32px] font-bold text-center w-full font-rajdhani;
+  }
+  .basic_detail_heading {
+    @apply flex w-full items-center mt-8;
+  }
+  .sub_heading {
+    @apply font-rajdhani whitespace-nowrap text-black font-bold text-[24px] pr-1;
+  }
+  .line {
+    @apply w-full h-[1px] bg-line;
+  }
+  .field_wrapper {
     @apply flex flex-col w-full max-h-[110px] h-[110px];
-}
-.label_Style{
-    @apply text-base text-para uppercase pb-1 font-medium ;
-}
-.field_style{
-    @apply py-4 px-6 border border-primary rounded-[50px] w-full placeholder:text-[14px] placeholder:text-greyy outline-none max-h-[50px] h-[50px];
-}
-.special_heading{
-    @apply text-line font-rajdhani text-[24px] px-1 whitespace-nowrap
-}
-.next_btn{
-    @apply bg-secondary w-[300px] mx-auto text-white my-14
-}
+  }
+  .label_Style {
+    @apply text-lg text-para capitalize pb-1 font-medium font-rajdhani;
+  }
+  .field_style {
+    @apply py-1 px-6 border border-primary rounded-[50px] w-full placeholder:text-[14px] placeholder:text-greyy max-h-[50px] h-[45px]  outline-none focus:border-primary focus:border-2;
+  }
+  .special_heading {
+    @apply text-line font-rajdhani text-[24px] px-1 whitespace-nowrap;
+  }
+  .next_btn {
+    @apply bg-secondary w-[300px] mx-auto text-white my-14;
+  }
+  /* Additional styles for textareas */
+  /* textarea {
+    @apply border border-primary rounded-[20px] max-!h-full !h-full px-4 py-2;
+  } */
+  /* Additional styles for error messages */
+  /* .text-red-500 {
+    @apply text-red-500 text-sm;
+  } */
+  /* Styles for dotted box */
+  .dotted_box {
+    @apply border border-dashed border-gray-300 p-4 flex flex-col items-center justify-center;
+  }
+  

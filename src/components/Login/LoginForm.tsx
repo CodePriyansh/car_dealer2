@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { toast, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 import styles from "../SignUp/styles.module.css";
 import Button from "../Common/Button";
 import { sendOtp } from "@/services/firebase/firebaseAuthService";
