@@ -17,10 +17,10 @@
     @apply font-rajdhani whitespace-nowrap text-black font-bold text-[24px] pr-1;
   }
   .line {
-    @apply w-full h-[1px] bg-line;
+    @apply w-full h-[1px] bg-line hidden sm:flex;
   }
   .field_wrapper {
-    @apply flex flex-col w-full max-h-[110px] h-[110px];
+    @apply flex flex-col w-full sm:max-h-[110px] sm:h-[110px] h-[90px] max-h-[90px];
   }
   .label_Style {
     @apply text-lg text-para capitalize pb-1 font-medium font-rajdhani;
@@ -29,7 +29,7 @@
     @apply py-1 px-6 border border-primary rounded-[50px] w-full placeholder:text-[14px] placeholder:text-greyy max-h-[50px] h-[45px]  outline-none focus:border-primary focus:border-2;
   }
   .special_heading {
-    @apply text-line font-rajdhani text-[24px] px-1 whitespace-nowrap;
+    @apply text-line font-rajdhani text-[24px] px-1 sm:whitespace-nowrap;
   }
   .next_btn {
     @apply bg-secondary w-[300px] mx-auto text-white my-14;
