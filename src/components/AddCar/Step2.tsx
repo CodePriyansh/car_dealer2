@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import signupStyles from "../SignUp/styles.module.css";
 import Image from "next/image";
 import { Images } from "@/assets/Images";
@@ -99,6 +99,8 @@ export default function Step2() {
     setSubmitting(false); // Make sure to setSubmitting(false) when done with API call
   };
   const [selectedOption, setSelectedOption] = useState(null);
+  const fielImageRef = useRef<HTMLInputElement | null>(null);
+
   return (
     <div>
       <Formik
@@ -115,7 +117,9 @@ export default function Step2() {
             </div>
             <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 w-full gap-6 my-4">
               {fields.map((field, index) => (
-                <div className={signupStyles.dotted_box}>
+                <div className={signupStyles.dotted_box}
+                onClick={() => fielImageRef.current?.click()}
+                >
                   <Image src={Images.uploadImg} alt="img" className="w-8 h-8" />
                   <Button otherStyles="mt-[50px]">
                     <Image
@@ -126,15 +130,21 @@ export default function Step2() {
                     />
                     Add Profile Image
                   </Button>
-                  <Field
+                  <input
                     type="file"
                     // style={{ display: 'none' }}
                     className="hidden"
                     name="profileImage"
-                    onChange={(event) => {
-                      const file = event.currentTarget.files[0];
-                      // form.setFieldValue('profileImage', file);
+                    ref={fielImageRef}
+                    onChange={(
+                      event: React.ChangeEvent<HTMLInputElement>
+                    ) => {
+                      const files = event.currentTarget.files;
+                      if (files && files.length > 0) {
+                        // setFieldValue("shopImage", files[0]);
+                      }
                     }}
+                   
                   />
                   <ErrorMessage
                     name="profileImage"
