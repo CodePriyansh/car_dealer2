@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import signupStyles from "../SignUp/styles.module.css";
 import Image from "next/image";
 import { Images } from "@/assets/Images";
 import Button from "../Common/Button";
-import ReactSelect from "../Common/Select";
 import CommonReactSelect from "../Common/Select";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import styles from "./styles.module.css";
 
 interface Step1Props {
-  setShowActiveStep: () => void; // Replace `any` with the correct type if needed
+  setShowActiveStep: () => void;
+  setValuesObj: (obj:{}) => void;
 }
 
 const fields = [
@@ -123,182 +123,166 @@ const fields = [
 ];
 
 const validationSchema = Yup.object().shape(
-    fields.reduce((acc, field) => {
-      acc[field.name] = Yup.string().required(`${field.placeholder} is required`);
-      return acc;
-    }, {})
-  );
-  const Step1: React.FC<Step1Props> = ({ setShowActiveStep }) => {
-    const initialValues = fields.reduce((acc, field) => {
-        acc[field.name] = "";
-        return acc;
-      }, {});
-    const handleSubmit = (values, { setSubmitting }) => {
-        console.log("Form data", values);
-        // Example: Call API to submit data
-        setSubmitting(false); // Make sure to setSubmitting(false) when done with API call
-      };
-      const [selectedOption, setSelectedOption] = useState(null);
+  fields.reduce((acc, field) => {
+    acc[field.name] = Yup.string().required(`${field.placeholder} is required`);
+    return acc;
+  }, {})
+);
+
+const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setValuesObj }) => {
+  const initialValues = fields.reduce((acc, field) => {
+    acc[field.name] = "";
+    return acc;
+  }, {});
+
+  const handleSubmit = (values, { setSubmitting }) => {
+    console.log("Form data", values, "=====================");
+    setSubmitting(false);
+    setValuesObj(values)
+    setShowActiveStep(2)
+  };
+
   return (
-    <div><Formik
-    initialValues={initialValues}
-    validationSchema={validationSchema}
-    onSubmit={handleSubmit}
-  >
-    {({ isSubmitting }) => (
-      <Form className="w-full">
-        {/* Basic Details */}
-        <div className={styles.basic_detail_heading}>
-          <p className={styles.sub_heading}>Basic Details</p>
-          <p className={styles.line}></p>
-        </div>
-        <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 w-full gap-6 my-4">
-          {fields.map((field, index) => (
-            <div className={styles.field_wrapper} key={index}>
-              <label className={styles.label_Style}>{field.name}</label>
-              {field.type !== "select" && (
-                <Field
-                  as={field.type === "select" ? "select" : "input"}
-                  type={field.type}
-                  name={field.name}
-                  placeholder={field.placeholder}
-                  className={styles.field_style}
-                >
-                  {/* {field.type === "select" ? (
-                  <>
-                    <option value="">{field.placeholder}</option>
-                    {field.options?.map((option, idx) => (
-                      <option value={option} key={idx}>
-                        {option}
-                      </option>
-                    ))}
-                  </>
-                ) : null} */}
-                </Field>
-              )}
-              {field.type === "select" && (
-                <CommonReactSelect
-                options={field.options}
-                  placeholder={field.placeholder}
-                  selectedOption={selectedOption}
-                  setSelectedOption={setSelectedOption}
-                  className={styles.field_style}
-                />
-              )}
-              <ErrorMessage
-                name={field.name}
-                component="div"
-                className="text-red-500 text-sm"
-              />
+    <div>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ isSubmitting }) => (
+          <Form className="w-full">
+            {/* Basic Details */}
+            <div className={styles.basic_detail_heading}>
+              <p className={styles.sub_heading}>Basic Details</p>
+              <p className={styles.line}></p>
             </div>
-          ))}
-        </div>
+            <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 w-full gap-6 my-4">
+              {fields.map((field, index) => (
+                <div className={styles.field_wrapper} key={index}>
+                  <label className={styles.label_Style}>{field.name}</label>
+                  {field.type !== "select" && (
+                    <Field
+                      as={field.type === "select" ? "select" : "input"}
+                      type={field.type}
+                      name={field.name}
+                      placeholder={field.placeholder}
+                      className={styles.field_style}
+                    />
+                  )}
+                  {field.type === "select" && (
+                    <Field
+                      name={field.name}
+                      component={CommonReactSelect}
+                      options={field.options}
+                      placeholder={field.placeholder}
+                      className={styles.field_style}
+                    />
+                  )}
+                  <ErrorMessage
+                    name={field.name}
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
+                </div>
+              ))}
+            </div>
 
-        {/* Description */}
-        <div className={styles.basic_detail_heading}>
-          <p className={styles.sub_heading}>Description</p>
-          <p className={styles.special_heading}>
-            [you can write in 300 words] Optional
-          </p>
-          <p className={styles.line}></p>
-        </div>
-        <div className="my-4">
-          <div className={styles.field_wrapper}>
-            <label className={styles.label_Style}>
-              Other Description related to car
-            </label>
-            <Field
-              as="textarea"
-              name="description"
-              rows={6}
-              placeholder="Enter Description"
-              className="border border-primary rounded-[15px] max-!h-full !h-full px-4 py-2"
-            />
-            <ErrorMessage
-              name="description"
-              component="div"
-              className="text-red-500 text-sm"
-            />
-          </div>
-        </div>
+            {/* Description */}
+            <div className={styles.basic_detail_heading}>
+              <p className={styles.sub_heading}>Description</p>
+              <p className={styles.special_heading}>
+                [you can write in 300 words] Optional
+              </p>
+              <p className={styles.line}></p>
+            </div>
+            <div className="my-4">
+              <div className={styles.field_wrapper}>
+                <label className={styles.label_Style}>
+                  Other Description related to car
+                </label>
+                <Field
+                  as="textarea"
+                  name="description"
+                  rows={6}
+                  placeholder="Enter Description"
+                  className="border border-primary rounded-[15px] max-!h-full !h-full px-4 py-2"
+                />
+                <ErrorMessage
+                  name="description"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
+              </div>
+            </div>
 
-        {/* Scratch & Dent Details */}
-        <div className={styles.basic_detail_heading}>
-          <p className={styles.sub_heading}>Scratch & Dent Details</p>
-          <p className={styles.special_heading}>(If any) Optional</p>
-          <p className={styles.line}></p>
-        </div>
-        <div className="my-4">
-          <div className={styles.field_wrapper}>
-            <label className={styles.label_Style}>
-              Scratch & Dent Details
-            </label>
-            <Field
-              as="textarea"
-              name="scratchDetails"
-              rows={6}
-              placeholder="Enter Scratch & Dent Details"
-              className="border border-primary rounded-[15px] max-!h-full !h-full px-4 py-2"
-            />
-            <ErrorMessage
-              name="scratchDetails"
-              component="div"
-              className="text-red-500 text-sm"
-            />
-          </div>
-        </div>
+            {/* Scratch & Dent Details */}
+            <div className={styles.basic_detail_heading}>
+              <p className={styles.sub_heading}>Scratch & Dent Details</p>
+              <p className={styles.special_heading}>(If any) Optional</p>
+              <p className={styles.line}></p>
+            </div>
+            <div className="my-4">
+              <div className={styles.field_wrapper}>
+                <label className={styles.label_Style}>
+                  Scratch & Dent Details
+                </label>
+                <Field
+                  as="textarea"
+                  name="scratchDetails"
+                  rows={6}
+                  placeholder="Enter Scratch & Dent Details"
+                  className="border border-primary rounded-[15px] max-!h-full !h-full px-4 py-2"
+                />
+                <ErrorMessage
+                  name="scratchDetails"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
+              </div>
+            </div>
 
-        {/* Scratch & Dent Image (Optional) */}
-        <div className="sm:w-1/4 w-full">
-          <div className={styles.basic_detail_heading}>
-            <p className={styles.sub_heading}>Scratch & Dent Details</p>
-            <p className={styles.special_heading}>(If any) Optional</p>
-          </div>
-          <div className={signupStyles.dotted_box}>
-            <Image src={Images.uploadImg} alt="img" className="w-8 h-8" />
-            <Button otherStyles="mt-[50px]">
-              <Image
-                src={Images.plus}
-                alt="plus"
-                width={20}
-                height={20}
-              />
-              Add Profile Image
-            </Button>
-            <Field
-              type="file"
-              // style={{ display: 'none' }}
-              className="hidden"
-              name="profileImage"
-              onChange={(event) => {
-                const file = event.currentTarget.files[0];
-                // form.setFieldValue('profileImage', file);
-              }}
-            />
-            <ErrorMessage
-              name="profileImage"
-              component="div"
-              className="text-red-500 text-sm"
-            />
-          </div>
-        </div>
+            {/* Scratch & Dent Image (Optional) */}
+            <div className="sm:w-1/4 w-full">
+              <div className={styles.basic_detail_heading}>
+                <p className={styles.sub_heading}>Scratch & Dent Details</p>
+                <p className={styles.special_heading}>(If any) Optional</p>
+              </div>
+              <div className={signupStyles.dotted_box}>
+                <Image src={Images.uploadImg} alt="img" className="w-8 h-8" />
+                <Button otherStyles="mt-[50px]">
+                  <Image src={Images.plus} alt="plus" width={20} height={20} />
+                  Add Profile Image
+                </Button>
+                <Field
+                  type="file"
+                  className="hidden"
+                  name="profileImage"
+                />
+                <ErrorMessage
+                  name="profileImage"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
+              </div>
+            </div>
 
-        {/* Submit Button */}
-
-        <button
-          type="submit"
-          className="mx-auto w-full"
-          disabled={isSubmitting}
-
-        >
-          <Button otherStyles={styles.next_btn} onclick={()=>setShowActiveStep(2)}>
-            {isSubmitting ? "Submitting..." : "Next"}
-          </Button>
-        </button>
-      </Form>
-    )}
-  </Formik></div>
-  )
-}
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="mx-auto w-full"
+              disabled={isSubmitting}
+            >
+              <Button
+                otherStyles={styles.next_btn}
+              >
+                {isSubmitting ? "Submitting..." : "Next"}
+              </Button>
+            </button>
+          </Form>
+        )}
+      </Formik>
+    </div>
+  );
+};
 
 export default Step1;
