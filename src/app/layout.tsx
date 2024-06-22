@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +26,9 @@ export default function RootLayout({
         />
       </head>
       <body className={inter.className}>{children}</body>
+      <Script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></Script>
+      <Script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></Script>
+      
     </html>
   );
 }

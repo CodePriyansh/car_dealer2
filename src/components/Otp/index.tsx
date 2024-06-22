@@ -5,7 +5,12 @@ import styles from "../SignUp/styles.module.css";
 import { useRouter } from "next/navigation";
 import Button from "../Common/Button";
 import instance from "@/network/axios";
+import Cookies from "universal-cookie";
+import path from "path";
+import { setLocalStorage } from "@/constants/constants";
+
 const OtpVerification = ({ mobileNumber, formData }) => {
+  const cookies = new Cookies();
   const [otp, setOtp] = useState(["", "", "", "", "", ``]);
   const [seconds, setSeconds] = useState(56);
   const [isOtpEntered, setIsOtpEntered] = useState(false);
@@ -73,31 +78,36 @@ const OtpVerification = ({ mobileNumber, formData }) => {
     const otpValue = otp.join("");
     try {
       const user = await verifyOtp(otpValue);
+      console.log(user, "user");
       toast.success("OTP verified successfully!");
       console.log("Login API called with mobile number:", mobileNumber);
       try {
+        const url = formData ? "/api/dealers/signup" : "/api/dealers/login";
+        const payload = formData ? formData : { phoneNumber: mobileNumber };
+        console.log(payload, "Pay");
 
-        try {
-          const url = formData ? "/api/dealers/signup" : "/api/dealers/login";
-          const payload = formData
-            ? formData
-            : { phoneNumber: { mobileNumber } };
-          const response = await instance.post(url, payload);
-          console.log(
-            "Signup API called successfully with mobile number:",
-            mobileNumber
-          );
-           toast.success(response?.response?.data.message)
-        } catch (error) {
-          console.error("Failed to call signup API", error);
-          toast.error("Failed to call signup API. Please try again.");
+        const response = await instance.post(url, payload);
+        console.log(response, "response");
+        if (response.status === 200) {
+          cookies.set("token", response.data.data.token, { path: "/" });
+          setLocalStorage("user", JSON.stringify(response.data))
+          // Redirect to the next page
+          toast.success(response?.data.message);
+          router.push("/");
         }
       } catch (error) {
-        console.error("OTP verification failed", error);
-        toast.error("Failed to verify OTP. Please try again.");
+        if (error.response && error.response.status === 404) {
+          // User not found, redirect to signup
+          const params = new URLSearchParams({
+            mobileNumber,
+            id: user.uid,
+          });
+          router.push(`/signup?${params.toString()}`);
+        } else {
+          console.error("Failed to call API", error);
+          toast.error("Failed to call API. Please try again.");
+        }
       }
-
-      // Redirect to the next page
     } catch (error) {
       console.error("OTP verification failed", error);
       toast.error("Failed to verify OTP. Please try again.");
@@ -129,7 +139,7 @@ const OtpVerification = ({ mobileNumber, formData }) => {
             </span>
             <button
               type="button"
-              className="bg-none border-none  text-greyy cursor-pointer font-semibold"
+              className="bg-none border-none text-greyy cursor-pointer font-semibold"
               onClick={handleResend}
             >
               Resend OTP

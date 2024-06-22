@@ -46,7 +46,7 @@ const LoginForm = () => {
   return (
     <div>
       <ToastContainer />
-      
+
       {otpSend && backBtnStatus && (
         <div
           className="absolute left-16 flex gap-2 items-center cursor-pointer"
@@ -119,6 +119,7 @@ const LoginForm = () => {
           )}
         </Formik>
       )}
+
     </div>
   );
 };

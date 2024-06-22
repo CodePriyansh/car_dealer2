@@ -31,5 +31,6 @@ export const domain = process.env.NEXT_PUBLIC_BASE_URL_DOMAIN || "http://localho
 //   appEnv,
 //   Config,
 // };
+console.log(domain)
 
 export const BASEURL = `${domain}/api/`;
