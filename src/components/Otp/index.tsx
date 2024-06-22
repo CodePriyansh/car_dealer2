@@ -1,3 +1,4 @@
+
 import React, { useRef, useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { verifyOtp, sendOtp } from "@/services/firebase/firebaseAuthService"; // Import sendOtp and verifyOtp functions
@@ -69,35 +70,35 @@ const OtpVerification = ({ mobileNumber, formData }) => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const otpValue = otp.join("");
+    // e.preventDefault();
+    // const otpValue = otp.join("");
     try {
-      const user = await verifyOtp(otpValue);
+      // const user = await verifyOtp(otpValue);
       toast.success("OTP verified successfully!");
       console.log("Login API called with mobile number:", mobileNumber);
       try {
-
-        try {
-          const url = formData ? "/api/dealers/signup" : "/api/dealers/login";
-          const payload = formData
-            ? formData
-            : { phoneNumber: { mobileNumber } };
-          const response = await instance.post(url, payload);
-          console.log(
-            "Signup API called successfully with mobile number:",
-            mobileNumber
-          );
-           toast.success(response?.response?.data.message)
-        } catch (error) {
-          console.error("Failed to call signup API", error);
-          toast.error("Failed to call signup API. Please try again.");
-        }
+        const url = formData ? "api/dealers/signup" : "api/dealers/login";
+        const payload = formData ? formData : { phoneNumber: mobileNumber };
+        console.log(payload, "payload");
+        const response = await instance.post(url, payload);
+        console.log(
+          "Signup API called successfully with mobile number:",
+          mobileNumber
+        );
+        console.log("response-----------> ", response?.data?.data?.token);
+        
+        // Save the token in cookies
+        document.cookie = `token=${response?.data?.data?.token}; path=/; max-age=${7 * 24 * 60 * 60}`;
+  
+        toast.success(response?.data.message);
+        
+        // Redirect to the next page if necessary
+        // router.push('/next-page'); // Uncomment and modify this line if you need to redirect
+  
       } catch (error) {
-        console.error("OTP verification failed", error);
-        toast.error("Failed to verify OTP. Please try again.");
+        console.log("Failed to call signup API", error);
+        toast.error("Failed to call signup API. Please try again.");
       }
-
-      // Redirect to the next page
     } catch (error) {
       console.error("OTP verification failed", error);
       toast.error("Failed to verify OTP. Please try again.");

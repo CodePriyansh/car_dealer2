@@ -9,7 +9,7 @@ dotenv.config({
   path: `./.env.${process.env.NODE_ENV}`,
 });
 
-export const domain = process.env.NEXT_PUBLIC_BASE_URL_DOMAIN || "http://localhost:3000/api/";
+export const domain = process.env.NEXT_PUBLIC_BASE_URL_DOMAIN || "http://localhost:8000";
 // const appEnv = AppEnv.STG;
 
 // const ConfigurationProd = {

@@ -24,23 +24,29 @@ const LoginForm = () => {
   const [backBtnStatus, setBackBtnStatus] = useState(true);
   const [mobileNumber, setMobileNumber] = useState('');
 
-  const handleSubmit = (values, { setSubmitting }) => {
+  const   handleSubmit = (values, { setSubmitting }) => {
     console.log(values, "submitted values");
-    sendOtp(`+91${values.mobileNumber}`)
-      .then(() => {
-        console.log("OTP sent successfully");
-        setMobileNumber(values.mobileNumber);
+    // sendOtp(`+91${values.mobileNumber}`)
+    //   .then(() => {
+    //     console.log("OTP sent successfully");
+    //     setMobileNumber(values.mobileNumber);
         
-        setOtpSend(true);
-        setSubmitting(false);
-        setBackBtnStatus(true);
-        // toast.success("OTP sent successfully!");
-      })
-      .catch((err) => {
-        console.log(err);
-        setSubmitting(false);
-        toast.error("Failed to send OTP. Please try again.");
-      });
+    //     setOtpSend(true);
+    //     setSubmitting(false);
+    //     setBackBtnStatus(true);
+    //     // toast.success("OTP sent successfully!");
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     setSubmitting(false);
+    //     toast.error("Failed to send OTP. Please try again.");
+    //   });
+    console.log("OTP sent successfully");
+    setMobileNumber(values.mobileNumber);
+    
+    setOtpSend(true);
+    setSubmitting(false);
+    setBackBtnStatus(true);
   };
 
   return (
