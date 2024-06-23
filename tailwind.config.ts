@@ -23,6 +23,7 @@ const config: Config = {
         greyy:'rgba(0, 0, 0, 0.3)',
         line:'rgba(0, 0, 0, 0.2)',
         para:'rgba(0, 0, 0, 1)',
+        subHeading:'rgba(0, 0, 0, 0.5)',
         'border-primary':'#0000001A',
         'f7f7f7':'#F7F7F7',
       },

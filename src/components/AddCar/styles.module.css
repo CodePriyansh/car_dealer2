@@ -1,49 +1,78 @@
 /* styles.module.css */
 
 .wrapper {
-    @apply bg-f7f7f7 w-full px-[60px] py-[44px];
-  }
-  .form_wrapper {
-    @apply flex bg-white p-8 flex-col;
-    box-shadow: 0px 0px 20px 0px #0000000F;
-  }
-  .heading {
-    @apply text-primary sm:text-[36px] text-[32px] font-bold text-center w-full font-rajdhani;
-  }
-  .basic_detail_heading {
-    @apply flex w-full items-center mt-8;
-  }
-  .sub_heading {
-    @apply font-rajdhani whitespace-nowrap text-black font-bold text-[24px] pr-1;
-  }
-  .line {
-    @apply w-full h-[1px] bg-line hidden sm:flex;
-  }
-  .field_wrapper {
-    @apply flex flex-col w-full sm:max-h-[110px] sm:h-[110px] h-[90px] max-h-[90px];
-  }
-  .label_Style {
-    @apply text-lg text-para capitalize pb-1 font-medium font-rajdhani;
-  }
-  .field_style {
-    @apply py-1 px-6 border border-primary rounded-[50px] w-full placeholder:text-[14px] placeholder:text-greyy max-h-[50px] h-[45px]  outline-none focus:border-primary focus:border-2;
-  }
-  .special_heading {
-    @apply text-line font-rajdhani text-[24px] px-1 sm:whitespace-nowrap;
-  }
-  .next_btn {
-    @apply bg-secondary w-[300px] mx-auto text-white my-14;
-  }
-  /* Additional styles for textareas */
-  /* textarea {
-    @apply border border-primary rounded-[20px] max-!h-full !h-full px-4 py-2;
-  } */
-  /* Additional styles for error messages */
-  /* .text-red-500 {
-    @apply text-red-500 text-sm;
-  } */
-  /* Styles for dotted box */
-  .dotted_box {
-    @apply border border-dashed border-gray-300 p-4 flex flex-col items-center justify-center;
-  }
-  
+  @apply bg-f7f7f7 w-full px-[60px] py-[44px];
+}
+.form_wrapper {
+  @apply flex bg-white p-8 flex-col;
+  box-shadow: 0px 0px 20px 0px #0000000f;
+}
+.heading {
+  @apply text-primary sm:text-[36px] text-[32px] font-bold text-center w-full font-rajdhani mb-8;
+}
+.basic_detail_heading {
+  @apply flex w-full items-center mt-8;
+}
+.sub_heading {
+  @apply font-rajdhani whitespace-nowrap text-black font-bold text-[24px] pr-1;
+}
+.line {
+  @apply w-full h-[1px] bg-line hidden sm:flex;
+}
+.field_wrapper {
+  @apply flex flex-col w-full sm:max-h-[110px] sm:h-[110px] h-[90px] max-h-[90px];
+}
+.label_Style {
+  @apply text-lg text-para capitalize pb-1 font-medium font-rajdhani;
+}
+.field_style {
+  @apply py-1 px-6 border border-primary rounded-[50px] w-full placeholder:text-[14px] placeholder:text-greyy max-h-[50px] h-[45px]  outline-none focus:border-primary focus:border-2;
+}
+.special_heading {
+  @apply text-line font-rajdhani text-[24px] px-1 sm:whitespace-nowrap;
+}
+.next_btn {
+  @apply bg-secondary w-[300px] mx-auto text-white my-14;
+}
+
+.dotted_box {
+  @apply border border-dashed border-gray-300 p-4 flex flex-col items-center justify-center;
+}
+
+.line1 {
+  @apply h-1 bg-primary w-[104px];
+}
+.line2 {
+  @apply h-1  w-[72px];
+}
+.line3 {
+  @apply h-1 bg-line w-[104px];
+}
+.circle1 {
+  @apply  h-9 w-9 border-[2px] border-primary rounded-[50%] cursor-pointer;
+}
+.circle2 {
+  @apply bg-white h-9 w-9 border-[2px] border-line rounded-[50%] cursor-pointer;
+}
+
+
+
+.common_step {
+  @apply text-base font-semibold font-rajdhani leading-5 text-primary absolute top-[-35px];
+}
+.step1 {
+  @apply left-[110px];
+}
+.step2 {
+  @apply left-[210px];
+}
+
+.common_text{
+  @apply text-subHeading font-rajdhani text-sm font-medium absolute top-[48px];
+}
+.car_details {
+  @apply left-[85px] ;
+}
+.photo_vedio {
+  @apply  left-[190px] ;
+}

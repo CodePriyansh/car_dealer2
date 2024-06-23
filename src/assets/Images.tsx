@@ -5,6 +5,7 @@ import plus from './plus.svg'
 import backArrow from './back-arrow.svg'
 import whitePlus from './white-plus.svg'
 import clearFilter from './clear-filter.svg'
+import whiteTick from './white-tick.svg'
 export const Images={
     signup,
     uploadImg,
@@ -12,5 +13,6 @@ export const Images={
     plus,
     backArrow,
     whitePlus,
-    clearFilter
+    clearFilter,
+    whiteTick,
 }

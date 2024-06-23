@@ -10,6 +10,8 @@ import * as Yup from "yup";
 import styles from "./styles.module.css";
 interface Step2Props {
   stepsData: any;
+  setShowActiveStep: React.Dispatch<React.SetStateAction<number>>;
+
 }
 const fields = [
   {
@@ -89,7 +91,7 @@ const validationSchema = Yup.object().shape(
     return acc;
   }, {})
 );
-const Step2: React.FC<Step2Props> = ({ stepsData }) => {
+const Step2: React.FC<Step2Props> = ({ stepsData,setShowActiveStep }) => {
   const initialValues = fields.reduce((acc, field) => {
     acc[field.name] = "";
     return acc;

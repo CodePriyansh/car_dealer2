@@ -10,8 +10,8 @@ import * as Yup from "yup";
 import styles from "./styles.module.css";
 
 interface Step1Props {
-  setShowActiveStep: () => void; 
-  setStepsData:()=>void;
+  setShowActiveStep: React.Dispatch<React.SetStateAction<number>>;
+  setStepsData:(data: any) => void;
 }
 
 const fields = [
