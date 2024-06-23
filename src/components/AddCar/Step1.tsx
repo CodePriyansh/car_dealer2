@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import signupStyles from "../SignUp/styles.module.css";
 import Image from "next/image";
 import { Images } from "@/assets/Images";
@@ -123,219 +123,237 @@ const fields = [
 ];
 
 const validationSchema = Yup.object().shape(
-    fields.reduce((acc, field) => {
-      acc[field.name] = Yup.string().required(`${field.placeholder} is required`);
-      return acc;
-    }, {})
-  );
-  const Step1: React.FC<Step1Props> = ({ setShowActiveStep }) => {
-    const initialValues = fields.reduce((acc, field) => {
-        acc[field.name] = "";
-        return acc;
-      }, {});
-    const handleSubmit = (values, { setSubmitting }) => {
-        console.log("Form data", values);
-        // Example: Call API to submit data
-        setSubmitting(false); // Make sure to setSubmitting(false) when done with API call
-      };
-      const [selectedOptions, setSelectedOptions] = useState<{ [key: string]: any }>({});
+  fields.reduce((acc, field) => {
+    acc[field.name] = Yup.string().required(`${field.placeholder} is required`);
+    return acc;
+  }, {})
+);
+const Step1: React.FC<Step1Props> = ({ setShowActiveStep }) => {
+  const profileImageInputRef = useRef<HTMLInputElement | null>(null);
 
-      const handleChange = (name: string, selectedOption: any) => {
-        setSelectedOptions({
-          ...selectedOptions,
-          [name]: selectedOption,
-        });
-      };
-    
+  const initialValues = {
+    dentDetails: null,
+    description: null,
+    profileImage: null,
+    ...fields.reduce((acc, field) => {
+      acc[field.name] = "";
+      return acc;
+    }, {}),
+  };
+  const handleSubmit = (values, { setSubmitting }) => {
+    console.log("Form data", values);
+    setSubmitting(false);
+    setShowActiveStep(2)
+  };
+  const [selectedOptions, setSelectedOptions] = useState<{
+    [key: string]: any;
+  }>({});
+
+  const handleChange = (name: string, selectedOption: any) => {
+    setSelectedOptions({
+      ...selectedOptions,
+      [name]: selectedOption,
+    });
+  };
+
   return (
-    <div><Formik
-    initialValues={initialValues}
-    validationSchema={validationSchema}
-    onSubmit={handleSubmit}
-  >
-    {({ isSubmitting,setFieldValue }) => (
-      <Form className="w-full">
-        {/* Basic Details */}
-        <div className={styles.basic_detail_heading}>
-          <p className={styles.sub_heading}>Basic Details</p>
-          <p className={styles.line}></p>
-        </div>
-        <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 w-full gap-6 my-4">
-          {fields.map((field, index) => (
-            // <div className={styles.field_wrapper} key={index}>
-            //   <label className={styles.label_Style}>{field.name}</label>
-            //   {field.type !== "select" && (
-            //     <Field
-            //       as={field.type === "select" ? "select" : "input"}
-            //       type={field.type}
-            //       name={field.name}
-            //       placeholder={field.placeholder}
-            //       className={styles.field_style}
-            //     >
-            //       {/* {field.type === "select" ? (
-            //       <>
-            //         <option value="">{field.placeholder}</option>
-            //         {field.options?.map((option, idx) => (
-            //           <option value={option} key={idx}>
-            //             {option}
-            //           </option>
-            //         ))}
-            //       </>
-            //     ) : null} */}
-            //     </Field>
-            //   )}
-            //   {field.type === "select" && (
-            //     <CommonReactSelect
-            //     options={field.options}
-            //       placeholder={field.placeholder}
-            //       selectedOption={selectedOption}
-            //       setSelectedOption={setSelectedOption}
-            //       className={styles.field_style}
-            //     />
-            //   )}
-            //   <ErrorMessage
-            //     name={field.name}
-            //     component="div"
-            //     className="text-red-500 text-sm"
-            //   />
-            // </div>
-            <div className={styles.field_wrapper} key={index}>
-                <label className={styles.label_Style}>{field.placeholder}</label>
-                {field.type === 'select' ? (
-                  <CommonReactSelect
-                    options={field.options}
-                    placeholder={field.placeholder}
-                    selectedOption={selectedOptions[field.name]}
-                    setSelectedOption={(option) => {
-                      handleChange(field.name, option);
-                      setFieldValue(field.name, option ? option.value : '');
-                    }}
-                    className={styles.field_style}
-                  />
-                ) : (
-                  <Field
-                    type={field.type}
+    <div>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ values,isSubmitting, setFieldValue }) => (
+          <Form className="w-full">
+            {/* Basic Details */}
+            <div className={styles.basic_detail_heading}>
+              <p className={styles.sub_heading}>Basic Details</p>
+              <p className={styles.line}></p>
+            </div>
+            <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 w-full gap-6 my-4">
+              {fields.map((field, index) => (
+                // <div className={styles.field_wrapper} key={index}>
+                //   <label className={styles.label_Style}>{field.name}</label>
+                //   {field.type !== "select" && (
+                //     <Field
+                //       as={field.type === "select" ? "select" : "input"}
+                //       type={field.type}
+                //       name={field.name}
+                //       placeholder={field.placeholder}
+                //       className={styles.field_style}
+                //     >
+                //       {/* {field.type === "select" ? (
+                //       <>
+                //         <option value="">{field.placeholder}</option>
+                //         {field.options?.map((option, idx) => (
+                //           <option value={option} key={idx}>
+                //             {option}
+                //           </option>
+                //         ))}
+                //       </>
+                //     ) : null} */}
+                //     </Field>
+                //   )}
+                //   {field.type === "select" && (
+                //     <CommonReactSelect
+                //     options={field.options}
+                //       placeholder={field.placeholder}
+                //       selectedOption={selectedOption}
+                //       setSelectedOption={setSelectedOption}
+                //       className={styles.field_style}
+                //     />
+                //   )}
+                //   <ErrorMessage
+                //     name={field.name}
+                //     component="div"
+                //     className="text-red-500 text-sm"
+                //   />
+                // </div>
+                <div className={styles.field_wrapper} key={index}>
+                  <label className={styles.label_Style}>
+                    {field.placeholder}
+                  </label>
+                  {field.type === "select" ? (
+                    <CommonReactSelect
+                      options={field.options}
+                      placeholder={field.placeholder}
+                      selectedOption={selectedOptions[field.name]}
+                      setSelectedOption={(option) => {
+                        handleChange(field.name, option);
+                        setFieldValue(field.name, option ? option.value : "");
+                      }}
+                      className={styles.field_style}
+                    />
+                  ) : (
+                    <Field
+                      type={field.type}
+                      name={field.name}
+                      placeholder={field.placeholder}
+                      className={styles.field_style}
+                    />
+                  )}
+                  <ErrorMessage
                     name={field.name}
-                    placeholder={field.placeholder}
-                    className={styles.field_style}
+                    component="div"
+                    className="text-red-500 text-sm"
                   />
-                )}
+                </div>
+              ))}
+            </div>
+
+            {/* Description */}
+            <div className={styles.basic_detail_heading}>
+              <p className={styles.sub_heading}>Description</p>
+              <p className={styles.special_heading}>
+                [you can write in 300 words] Optional
+              </p>
+              <p className={styles.line}></p>
+            </div>
+            <div className="my-4">
+              <div className={styles.field_wrapper}>
+                <label className={styles.label_Style}>
+                  Other Description related to car
+                </label>
+                <Field
+                  as="textarea"
+                  name="description"
+                  rows={6}
+                  placeholder="Enter Description"
+                  className="border border-primary rounded-[15px] max-!h-full !h-full px-4 py-2"
+                  onChange={(e) => setFieldValue("description", e.target.value)}
+                />
                 <ErrorMessage
-                  name={field.name}
+                  name="description"
                   component="div"
                   className="text-red-500 text-sm"
                 />
               </div>
-          ))}
-        </div>
+            </div>
 
-        {/* Description */}
-        <div className={styles.basic_detail_heading}>
-          <p className={styles.sub_heading}>Description</p>
-          <p className={styles.special_heading}>
-            [you can write in 300 words] Optional
-          </p>
-          <p className={styles.line}></p>
-        </div>
-        <div className="my-4">
-          <div className={styles.field_wrapper}>
-            <label className={styles.label_Style}>
-              Other Description related to car
-            </label>
-            <Field
-              as="textarea"
-              name="description"
-              rows={6}
-              placeholder="Enter Description"
-              className="border border-primary rounded-[15px] max-!h-full !h-full px-4 py-2"
-            />
-            <ErrorMessage
-              name="description"
-              component="div"
-              className="text-red-500 text-sm"
-            />
-          </div>
-        </div>
+            {/* Scratch & Dent Details */}
+            <div className={styles.basic_detail_heading}>
+              <p className={styles.sub_heading}>Scratch & Dent Details</p>
+              <p className={styles.special_heading}>(If any) Optional</p>
+              <p className={styles.line}></p>
+            </div>
+            <div className="my-4">
+              <div className={styles.field_wrapper}>
+                <label className={styles.label_Style}>
+                  Scratch & Dent Details
+                </label>
+                <Field
+                  as="textarea"
+                  name="scratchDetails"
+                  rows={6}
+                  placeholder="Enter Scratch & Dent Details"
+                  className="border border-primary rounded-[15px] max-!h-full !h-full px-4 py-2"
+                  onChange={(e) => setFieldValue("dentDetails", e.target.value)}
+                />
+                <ErrorMessage
+                  name="scratchDetails"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
+              </div>
+            </div>
 
-        {/* Scratch & Dent Details */}
-        <div className={styles.basic_detail_heading}>
-          <p className={styles.sub_heading}>Scratch & Dent Details</p>
-          <p className={styles.special_heading}>(If any) Optional</p>
-          <p className={styles.line}></p>
-        </div>
-        <div className="my-4">
-          <div className={styles.field_wrapper}>
-            <label className={styles.label_Style}>
-              Scratch & Dent Details
-            </label>
-            <Field
-              as="textarea"
-              name="scratchDetails"
-              rows={6}
-              placeholder="Enter Scratch & Dent Details"
-              className="border border-primary rounded-[15px] max-!h-full !h-full px-4 py-2"
-            />
-            <ErrorMessage
-              name="scratchDetails"
-              component="div"
-              className="text-red-500 text-sm"
-            />
-          </div>
-        </div>
+            {/* Scratch & Dent Image (Optional) */}
+            <div className="sm:w-1/4 w-full">
+              <div className={styles.basic_detail_heading}>
+                <p className={styles.sub_heading}>Scratch & Dent Details</p>
+                <p className={styles.special_heading}>(If any) Optional</p>
+              </div>
 
-        {/* Scratch & Dent Image (Optional) */}
-        <div className="sm:w-1/4 w-full">
-          <div className={styles.basic_detail_heading}>
-            <p className={styles.sub_heading}>Scratch & Dent Details</p>
-            <p className={styles.special_heading}>(If any) Optional</p>
-          </div>
-          <div className={signupStyles.dotted_box}>
-            <Image src={Images.uploadImg} alt="img" className="w-8 h-8" />
-            <Button otherStyles="mt-[50px]">
-              <Image
-                src={Images.plus}
-                alt="plus"
-                width={20}
-                height={20}
-              />
-              Add Profile Image
-            </Button>
-            <Field
-              type="file"
-              // style={{ display: 'none' }}
-              className="hidden"
-              name="profileImage"
-              onChange={(event) => {
-                const file = event.currentTarget.files[0];
-                // form.setFieldValue('profileImage', file);
-              }}
-            />
-            <ErrorMessage
-              name="profileImage"
-              component="div"
-              className="text-red-500 text-sm"
-            />
-          </div>
-        </div>
+              <div
+                className={signupStyles.dotted_box}
+                onClick={() => profileImageInputRef.current?.click()}
+              >
+                <Image src={Images.uploadImg} alt="img" className="w-8 h-8" />
+                <Button otherStyles="mt-[50px]">
+                  <Image src={Images.plus} alt="plus" width={20} height={20} />
+                  Add Profile Image
+                </Button>
+                <input
+                  type="file"
+                  ref={profileImageInputRef}
+                  style={{ display: "none" }}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    const files = event.currentTarget.files;
+                    if (files && files.length > 0) {
+                      setFieldValue("profileImage", files[0]);
+                    }
+                  }}
+                  name="profileImage"
+                />
+                {/* Conditional rendering within Formik's child function */}
+                {values.profileImage && (
+                  <p className={styles.selected_file}>
+                    {values.profileImage.name}
+                  </p>
+                )}
+                <ErrorMessage
+                  name="profileImage"
+                  component="p"
+                  className="text-red-500 text-sm"
+                />
+              </div>
+            </div>
 
-        {/* Submit Button */}
-
-        <button
-          type="submit"
-          className="mx-auto w-full"
-          disabled={isSubmitting}
-
-        >
-          <Button otherStyles={styles.next_btn}
-          //  onclick={()=>setShowActiveStep(2)}
-           >
-            {isSubmitting ? "Submitting..." : "Next"}
-          </Button>
-        </button>
-      </Form>
-    )}
-  </Formik></div>
-  )
-}
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="mx-auto w-full"
+              disabled={isSubmitting}
+            >
+              <Button otherStyles={styles.next_btn}>
+                {isSubmitting ? "Submitting..." : "Next"}
+              </Button>
+            </button>
+          </Form>
+        )}
+      </Formik>
+    </div>
+  );
+};
 
 export default Step1;

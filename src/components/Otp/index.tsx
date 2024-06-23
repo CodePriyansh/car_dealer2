@@ -5,9 +5,9 @@ import styles from "../SignUp/styles.module.css";
 import { useRouter } from "next/navigation";
 import Button from "../Common/Button";
 import instance from "@/network/axios";
-import Cookies from "universal-cookie";
 import path from "path";
 import { setLocalStorage } from "@/constants/constants";
+import Cookies from "universal-cookie";
 
 const OtpVerification = ({ mobileNumber, formData }) => {
   const cookies = new Cookies();
