@@ -8,12 +8,16 @@ import Step2 from "./Step2";
 
 const AddCarForm = () => {
   const [showActiveStep, setShowActiveStep] = useState(1);
-
+  const [stepsData, setStepsData] = useState(null);
   return (
     <div className={styles.wrapper}>
       <div className={styles.form_wrapper}>
         <p className={styles.heading}>Add Car</p>
-        {showActiveStep === 1 ? <Step1 setShowActiveStep={setShowActiveStep}/> : <Step2 setShowActiveStep={setShowActiveStep}/>}
+        {showActiveStep === 1 ? (
+          <Step1 setShowActiveStep={setShowActiveStep} setStepsData={setStepsData}/>
+        ) : (
+          <Step2 setShowActiveStep={setShowActiveStep} stepsData={stepsData} />
+        )}
       </div>
     </div>
   );

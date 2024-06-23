@@ -8,7 +8,9 @@ import CommonReactSelect from "../Common/Select";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import styles from "./styles.module.css";
-
+interface Step2Props {
+  stepsData: any;
+}
 const fields = [
   {
     name: "registration Date",
@@ -87,7 +89,7 @@ const validationSchema = Yup.object().shape(
     return acc;
   }, {})
 );
-export default function Step2() {
+const Step2: React.FC<Step2Props> = ({ stepsData }) => {
   const initialValues = fields.reduce((acc, field) => {
     acc[field.name] = "";
     return acc;
@@ -117,8 +119,9 @@ export default function Step2() {
             </div>
             <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 w-full gap-6 my-4">
               {fields.map((field, index) => (
-                <div className={signupStyles.dotted_box}
-                onClick={() => fielImageRef.current?.click()}
+                <div
+                  className={signupStyles.dotted_box}
+                  onClick={() => fielImageRef.current?.click()}
                 >
                   <Image src={Images.uploadImg} alt="img" className="w-8 h-8" />
                   <Button otherStyles="mt-[50px]">
@@ -136,15 +139,12 @@ export default function Step2() {
                     className="hidden"
                     name="profileImage"
                     ref={fielImageRef}
-                    onChange={(
-                      event: React.ChangeEvent<HTMLInputElement>
-                    ) => {
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                       const files = event.currentTarget.files;
                       if (files && files.length > 0) {
                         // setFieldValue("shopImage", files[0]);
                       }
                     }}
-                   
                   />
                   <ErrorMessage
                     name="profileImage"
@@ -231,4 +231,6 @@ export default function Step2() {
       </Formik>
     </div>
   );
-}
+};
+
+export default Step2;

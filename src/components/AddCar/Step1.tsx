@@ -10,7 +10,8 @@ import * as Yup from "yup";
 import styles from "./styles.module.css";
 
 interface Step1Props {
-  setShowActiveStep: () => void; // Replace `any` with the correct type if needed
+  setShowActiveStep: () => void; 
+  setStepsData:()=>void;
 }
 
 const fields = [
@@ -128,7 +129,7 @@ const validationSchema = Yup.object().shape(
     return acc;
   }, {})
 );
-const Step1: React.FC<Step1Props> = ({ setShowActiveStep }) => {
+const Step1: React.FC<Step1Props> = ({ setShowActiveStep,setStepsData }) => {
   const profileImageInputRef = useRef<HTMLInputElement | null>(null);
 
   const initialValues = {
@@ -140,10 +141,11 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep }) => {
       return acc;
     }, {}),
   };
-  const handleSubmit = (values, { setSubmitting }) => {
+  const handleSubmit = (values:any, { setSubmitting }) => {
     console.log("Form data", values);
     setSubmitting(false);
     setShowActiveStep(2)
+    setStepsData(values)
   };
   const [selectedOptions, setSelectedOptions] = useState<{
     [key: string]: any;
