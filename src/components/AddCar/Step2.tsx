@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import signupStyles from "../SignUp/styles.module.css";
 import Image from "next/image";
 import { Images } from "@/assets/Images";
@@ -77,6 +77,18 @@ const carImages = [
 ];
 
 const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
+  const [interiorImagesPreview, setInteriorImagesPreview] = useState<
+    Array<string>
+  >([]);
+  useEffect(() => {
+    return () => {
+      // Clean up object URLs to prevent memory leaks
+      interiorImagesPreview.forEach((previewUrl) =>
+        URL.revokeObjectURL(previewUrl)
+      );
+    };
+  }, [interiorImagesPreview]);
+
   const router = useRouter();
   const cookies = new Cookies();
 
@@ -110,21 +122,22 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
         formData.append(key, stepsData[key]);
       });
 
-
       try {
         const url = "/api/dealers/signup";
         const payload = formData;
         console.log(payload, "Pay");
 
-
-        console.log(cookies.get("token"))
+        console.log(cookies.get("token"));
         let token = cookies.get("token");
         const response = await instance.post("/api/cars/add", formData, {
-          headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
         });
 
         if (response.status === 200) {
-      setShowActiveStep((prevStep) => prevStep + 1);
+          setShowActiveStep((prevStep) => prevStep + 1);
           toast.success(response.data.message);
           router.push("/");
         }
@@ -149,11 +162,24 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
   const handleFileChange = (setFieldValue, image, event) => {
     const files = event.currentTarget.files;
     if (files && files.length > 0) {
-      setFieldValue(image.name, files[0]);
-      setFileNames((prevState) => ({
-        ...prevState,
-        [image.name]: files[0].name,
-      }));
+      if (image.name === "interior_images") {
+        const fileList = Array.from(files);
+        setFieldValue(image.name, fileList);
+        setFileNames((prevState) => ({
+          ...prevState,
+          [image.name]: fileList.map((file) => file.name).join(", "),
+        }));
+
+        // Generate preview URLs for each selected file
+        const filePreviews = fileList.map((file) => URL.createObjectURL(file));
+        setInteriorImagesPreview(filePreviews);
+      } else {
+        setFieldValue(image.name, files[0]);
+        setFileNames((prevState) => ({
+          ...prevState,
+          [image.name]: files[0].name,
+        }));
+      }
     }
   };
 
@@ -215,42 +241,62 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
             </div>
 
             {/* Interior Images */}
-            <div className="w-full">
-              <div className={styles.basic_detail_heading}>
-                <p className={styles.sub_heading}>Interior Images</p>
-                <p className={styles.line}></p>
+            {/* Interior Images */}
+            <div className="flex flex-row w-full">
+              <div className="w-1/3">
+                <div className={styles.basic_detail_heading}>
+                  <p className={styles.sub_heading}>Interior Images</p>
+                  <p className={styles.line}></p>
+                </div>
+                <div
+                  className={`${signupStyles.dotted_box} w-full`}
+                  onClick={() => interiorImagesRef.current?.click()}
+                >
+                  <Image
+                    src={Images.uploadImg}
+                    alt="img"
+                    className="w-8 h-8 mx-auto"
+                  />
+                  <Button otherStyles="mt-[50px]">
+                    <Image
+                      src={Images.plus}
+                      alt="plus"
+                      width={20}
+                      height={20}
+                    />
+                    Add Images
+                  </Button>
+                  <input
+                    type="file"
+                    multiple={true}
+                    className="hidden"
+                    name="interior_images"
+                    ref={interiorImagesRef}
+                    onChange={(event) =>
+                      handleFileChange(
+                        setFieldValue,
+                        { name: "interior_images" },
+                        event
+                      )
+                    }
+                  />
+                  <ErrorMessage
+                    name="interior_images"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
+                </div>
               </div>
-              <div
-                className={`${signupStyles.dotted_box} sm:!w-1/4`}
-                onClick={() => interiorImagesRef.current?.click()}
-              >
-                <Image src={Images.uploadImg} alt="img" className="w-8 h-8" />
-                <Button otherStyles="mt-[50px]">
-                  <Image src={Images.plus} alt="plus" width={20} height={20} />
-                  Add Images
-                </Button>
-                <input
-                  type="file"
-                  multiple={true}
-                  className="hidden"
-                  name="interior_images"
-                  ref={interiorImagesRef}
-                  onChange={(event) =>
-                    handleFileChange(
-                      setFieldValue,
-                      { name: "interior_images" },
-                      event
-                    )
-                  }
-                />
-                {fileNames["interior_images"] && (
-                  <p className="text-sm mt-2">{fileNames["interior_images"]}</p>
-                )}
-                <ErrorMessage
-                  name="interior_images"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
+              <div className="w-2/3 grid grid-cols-3 gap-2 ml-4 mt-10">
+                {interiorImagesPreview.map((previewUrl, index) => (
+                  <div key={index} className="mt-2">
+                    <img
+                      src={previewUrl}
+                      alt={`Preview ${index}`}
+                      className="w-20 h-20"
+                    />
+                  </div>
+                ))}
               </div>
             </div>
 
