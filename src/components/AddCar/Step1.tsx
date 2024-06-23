@@ -25,7 +25,7 @@ const fields = [
     ],
   },
   {
-    name: "model Name",
+    name: "modelName",
     type: "select",
     placeholder: "Select Model",
     options: [
@@ -45,16 +45,16 @@ const fields = [
     ],
   },
   {
-    name: "year Of Manufacture",
+    name: "yearOfManufacture",
     type: "date",
     placeholder: "Select Year of Manufacture",
   },
   {
-    name: "registration Date",
+    name: "registrationDate",
     type: "date",
     placeholder: "Select Registration Date",
   },
-  { name: "number Plate", type: "text", placeholder: "Enter Number Plate" },
+  { name: "numberPlate", type: "text", placeholder: "Enter Number Plate" },
   { name: "price", type: "number", placeholder: "Enter Price" },
   {
     name: "color",
@@ -76,7 +76,7 @@ const fields = [
     ],
   },
   {
-    name: "fuel Type",
+    name: "fuelType",
     type: "select",
     placeholder: "Select Fuel Type",
     options: [
@@ -86,14 +86,14 @@ const fields = [
     ],
   },
   {
-    name: "cubic Capacity",
+    name: "cubicCapacity",
     type: "number",
     placeholder: "Enter Cubic Capacity",
   },
   { name: "average", type: "number", placeholder: "Enter Average" },
   { name: "kmDriven", type: "number", placeholder: "Enter Kilometers Driven" },
   {
-    name: "air Conditioner",
+    name: "airConditioner",
     type: "select",
     placeholder: "Select Air Conditioner",
     options: [
@@ -102,7 +102,7 @@ const fields = [
     ],
   },
   {
-    name: "power Window",
+    name: "powerWindow",
     type: "select",
     placeholder: "Select Power Window",
     options: [
@@ -291,7 +291,9 @@ const validationSchema = Yup.object().shape(
           disabled={isSubmitting}
 
         >
-          <Button otherStyles={styles.next_btn} onclick={()=>setShowActiveStep(2)}>
+          <Button otherStyles={styles.next_btn}
+          //  onclick={()=>setShowActiveStep(2)}
+           >
             {isSubmitting ? "Submitting..." : "Next"}
           </Button>
         </button>
