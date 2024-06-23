@@ -41,7 +41,7 @@ const AddCarForm = () => {
 
           <div
             className={`${styles.line2} ${
-              stepsData ? "bg-line" : "bg-primary"
+              stepsData===null? "bg-line" : "bg-primary"
             }`}
           />
 
