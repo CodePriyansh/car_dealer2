@@ -6,6 +6,14 @@ import backArrow from './back-arrow.svg'
 import whitePlus from './white-plus.svg'
 import clearFilter from './clear-filter.svg'
 import whiteTick from './white-tick.svg'
+import frontSide from './car_front.svg'
+import backSide from './back_side.svg'
+import frontLeft from './front_left.svg'
+import backLeft from './back_left.svg'
+import backRight from './back_right.svg'
+import frontRight from './front_right.svg'
+import leftSide from './left_side.svg'
+import rightSide from './right_side.svg'
 export const Images={
     signup,
     uploadImg,
@@ -15,4 +23,12 @@ export const Images={
     whitePlus,
     clearFilter,
     whiteTick,
+    frontSide,
+    backSide,
+    frontLeft,
+    backLeft,
+    backRight,
+    frontRight,
+    leftSide,
+    rightSide
 }

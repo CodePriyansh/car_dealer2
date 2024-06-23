@@ -11,7 +11,7 @@
   @apply text-primary sm:text-[36px] text-[32px] font-bold text-center w-full font-rajdhani mb-8;
 }
 .basic_detail_heading {
-  @apply flex w-full items-center mt-8;
+  @apply flex w-full items-center mt-8 flex-col sm:flex-row ;
 }
 .sub_heading {
   @apply font-rajdhani whitespace-nowrap text-black font-bold text-[24px] pr-1;
@@ -29,14 +29,14 @@
   @apply py-1 px-6 border border-primary rounded-[50px] w-full placeholder:text-[14px] placeholder:text-greyy max-h-[50px] h-[45px]  outline-none focus:border-primary focus:border-2;
 }
 .special_heading {
-  @apply text-line font-rajdhani text-[24px] px-1 sm:whitespace-nowrap;
+  @apply text-line font-rajdhani text-[16px] sm:text-[24px]  px-1 sm:whitespace-nowrap;
 }
 .next_btn {
   @apply bg-secondary w-[300px] mx-auto text-white my-14;
 }
 
 .dotted_box {
-  @apply border border-dashed border-gray-300 p-4 flex flex-col items-center justify-center;
+  @apply border border-dashed border-gray-300 sm:p-3 p-2 flex flex-col items-center justify-center;
 }
 
 .line1 {
@@ -67,6 +67,10 @@
   @apply left-[210px];
 }
 
+
+.description_and_dent_style{
+@apply border border-primary rounded-[15px]  px-4 py-2 outline-none focus:border-primary focus:border-2
+}
 .common_text{
   @apply text-subHeading font-rajdhani text-sm font-medium absolute top-[48px];
 }

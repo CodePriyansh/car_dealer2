@@ -11,7 +11,7 @@ import styles from "./styles.module.css";
 
 interface Step1Props {
   setShowActiveStep: React.Dispatch<React.SetStateAction<number>>;
-  setStepsData:(data: any) => void;
+  setStepsData: (data: any) => void;
 }
 
 const fields = [
@@ -111,7 +111,15 @@ const fields = [
       { value: "No", label: "No" },
     ],
   },
-  { name: "owner", type: "text", placeholder: "Enter Owner Name" },
+  {
+    name: "owner",
+    type: "text",
+    placeholder: "Select Owner Type",
+    options: [
+      { value: "First Owner", label: "FIrst " },
+      { value: "Second Owner", label: "No" },
+    ],
+  },
   {
     name: "insurance",
     type: "select",
@@ -129,7 +137,7 @@ const validationSchema = Yup.object().shape(
     return acc;
   }, {})
 );
-const Step1: React.FC<Step1Props> = ({ setShowActiveStep,setStepsData }) => {
+const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
   const profileImageInputRef = useRef<HTMLInputElement | null>(null);
 
   const initialValues = {
@@ -141,11 +149,11 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep,setStepsData }) => {
       return acc;
     }, {}),
   };
-  const handleSubmit = (values:any, { setSubmitting }) => {
+  const handleSubmit = (values: any, { setSubmitting }) => {
     console.log("Form data", values);
     setSubmitting(false);
-    setShowActiveStep(2)
-    setStepsData(values)
+    setShowActiveStep(2);
+    setStepsData(values);
   };
   const [selectedOptions, setSelectedOptions] = useState<{
     [key: string]: any;
@@ -165,7 +173,7 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep,setStepsData }) => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ values,isSubmitting, setFieldValue }) => (
+        {({ values, isSubmitting, setFieldValue }) => (
           <Form className="w-full">
             {/* Basic Details */}
             <div className={styles.basic_detail_heading}>
@@ -244,103 +252,122 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep,setStepsData }) => {
             </div>
 
             {/* Description */}
-            <div className={styles.basic_detail_heading}>
-              <p className={styles.sub_heading}>Description</p>
-              <p className={styles.special_heading}>
-                [you can write in 300 words] Optional
-              </p>
-              <p className={styles.line}></p>
-            </div>
-            <div className="my-4">
-              <div className={styles.field_wrapper}>
-                <label className={styles.label_Style}>
-                  Other Description related to car
-                </label>
-                <Field
-                  as="textarea"
-                  name="description"
-                  rows={6}
-                  placeholder="Enter Description"
-                  className="border border-primary rounded-[15px] max-!h-full !h-full px-4 py-2"
-                  onChange={(e) => setFieldValue("description", e.target.value)}
-                />
-                <ErrorMessage
-                  name="description"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-              </div>
-            </div>
+            <div className="flex sm:flex-row gap flex-col sm:gap-x-10">
+              <div className="basis-1/3 sm:flex-row">
+                {/* Scratch & Dent Details */}
+                <div className={styles.basic_detail_heading}>
+                  <p className={styles.sub_heading}>Scratch & Dent Details</p>
+                  <p className={styles.special_heading}>(If any) Optional</p>
+                  <p className={styles.line}></p>
+                </div>
+                <div className="my-4">
+                  <div className={styles.field_wrapper}>
+                    <label className={styles.label_Style}>
+                      Scratch & Dent Details
+                    </label>
+                    <Field
+                      as="textarea"
+                      name="scratchDetails"
+                      rows={6}
+                      placeholder="Enter Scratch & Dent Details"
+                      className={styles.description_and_dent_style}
+                      onChange={(e) =>
+                        setFieldValue("dentDetails", e.target.value)
+                      }
+                    />
+                    <ErrorMessage
+                      name="scratchDetails"
+                      component="div"
+                      className="text-red-500 text-sm"
+                    />
+                  </div>
+                </div>
 
-            {/* Scratch & Dent Details */}
-            <div className={styles.basic_detail_heading}>
-              <p className={styles.sub_heading}>Scratch & Dent Details</p>
-              <p className={styles.special_heading}>(If any) Optional</p>
-              <p className={styles.line}></p>
-            </div>
-            <div className="my-4">
-              <div className={styles.field_wrapper}>
-                <label className={styles.label_Style}>
-                  Scratch & Dent Details
-                </label>
-                <Field
-                  as="textarea"
-                  name="scratchDetails"
-                  rows={6}
-                  placeholder="Enter Scratch & Dent Details"
-                  className="border border-primary rounded-[15px] max-!h-full !h-full px-4 py-2"
-                  onChange={(e) => setFieldValue("dentDetails", e.target.value)}
-                />
-                <ErrorMessage
-                  name="scratchDetails"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-              </div>
-            </div>
+                {/* Scratch & Dent Image (Optional) */}
+                <div className="sm:w-1/2 sm:h-1/3 w-full">
+                  <div className={styles.basic_detail_heading}>
+                    <p className={styles.sub_heading}>Scratch & Dent Image</p>
+                    <p className={styles.special_heading}>(If any) Optional</p>
+                  </div>
 
-            {/* Scratch & Dent Image (Optional) */}
-            <div className="sm:w-1/4 w-full">
-              <div className={styles.basic_detail_heading}>
-                <p className={styles.sub_heading}>Scratch & Dent Details</p>
-                <p className={styles.special_heading}>(If any) Optional</p>
+                  <div
+                    className={signupStyles.dotted_box}
+                    onClick={() => profileImageInputRef.current?.click()}
+                  >
+                    <Image
+                      src={Images.uploadImg}
+                      alt="img"
+                      className="w-8 h-8"
+                    />
+                    <Button otherStyles="mt-[50px]">
+                      <Image
+                        src={Images.plus}
+                        alt="plus"
+                        width={20}
+                        height={20}
+                      />
+                      Add Profile Image
+                    </Button>
+                    <input
+                      type="file"
+                      ref={profileImageInputRef}
+                      style={{ display: "none" }}
+                      onChange={(
+                        event: React.ChangeEvent<HTMLInputElement>
+                      ) => {
+                        const files = event.currentTarget.files;
+                        if (files && files.length > 0) {
+                          setFieldValue("profileImage", files[0]);
+                        }
+                      }}
+                      name="profileImage"
+                    />
+                    {/* Conditional rendering within Formik's child function */}
+                    {values.profileImage && (
+                      <p className={styles.selected_file}>
+                        {values.profileImage.name}
+                      </p>
+                    )}
+                    <ErrorMessage
+                      name="profileImage"
+                      component="p"
+                      className="text-red-500 text-sm"
+                    />
+                  </div>
+                </div>
               </div>
-
-              <div
-                className={signupStyles.dotted_box}
-                onClick={() => profileImageInputRef.current?.click()}
-              >
-                <Image src={Images.uploadImg} alt="img" className="w-8 h-8" />
-                <Button otherStyles="mt-[50px]">
-                  <Image src={Images.plus} alt="plus" width={20} height={20} />
-                  Add Profile Image
-                </Button>
-                <input
-                  type="file"
-                  ref={profileImageInputRef}
-                  style={{ display: "none" }}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    const files = event.currentTarget.files;
-                    if (files && files.length > 0) {
-                      setFieldValue("profileImage", files[0]);
-                    }
-                  }}
-                  name="profileImage"
-                />
-                {/* Conditional rendering within Formik's child function */}
-                {values.profileImage && (
-                  <p className={styles.selected_file}>
-                    {values.profileImage.name}
+              <div className="basis-1/2">
+                <div className={styles.basic_detail_heading}>
+                  <p className={styles.sub_heading}>Description</p>
+                  <p className={styles.special_heading}>
+                    [you can write in 300 words] Optional
                   </p>
-                )}
-                <ErrorMessage
-                  name="profileImage"
-                  component="p"
-                  className="text-red-500 text-sm"
-                />
+                  <p className={styles.line}></p>
+                </div>
+                <div className="my-4">
+                  <div className={styles.field_wrapper}>
+                    <label className={styles.label_Style}>
+                      Other Description related to car
+                    </label>
+                    <Field
+                      as="textarea"
+                      name="description"
+                      rows={6}
+                      placeholder="Enter Description"
+                      className={styles.description_and_dent_style}
+                      onChange={(e) =>
+                        setFieldValue("description", e.target.value)
+                      }
+                    />
+                    <ErrorMessage
+                      name="description"
+                      component="div"
+                      className="text-red-500 text-sm"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-
             {/* Submit Button */}
             <button
               type="submit"
