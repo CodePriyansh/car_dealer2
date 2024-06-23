@@ -25,7 +25,7 @@ const fields = [
     ],
   },
   {
-    name: "model Name",
+    name: "modelName",
     type: "select",
     placeholder: "Select Model",
     options: [
@@ -45,16 +45,16 @@ const fields = [
     ],
   },
   {
-    name: "year Of Manufacture",
+    name: "yearOfManufacture",
     type: "date",
     placeholder: "Select Year of Manufacture",
   },
   {
-    name: "registration Date",
+    name: "registrationDate",
     type: "date",
     placeholder: "Select Registration Date",
   },
-  { name: "number Plate", type: "text", placeholder: "Enter Number Plate" },
+  { name: "numberPlate", type: "text", placeholder: "Enter Number Plate" },
   { name: "price", type: "number", placeholder: "Enter Price" },
   {
     name: "color",
@@ -76,7 +76,7 @@ const fields = [
     ],
   },
   {
-    name: "fuel Type",
+    name: "fuelType",
     type: "select",
     placeholder: "Select Fuel Type",
     options: [
@@ -86,14 +86,14 @@ const fields = [
     ],
   },
   {
-    name: "cubic Capacity",
+    name: "cubicCapacity",
     type: "number",
     placeholder: "Enter Cubic Capacity",
   },
   { name: "average", type: "number", placeholder: "Enter Average" },
   { name: "kmDriven", type: "number", placeholder: "Enter Kilometers Driven" },
   {
-    name: "air Conditioner",
+    name: "airConditioner",
     type: "select",
     placeholder: "Select Air Conditioner",
     options: [
@@ -102,7 +102,7 @@ const fields = [
     ],
   },
   {
-    name: "power Window",
+    name: "powerWindow",
     type: "select",
     placeholder: "Select Power Window",
     options: [
@@ -138,14 +138,22 @@ const validationSchema = Yup.object().shape(
         // Example: Call API to submit data
         setSubmitting(false); // Make sure to setSubmitting(false) when done with API call
       };
-      const [selectedOption, setSelectedOption] = useState(null);
+      const [selectedOptions, setSelectedOptions] = useState<{ [key: string]: any }>({});
+
+      const handleChange = (name: string, selectedOption: any) => {
+        setSelectedOptions({
+          ...selectedOptions,
+          [name]: selectedOption,
+        });
+      };
+    
   return (
     <div><Formik
     initialValues={initialValues}
     validationSchema={validationSchema}
     onSubmit={handleSubmit}
   >
-    {({ isSubmitting }) => (
+    {({ isSubmitting,setFieldValue }) => (
       <Form className="w-full">
         {/* Basic Details */}
         <div className={styles.basic_detail_heading}>
@@ -154,43 +162,70 @@ const validationSchema = Yup.object().shape(
         </div>
         <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 w-full gap-6 my-4">
           {fields.map((field, index) => (
+            // <div className={styles.field_wrapper} key={index}>
+            //   <label className={styles.label_Style}>{field.name}</label>
+            //   {field.type !== "select" && (
+            //     <Field
+            //       as={field.type === "select" ? "select" : "input"}
+            //       type={field.type}
+            //       name={field.name}
+            //       placeholder={field.placeholder}
+            //       className={styles.field_style}
+            //     >
+            //       {/* {field.type === "select" ? (
+            //       <>
+            //         <option value="">{field.placeholder}</option>
+            //         {field.options?.map((option, idx) => (
+            //           <option value={option} key={idx}>
+            //             {option}
+            //           </option>
+            //         ))}
+            //       </>
+            //     ) : null} */}
+            //     </Field>
+            //   )}
+            //   {field.type === "select" && (
+            //     <CommonReactSelect
+            //     options={field.options}
+            //       placeholder={field.placeholder}
+            //       selectedOption={selectedOption}
+            //       setSelectedOption={setSelectedOption}
+            //       className={styles.field_style}
+            //     />
+            //   )}
+            //   <ErrorMessage
+            //     name={field.name}
+            //     component="div"
+            //     className="text-red-500 text-sm"
+            //   />
+            // </div>
             <div className={styles.field_wrapper} key={index}>
-              <label className={styles.label_Style}>{field.name}</label>
-              {field.type !== "select" && (
-                <Field
-                  as={field.type === "select" ? "select" : "input"}
-                  type={field.type}
+                <label className={styles.label_Style}>{field.placeholder}</label>
+                {field.type === 'select' ? (
+                  <CommonReactSelect
+                    options={field.options}
+                    placeholder={field.placeholder}
+                    selectedOption={selectedOptions[field.name]}
+                    setSelectedOption={(option) => {
+                      handleChange(field.name, option);
+                      setFieldValue(field.name, option ? option.value : '');
+                    }}
+                    className={styles.field_style}
+                  />
+                ) : (
+                  <Field
+                    type={field.type}
+                    name={field.name}
+                    placeholder={field.placeholder}
+                    className={styles.field_style}
+                  />
+                )}
+                <ErrorMessage
                   name={field.name}
-                  placeholder={field.placeholder}
-                  className={styles.field_style}
-                >
-                  {/* {field.type === "select" ? (
-                  <>
-                    <option value="">{field.placeholder}</option>
-                    {field.options?.map((option, idx) => (
-                      <option value={option} key={idx}>
-                        {option}
-                      </option>
-                    ))}
-                  </>
-                ) : null} */}
-                </Field>
-              )}
-              {field.type === "select" && (
-                <CommonReactSelect
-                options={field.options}
-                  placeholder={field.placeholder}
-                  selectedOption={selectedOption}
-                  setSelectedOption={setSelectedOption}
-                  className={styles.field_style}
+                  component="div"
+                  className="text-red-500 text-sm"
                 />
-              )}
-              <ErrorMessage
-                name={field.name}
-                component="div"
-                className="text-red-500 text-sm"
-              />
-            </div>
+              </div>
           ))}
         </div>
 
@@ -291,7 +326,9 @@ const validationSchema = Yup.object().shape(
           disabled={isSubmitting}
 
         >
-          <Button otherStyles={styles.next_btn} onclick={()=>setShowActiveStep(2)}>
+          <Button otherStyles={styles.next_btn}
+          //  onclick={()=>setShowActiveStep(2)}
+           >
             {isSubmitting ? "Submitting..." : "Next"}
           </Button>
         </button>
