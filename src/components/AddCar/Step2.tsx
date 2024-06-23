@@ -71,7 +71,9 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
   };
 
   const fileInputRefs = useRef(carImages.map(() => React.createRef<HTMLInputElement>()));
-
+  const interiorImagesRef = useRef<HTMLInputElement | null>(null);
+  const videoRef = useRef<HTMLInputElement | null>(null);
+  
   const handleFileChange = (setFieldValue, image, event) => {
     const files = event.currentTarget.files;
     if (files && files.length > 0) {
@@ -128,7 +130,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                 <p className={styles.sub_heading}>Interior Images</p>
                 <p className={styles.line}></p>
               </div>
-              <div className={`${signupStyles.dotted_box} sm:!w-1/4`}>
+              <div className={`${signupStyles.dotted_box} sm:!w-1/4`} onClick={() => interiorImagesRef.current?.click()}>
                 <Image src={Images.uploadImg} alt="img" className="w-8 h-8" />
                 <Button otherStyles="mt-[50px]">
                   <Image src={Images.plus} alt="plus" width={20} height={20} />
@@ -138,6 +140,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                   type="file"
                   className="hidden"
                   name="interior_images"
+                  ref={interiorImagesRef}
                   onChange={(event) => handleFileChange(setFieldValue, { name: 'interior_images' }, event)}
                 />
                 {fileNames['interior_images'] && <p className="text-sm mt-2">{fileNames['interior_images']}</p>}
@@ -161,6 +164,8 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                   type="file"
                   className="hidden"
                   name="video"
+                  ref={videoRef}
+
                   onChange={(event) => handleFileChange(setFieldValue, { name: 'video' }, event)}
                 />
                 {fileNames['video'] && <p className="text-sm mt-2">{fileNames['video']}</p>}
