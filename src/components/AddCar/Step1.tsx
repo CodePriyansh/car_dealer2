@@ -112,12 +112,12 @@ const fields = [
     ],
   },
   {
-    name: "owner",
-    type: "text",
+    name: "ownerType",
+    type: "select",
     placeholder: "Select Owner Type",
     options: [
-      { value: "First Owner", label: "FIrst " },
-      { value: "Second Owner", label: "No" },
+      { value: "First Owner", label: "First Owner" },
+      { value: "Second Owner", label: "Second owner" },
     ],
   },
   {
@@ -125,10 +125,12 @@ const fields = [
     type: "select",
     placeholder: "Select Insurance",
     options: [
-      { value: "Comprehensive", label: "Comprehensive" },
-      { value: "Third-Party", label: "Third-Party" },
+      { value: "Yes", label: "Yes" },
+      { value: "No", label: "No" },
     ],
   },
+  { name: "insuranceValidity", type: "date", placeholder: "Enter Insurance Validity Date" },
+
 ];
 
 const validationSchema = Yup.object().shape(
@@ -143,9 +145,9 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
   const initialValues = {
     dentDetails: null,
     description: null,
-    profileImage: null,
+    scratchAndDentImage: null,
     ...fields.reduce((acc, field) => {
-      acc[field.name] = "";
+      acc[field.name] = "test";
       return acc;
     }, {}),
   };
@@ -317,7 +319,7 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
                       ) => {
                         const files = event.currentTarget.files;
                         if (files && files.length > 0) {
-                          setFieldValue("profileImage", files[0]);
+                          setFieldValue("scratchAndDentImage", files[0]);
                         }
                       }}
                       name="profileImage"

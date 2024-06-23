@@ -7,6 +7,7 @@ import Step1 from "./Step1";
 import Step2 from "./Step2";
 import { Images } from "@/assets/Images";
 import Image from "next/image";
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddCarForm = () => {
   const [showActiveStep, setShowActiveStep] = useState<number>(1);
