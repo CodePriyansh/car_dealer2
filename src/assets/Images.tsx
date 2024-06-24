@@ -1,5 +1,6 @@
 import signup from './signup_login_image.png'
 import uploadImg from './upload_image.png'
+import logo from './logo.svg'
 import myCar from './my_car.png'
 import plus from './plus.svg'
 import backArrow from './back-arrow.svg'
@@ -14,8 +15,15 @@ import backRight from './back_right.svg'
 import frontRight from './front_right.svg'
 import leftSide from './left_side.svg'
 import rightSide from './right_side.svg'
+
+
+import menu from './menu.svg'
+import notification from './notification.svg'
+import subscription from './subscription.svg'
+
 export const Images={
     signup,
+    logo,
     uploadImg,
     myCar,
     plus,
@@ -30,5 +38,10 @@ export const Images={
     backRight,
     frontRight,
     leftSide,
-    rightSide
+    rightSide,
+
+    menu,
+    notification,
+    subscription
+
 }

@@ -1,5 +1,5 @@
 .wrapper{
-@apply flex w-full justify-between items-center px-[60px] py-[45px] bg-f7f7f7;
+@apply flex w-full justify-between items-center md:px-[60px] sm:px-[30px] px-4  py-[45px] bg-f7f7f7;
 }
 
 .left{

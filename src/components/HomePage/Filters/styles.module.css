@@ -1,5 +1,5 @@
 .container{
-    @apply w-full px-[60px] bg-f7f7f7;
+    @apply w-full md:px-[60px] sm:px-[30px] px-4  bg-f7f7f7;
 }
 .wrapper{
 @apply w-full flex border border-line rounded-[10px] p-6 ;
