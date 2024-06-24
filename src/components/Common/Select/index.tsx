@@ -88,7 +88,7 @@ const CommonReactSelect: React.FC<ReactSelectProps> = ({
   };
 
   return (
-    <div className="App">
+    <div>
       <Select
         value={selectedOption}
         onChange={handleChange}

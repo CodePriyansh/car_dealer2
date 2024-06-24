@@ -3,7 +3,6 @@ import signupStyles from "../SignUp/styles.module.css";
 import Image from "next/image";
 import { Images } from "@/assets/Images";
 import Button from "../Common/Button";
-import ReactSelect from "../Common/Select";
 import CommonReactSelect from "../Common/Select";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";

@@ -1,0 +1,42 @@
+.container{
+    @apply w-full px-[60px] bg-f7f7f7;
+}
+.wrapper{
+@apply w-full flex border border-line rounded-[10px] p-6 ;
+}
+.filters_wrapper{
+    @apply flex w-[40%] border-r border-line flex-col pr-6;
+    
+}
+.car_type_wrapper{
+    @apply flex flex-col pl-6 w-[30%] border-r border-line;
+    
+}
+.color_wrapper{
+    @apply flex w-[30%] flex-col pl-6;
+
+}
+.heading{
+    @apply font-rajdhani text-[28px] font-bold text-para leading-8; 
+}
+.sub_heading{
+    @apply font-rajdhani text-base font-bold text-para leading-5; 
+
+}
+.checklist_wrapper{
+    @apply grid grid-cols-3 w-full my-5 gap-x-4 gap-y-8;
+}
+.selectors{
+    @apply grid grid-cols-3 w-full my-5 gap-6;
+
+}
+.field_wrapper {
+    @apply flex flex-col w-full sm:max-h-[110px] sm:h-[110px] h-[90px] max-h-[90px] gap-6;
+  }
+  
+  .field_style {
+    @apply py-1 px-6 border border-line rounded-[50px] w-full placeholder:text-[14px] placeholder:text-greyy max-h-[50px] h-[45px]  outline-none focus:border-primary focus:border-2;
+  }
+  .checklist_item{
+    @apply font-rajdhani font-semibold text-base leading-5 text-subHeading capitalize;
+  }
