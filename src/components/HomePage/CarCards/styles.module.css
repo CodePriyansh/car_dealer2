@@ -1,0 +1,19 @@
+.carsGrid {
+    @apply gap-6;
+  }
+  
+  .carCard img {
+    @apply transition-transform duration-300;
+  }
+  
+  .carCard img:hover {
+    @apply transform scale-105;
+  }
+  
+  .carCard {
+    @apply transition-shadow duration-300;
+  }
+  
+  .carCard:hover {
+    @apply shadow-lg;
+  }

@@ -1,8 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import CommonReactSelect from "@/components/Common/Select";
-
+import CarCard from "../CarCards";
+import CarCards from "../CarCards";
+import Cookies from "universal-cookie"
+import instance from "@/network/axios";
 function Filters() {
   const fields = [
     {
@@ -60,6 +63,22 @@ function Filters() {
     "marron",
     "yellow",
   ];
+  const [cars, setCars] = useState([]);
+  const cookies = new Cookies();
+  useEffect(() => {
+    const fetchCars = async () => {
+    let token = cookies.get("token");
+    const response = await instance.get("/api/cars/all", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(response.data.data)
+    setCars(response.data.data);
+  }
+    fetchCars();
+  }, []);
   const [selectedOptions, setSelectedOptions] = useState<{
     [key: string]: any;
   }>({});
@@ -143,7 +162,13 @@ function Filters() {
           })}
         </div>
       </div>
-    </div></div>
+    </div>
+    <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 ${styles.carsGrid}`}>
+        {cars.map((car, index) => (
+          <CarCards car={car} key={index} />
+        ))}
+      </div>
+    </div>
   );
 }
 

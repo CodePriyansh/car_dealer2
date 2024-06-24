@@ -123,11 +123,6 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
       });
 
       try {
-        const url = "/api/dealers/signup";
-        const payload = formData;
-        console.log(payload, "Pay");
-
-        console.log(cookies.get("token"));
         let token = cookies.get("token");
         const response = await instance.post("/api/cars/add", formData, {
           headers: {

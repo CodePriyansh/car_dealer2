@@ -88,7 +88,7 @@ const OtpVerification = ({ mobileNumber, formData }) => {
 
         const response = await instance.post(url, payload);
         console.log(response, "response");
-        if (response.status === 200) {
+        if (response.status >= 200) {
           cookies.set("token", response.data.data.token, { path: "/" });
           setLocalStorage("user", JSON.stringify(response.data))
           // Redirect to the next page
