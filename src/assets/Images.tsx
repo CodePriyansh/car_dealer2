@@ -20,7 +20,7 @@ import rightSide from './right_side.svg'
 import menu from './menu.svg'
 import notification from './notification.svg'
 import subscription from './subscription.svg'
-
+import search from './search.svg'
 export const Images={
     signup,
     logo,
@@ -42,6 +42,7 @@ export const Images={
 
     menu,
     notification,
-    subscription
+    subscription,
+    search,
 
 }
