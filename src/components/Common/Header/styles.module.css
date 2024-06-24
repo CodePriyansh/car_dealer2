@@ -13,7 +13,7 @@
 }
 
 .responsive_right_part{
-    @apply flex  gap-3;
+    @apply flex md:hidden  gap-3;
 }
 .responsive_subscription{
     @apply w-10 h-10 rounded-[50%] bg-secondary justify-center items-center
