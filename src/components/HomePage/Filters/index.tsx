@@ -90,9 +90,9 @@ function Filters() {
   };
   return (
     <div className={styles.container}>
-    <div className={styles.wrapper}>
+    {/* <div className={styles.wrapper}> */}
       {/* filter box  */}
-      <div className={styles.filters_wrapper}>
+      {/* <div className={styles.filters_wrapper}>
         <p className={styles.heading}>Filters </p>
         <div className={styles.selectors}>
           {fields.map((field, index) => (
@@ -111,10 +111,10 @@ function Filters() {
           ))}
         </div>
         <p className={styles.sub_heading}>Price Range</p>
-      </div>
+      </div> */}
 
       {/* car type box  */}
-      <div className={styles.car_type_wrapper}>
+      {/* <div className={styles.car_type_wrapper}>
         <p className={styles.sub_heading}>Car Type</p>
         <div className={styles.checklist_wrapper}>
           {carType?.map((item, index) => {
@@ -136,10 +136,10 @@ function Filters() {
             );
           })}
         </div>
-      </div>
+      </div> */}
 
       {/* color box  */}
-      <div className={styles.color_wrapper}>
+      {/* <div className={styles.color_wrapper}>
         <p className={styles.sub_heading}>Color</p>
         <div className={styles.checklist_wrapper}>
           {colors?.map((item, index) => {
@@ -161,8 +161,8 @@ function Filters() {
             );
           })}
         </div>
-      </div>
-    </div>
+      </div> */}
+    {/* </div> */}
     <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 ${styles.carsGrid}`}>
         {cars.map((car, index) => (
           <CarCards car={car} key={index} />

@@ -9,9 +9,38 @@ export default function Home() {
 
 
   return (
-  <div ><Header/>
-  <SubHeader/>
+  <div >
   <Filters/>
   </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {/* <Header/>
+  <SubHeader/> */}
