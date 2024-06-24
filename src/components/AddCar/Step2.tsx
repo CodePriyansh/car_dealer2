@@ -185,7 +185,6 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
 
   return (
     <div>
-      <ToastContainer />
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

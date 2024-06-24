@@ -7,6 +7,7 @@ import CommonReactSelect from "../Common/Select";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import styles from "./styles.module.css";
+import { ToastContainer } from "react-toastify";
 
 interface Step1Props {
   setShowActiveStep: React.Dispatch<React.SetStateAction<number>>;
@@ -83,6 +84,7 @@ const fields = [
       { value: "Petrol", label: "Petrol" },
       { value: "Diesel", label: "Diesel" },
       { value: "Electric", label: "Electric" },
+      { value: "CNG", label: "CNG" },
     ],
   },
   {
@@ -142,8 +144,8 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
   const profileImageInputRef = useRef<HTMLInputElement | null>(null);
 
   const initialValues = {
-    dentDetails: null,
-    description: null,
+    dentDetails: "",
+    description: "",
     scratchAndDentImage: null,
     ...fields.reduce((acc, field) => {
       acc[field.name] = "test";
@@ -169,6 +171,8 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
 
   return (
     <div>
+      <ToastContainer />
+
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
