@@ -35,7 +35,7 @@
   }
   
   .field_style {
-    @apply py-1 px-6 border border-line rounded-[50px] w-full placeholder:text-[14px] placeholder:text-greyy max-h-[50px] h-[45px]  outline-none focus:border-primary focus:border-2;
+    @apply py-1 px-6 border border-line rounded-[50px] w-full placeholder:text-[14px] placeholder:text-greyy max-h-[50px] h-[45px]  outline-none focus:border-primary focus:border-2  text-black text-18 font-semibold font-rajdhani;
   }
   .checklist_item{
     @apply font-rajdhani font-semibold text-base leading-5 text-subHeading capitalize;

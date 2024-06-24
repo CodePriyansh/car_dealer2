@@ -183,43 +183,6 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
             </div>
             <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 w-full gap-6 my-4">
               {fields.map((field, index) => (
-                // <div className={styles.field_wrapper} key={index}>
-                //   <label className={styles.label_Style}>{field.name}</label>
-                //   {field.type !== "select" && (
-                //     <Field
-                //       as={field.type === "select" ? "select" : "input"}
-                //       type={field.type}
-                //       name={field.name}
-                //       placeholder={field.placeholder}
-                //       className={styles.field_style}
-                //     >
-                //       {/* {field.type === "select" ? (
-                //       <>
-                //         <option value="">{field.placeholder}</option>
-                //         {field.options?.map((option, idx) => (
-                //           <option value={option} key={idx}>
-                //             {option}
-                //           </option>
-                //         ))}
-                //       </>
-                //     ) : null} */}
-                //     </Field>
-                //   )}
-                //   {field.type === "select" && (
-                //     <CommonReactSelect
-                //     options={field.options}
-                //       placeholder={field.placeholder}
-                //       selectedOption={selectedOption}
-                //       setSelectedOption={setSelectedOption}
-                //       className={styles.field_style}
-                //     />
-                //   )}
-                //   <ErrorMessage
-                //     name={field.name}
-                //     component="div"
-                //     className="text-red-500 text-sm"
-                //   />
-                // </div>
                 <div className={styles.field_wrapper} key={index}>
                   <label className={styles.label_Style}>
                     {field.placeholder}

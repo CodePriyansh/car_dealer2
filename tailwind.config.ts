@@ -28,7 +28,8 @@ const config: Config = {
         'f7f7f7':'#F7F7F7',
       },
       fontSize: {
-        48:"48"
+        48:"48",
+        18:'18',
       },
     },
   },

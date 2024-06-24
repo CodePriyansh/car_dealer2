@@ -9,7 +9,7 @@ const customStylesForSelect: StylesConfig<any, boolean> = {
       borderRadius: "12px",
       outline: "none",
       cursor: "pointer",
-      boxShadow: "none", // Remove box shadow for the main select control
+      boxShadow: "none", 
       minHeight: "38px",
       fontSize: "14px",
       height: "100%",
@@ -36,7 +36,10 @@ const customStylesForSelect: StylesConfig<any, boolean> = {
     }),
     singleValue: (base: any) => ({
       ...base,
-      color: "#71717A",
+      color: "#000000",
+      fontSize:'16px',
+      fontWeight:'600',
+      fontFamily: "rajdhani",
     }),
     placeholder: (base: any) => ({
       ...base,
