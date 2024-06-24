@@ -86,7 +86,7 @@ function Filters() {
                   handleChange(field.name, option);
                   //   setFieldValue(field.name, option ? option.value : "");
                 }}
-                className={styles.field_style}
+                className={`${styles.field_style} !bg-transparent`}
               />
             </div>
           ))}

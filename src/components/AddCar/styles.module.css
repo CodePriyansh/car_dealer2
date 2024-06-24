@@ -26,7 +26,7 @@
   @apply text-lg text-para capitalize pb-1 font-medium font-rajdhani;
 }
 .field_style {
-  @apply py-1 px-6 border border-primary rounded-[50px] w-full placeholder:text-[14px] placeholder:text-greyy max-h-[50px] h-[45px]  outline-none focus:border-primary focus:border-2 text-black text-18 font-semibold font-rajdhani;
+  @apply py-1 px-4 border border-primary rounded-[50px] w-full placeholder:text-[14px] placeholder:text-greyy max-h-[50px] h-[45px]  outline-none focus:border-primary focus:border-2 text-black text-18 font-semibold font-rajdhani bg-transparent;
 }
 .special_heading {
   @apply text-line font-rajdhani text-[16px] sm:text-[24px]  px-1 sm:whitespace-nowrap;
