@@ -1,5 +1,5 @@
 .wrapper{
-@apply flex w-full justify-between items-center px-[60px] py-[45px] bg-f7f7f7;
+@apply flex w-full justify-between items-center md:px-[60px] sm:px-[30px] px-4  py-[45px] bg-f7f7f7;
 }
 
 .left{
@@ -19,3 +19,10 @@
 .clear_fil_btn{
     @apply gap-2 items-center bg-transparent text-primary border-primary border;
 }
+
+.field_style {
+    @apply py-1 px-4 border border-line rounded-[50px] w-full placeholder:text-[14px] placeholder:text-greyy max-h-[50px] h-[45px]  outline-none focus:border-primary focus:border-2  text-black text-18 font-semibold font-rajdhani bg-transparent flex items-center;
+  }
+  .search_input{
+    @apply bg-transparent outline-none w-full px-2
+  }

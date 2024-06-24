@@ -18,7 +18,10 @@ const customStylesForSelect: StylesConfig<any, boolean> = {
       ".css-1u9des2-indicatorSeparator": {
         display: "none",
       },
-      position:'relative'
+      position:'relative',
+      backgroundColor:'transparent',
+      width:"100%",
+
     }),
     option: (base: any, state: { isSelected: any }) => ({
       ...base,

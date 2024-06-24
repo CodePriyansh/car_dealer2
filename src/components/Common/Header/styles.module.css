@@ -1,3 +1,24 @@
 .wrapper{
-    @apply h-[90px] bg-white border-b border-border-primary px-[60px]
+    @apply h-[90px] bg-white border-b border-border-primary md:px-[60px] sm:px-[30px] px-4 flex w-full justify-between items-center
+}
+.right_part{
+    @apply md:flex gap-10 items-center hidden;
+}
+.name{
+    @apply font-rajdhani text-black font-bold text-base;
+
+}
+.role{
+    @apply font-rajdhani text-subHeading text-base;
+}
+
+.responsive_right_part{
+    @apply flex md:hidden  gap-3;
+}
+.responsive_subscription{
+    @apply w-10 h-10 rounded-[50%] bg-secondary justify-center items-center
+}
+.responsive_profile{
+    @apply w-10 h-10 rounded-[50%] bg-primary justify-center items-center
+
 }

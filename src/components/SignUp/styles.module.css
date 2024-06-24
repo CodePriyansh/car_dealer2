@@ -14,7 +14,7 @@
     @apply text-primary sm:text-[48px] text-[34px] font-bold pb-8 flex justify-center font-rajdhani;
 }
 .field_style{
-    @apply py-4 px-6 border border-primary rounded-[50px] sm:w-[250px] 2xl:w-[280px] w-full placeholder:text-[14px] placeholder:text-greyy outline-none max-h-[50px] h-[50px]  text-black text-18 font-semibold font-rajdhani;
+    @apply py-4 px-4 border border-primary rounded-[50px] sm:w-[250px] 2xl:w-[280px] w-full placeholder:text-[14px] placeholder:text-greyy outline-none max-h-[50px] h-[50px]  text-black text-18 font-semibold font-rajdhani bg-transparent;
 }
 .label_Style{
     @apply text-base text-para uppercase pb-[16px] font-medium ;
