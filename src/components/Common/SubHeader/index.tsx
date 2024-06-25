@@ -10,13 +10,27 @@ export default function SubHeader() {
   const router = useRouter();
   return (
     <div className={styles.wrapper}>
+      {/* left  */}
       <div className={styles.left}>
         <div className={styles.field_style}>
           <Image src={Images.search} alt="img" className="w-[18px] h-[18px]" />
           <input className={styles.search_input} type="text" />
         </div>
+        <div className={styles.responsive_filter_icon}>
+          <Image src={Images.responsiveFilter} alt="img" className="w-[24px] h-[24px]" />
+          
+        </div>
       </div>
-      <div className={styles.mid}>mid</div>
+
+      {/* mid  */}
+      <div className={styles.mid}>
+        <div className={styles.mid_btn_wrapper}>
+          <Button otherStyles="uppercase md:w-[215px] w-1/2 m-[1px] ">cars</Button>
+          <button className="md:w-[190px] w-1/2 uppercase text-20 font-bold font-rajdhani text-subHeading">bike</button>
+        </div>
+      </div>
+
+      {/* right  */}
       <div className={styles.right}>
         <Button otherStyles={styles.clear_fil_btn}>
           <Image

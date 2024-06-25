@@ -30,6 +30,7 @@ const config: Config = {
       fontSize: {
         48:"48",
         18:'18',
+        20:"20",
       },
     },
   },
