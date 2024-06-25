@@ -52,7 +52,7 @@ const fields = [
   },
   {
     name: "yearOfManufacture",
-    type: "date",
+    type: "month",
     placeholder: "Select Year of Manufacture",
   },
   {
@@ -367,6 +367,8 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
                   </div>
                 </div>
               </div>
+            </div>
+            <div>
             </div>
             {/* Submit Button */}
             <button
