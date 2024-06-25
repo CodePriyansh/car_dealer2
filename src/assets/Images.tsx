@@ -15,12 +15,14 @@ import backRight from './back_right.svg'
 import frontRight from './front_right.svg'
 import leftSide from './left_side.svg'
 import rightSide from './right_side.svg'
+import downArrow from './down-arrow.svg'
 
 
 import menu from './menu.svg'
 import notification from './notification.svg'
 import subscription from './subscription.svg'
 import search from './search.svg'
+import responsiveFilter from './responsive-filter.svg'
 export const Images={
     signup,
     logo,
@@ -44,5 +46,6 @@ export const Images={
     notification,
     subscription,
     search,
-
+    downArrow,
+    responsiveFilter,
 }
