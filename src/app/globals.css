@@ -90,4 +90,6 @@ input[type="radio"]:checked {
   border-radius: 6px;
   background: #a09f9f; 
 }
-
+.error_msg{
+  @apply text-red-500 text-sm pt-1;
+}

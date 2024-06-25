@@ -227,7 +227,7 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
                   <ErrorMessage
                     name={field.name}
                     component="div"
-                    className="text-red-500 text-sm"
+                    className="error_msg"
                   />
                 </div>
               ))}
@@ -245,7 +245,7 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
                   <ErrorMessage
                     name="insuranceValidity"
                     component="div"
-                    className="text-red-500 text-sm"
+                    className="error_msg"
                   />
                 </div>
               )}
@@ -278,7 +278,7 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
                     <ErrorMessage
                       name="scratchDetails"
                       component="div"
-                      className="text-red-500 text-sm"
+                      className="error_msg"
                     />
                   </div>
                 </div>
@@ -331,7 +331,7 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
                     <ErrorMessage
                       name="profileImage"
                       component="p"
-                      className="text-red-500 text-sm"
+                      className="error_msg"
                     />
                   </div>
                 </div>
@@ -362,7 +362,7 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
                     <ErrorMessage
                       name="description"
                       component="div"
-                      className="text-red-500 text-sm"
+                      className="error_msg"
                     />
                   </div>
                 </div>

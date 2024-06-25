@@ -262,7 +262,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                   <ErrorMessage
                     name={image.name}
                     component="div"
-                    className="text-red-500 text-sm"
+                    className="error_msg"
                   />
                 </div>
               ))}
@@ -307,11 +307,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                       )
                     }
                   />
-                  <ErrorMessage
-                    name="interior_images"
-                    component="div"
-                    className="text-red-500 text-sm"
-                  />
+                  
                 </div>
 
                 <div className="flex flex-col w-fit overflow-x-scroll ml-4 custome-scrollbar scroll-smooth">
@@ -340,6 +336,11 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                   </div>
                 </div>
               </div>
+              <ErrorMessage
+                    name="interior_images"
+                    component="div"
+                    className="error_msg"
+                  />
             </div>
 
             {/* Video */}
@@ -372,7 +373,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                 <ErrorMessage
                   name="video"
                   component="div"
-                  className="text-red-500 text-sm"
+                  className="error_msg"
                 />
               </div>
             </div>
