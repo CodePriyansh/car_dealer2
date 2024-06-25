@@ -99,17 +99,30 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
     }, {})
   );
 
-  const validationSchema = Yup.object().shape(
-    carImages.reduce((acc, field) => {
+  const validationSchema = Yup.object().shape({
+    ...carImages.reduce((acc, field) => {
       acc[field.name] = Yup.mixed().required(`${field.label} is required`);
       return acc;
-    }, {})
-  );
+    }, {}),
+    interior_images: Yup.array()
+    .min(1, "At least one interior image is required")
+    .required("Interior images are required"),
+  video: Yup.mixed()
+    .required("Video is required")
+    .test("fileType", "Unsupported File Format", (value) => {
+      return value && ["video/mp4", "video/avi", "video/mkv", "video/mov", "video/wmv",
+      "video/flv", "video/webm", "video/mpeg", "video/3gpp", "video/ogg",
+      "video/quicktime", "video/x-msvideo", "video/x-ms-wmv"].includes(value.type);
+    }),
+});
 
-  const initialValues = carImages.reduce((acc, field) => {
+  const initialValues = { ...carImages.reduce((acc, field) => {
     acc[field.name] = null;
     return acc;
-  }, {});
+  }, {}),
+  interior_images: [],
+  video: null,
+};
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {

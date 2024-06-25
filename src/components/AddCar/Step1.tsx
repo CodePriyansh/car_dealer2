@@ -42,7 +42,12 @@ const fields = [
     options: [
       { value: "SUV", label: "SUV" },
       { value: "Sedan", label: "Sedan" },
-      { value: "Truck", label: "Truck" },
+      { value: "Pickup", label: "Pickup" },
+      { value: "Minivan", label: "Minivan" },
+      { value: "Coupes", label: "Coupes" },
+      { value: "Hatchbacks", label: "Hatchbacks" },
+      { value: "Wagon", label: "Wagon" },
+      { value: "Van", label: "Van" },
     ],
   },
   {
@@ -63,7 +68,7 @@ const fields = [
     placeholder: "Select Color",
     options: [
       { value: "Red", label: "Red" },
-      { value: "Blue", label: "Blue" },
+      { value: "Blue", label: "Blue" } ,
       { value: "Black", label: "Black" },
     ],
   },
@@ -74,6 +79,7 @@ const fields = [
     options: [
       { value: "Manual", label: "Manual" },
       { value: "Automatic", label: "Automatic" },
+      { value: "Paddle Shift", label: "Paddle Shift" },
     ],
   },
   {
@@ -118,7 +124,8 @@ const fields = [
     placeholder: "Select Owner Type",
     options: [
       { value: "First Owner", label: "First Owner" },
-      { value: "Second Owner", label: "Second owner" },
+      { value: "Second Owner", label: "Second Owner" },
+      { value: "Third Owner", label: "Third Owner" },
     ],
   },
   {
@@ -130,16 +137,11 @@ const fields = [
       { value: "No", label: "No" },
     ],
   },
-  { name: "insuranceValidity", type: "date", placeholder: "Enter Insurance Validity Date" },
+  // { name: "insuranceValidity", type: "date", placeholder: "Enter Insurance Validity Date" },
 
 ];
 
-const validationSchema = Yup.object().shape(
-  fields.reduce((acc, field) => {
-    acc[field.name] = Yup.string().required(`${field.placeholder} is required`);
-    return acc;
-  }, {})
-);
+
 const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
   const profileImageInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -148,10 +150,21 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
     description: "",
     scratchAndDentImage: null,
     ...fields.reduce((acc, field) => {
-      acc[field.name] = "test";
+      acc[field.name] = "";
       return acc;
     }, {}),
   };
+
+  const validationSchema = Yup.object().shape({
+    ...fields.reduce((acc, field) => {
+      acc[field.name] = Yup.string().required(`${field.placeholder} is required`);
+      return acc;
+    }, {}),
+    insuranceValidity: Yup.string().when("insurance", {
+      is: (insurance: string) => insurance === "Yes",
+      then: () => Yup.string().required("Enter Insurance Validity Date is required"),
+    }),
+  });
   const handleSubmit = (values: any, { setSubmitting }) => {
     console.log("Form data", values);
     setSubmitting(false);
@@ -198,6 +211,7 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
                       selectedOption={selectedOptions[field.name]}
                       setSelectedOption={(option) => {
                         handleChange(field.name, option);
+                        console.log(field.name, option)
                         setFieldValue(field.name, option ? option.value : "");
                       }}
                       className={styles.field_style}
@@ -217,6 +231,24 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
                   />
                 </div>
               ))}
+              {values.insurance === "Yes" && (
+                <div className={styles.field_wrapper}>
+                  <label className={styles.label_Style}>
+                    Enter Insurance Validity Date
+                  </label>
+                  <Field
+                    type="date"
+                    name="insuranceValidity"
+                    placeholder="Enter Insurance Validity Date"
+                    className={styles.field_style}
+                  />
+                  <ErrorMessage
+                    name="insuranceValidity"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
+                </div>
+              )}
             </div>
 
             {/* Description */}
