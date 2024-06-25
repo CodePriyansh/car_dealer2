@@ -73,3 +73,21 @@ input:checked ~ .checkmark {
 input[type="radio"]:checked {
   accent-color: #EF6E0B !important;
 }
+
+
+.custome-scrollbar::-webkit-scrollbar {
+  height: 8px;
+  border-radius: 6px;
+}
+
+/* Track */
+.custome-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+
+/* Handle */
+.custome-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background: #a09f9f; 
+}
+

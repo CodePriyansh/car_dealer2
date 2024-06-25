@@ -105,24 +105,40 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
       return acc;
     }, {}),
     interior_images: Yup.array()
-    .min(1, "At least one interior image is required")
-    .required("Interior images are required"),
-  video: Yup.mixed()
-    .required("Video is required")
-    .test("fileType", "Unsupported File Format", (value) => {
-      return value && ["video/mp4", "video/avi", "video/mkv", "video/mov", "video/wmv",
-      "video/flv", "video/webm", "video/mpeg", "video/3gpp", "video/ogg",
-      "video/quicktime", "video/x-msvideo", "video/x-ms-wmv"].includes(value.type);
-    }),
-});
+      .min(1, "At least one interior image is required")
+      .required("Interior images are required"),
+    video: Yup.mixed()
+      .required("Video is required")
+      .test("fileType", "Unsupported File Format", (value) => {
+        return (
+          value &&
+          [
+            "video/mp4",
+            "video/avi",
+            "video/mkv",
+            "video/mov",
+            "video/wmv",
+            "video/flv",
+            "video/webm",
+            "video/mpeg",
+            "video/3gpp",
+            "video/ogg",
+            "video/quicktime",
+            "video/x-msvideo",
+            "video/x-ms-wmv",
+          ].includes(value.type)
+        );
+      }),
+  });
 
-  const initialValues = { ...carImages.reduce((acc, field) => {
-    acc[field.name] = null;
-    return acc;
-  }, {}),
-  interior_images: [],
-  video: null,
-};
+  const initialValues = {
+    ...carImages.reduce((acc, field) => {
+      acc[field.name] = null;
+      return acc;
+    }, {}),
+    interior_images: [],
+    video: null,
+  };
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
@@ -249,14 +265,14 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
 
             {/* Interior Images */}
             {/* Interior Images */}
-            <div className="flex flex-row w-full">
-              <div className="w-1/3">
-                <div className={styles.basic_detail_heading}>
-                  <p className={styles.sub_heading}>Interior Images</p>
-                  <p className={styles.line}></p>
-                </div>
+            <div className="flex flex-col w-full">
+              <div className={styles.basic_detail_heading}>
+                <p className={styles.sub_heading}>Interior Images</p>
+                <p className={styles.line}></p>
+              </div>
+              <div className="flex w-full">
                 <div
-                  className={`${signupStyles.dotted_box} w-full`}
+                  className={`${signupStyles.dotted_box} w-full !max-w-[224px] min-w-[200px]  !max-h-[224px] h-[224px]`}
                   onClick={() => interiorImagesRef.current?.click()}
                 >
                   <Image
@@ -293,17 +309,26 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                     className="text-red-500 text-sm"
                   />
                 </div>
-              </div>
-              <div className="w-2/3 grid grid-cols-3 gap-2 ml-4 mt-10">
-                {interiorImagesPreview.map((previewUrl, index) => (
-                  <div key={index} className="mt-2">
-                    <img
-                      src={previewUrl}
-                      alt={`Preview ${index}`}
-                      className="w-20 h-20"
-                    />
+
+                <div className="flex flex-col w-fit overflow-x-scroll ml-4 custome-scrollbar scroll-smooth">
+                  <div className="w-full flex gap-2">
+                    {interiorImagesPreview.map((previewUrl, index) => (
+                      <div
+                        key={index}
+                        className="mt-2 max-w-[224px] max-h-[224px] h-[224px] min-w-[224px] flex"
+                      >
+                        <div
+                          style={{
+                            backgroundImage: `url(${previewUrl})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                          }}
+                          className="w-full h-full"
+                        />
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
               </div>
             </div>
 
