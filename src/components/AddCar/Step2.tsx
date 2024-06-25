@@ -207,6 +207,11 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
     }
   };
 
+  const handleDeleteImage = (index) => {
+    const updatedPreviews = [...interiorImagesPreview];
+    updatedPreviews.splice(index, 1);
+    setInteriorImagesPreview(updatedPreviews);
+  };
   return (
     <div>
       <Formik
@@ -263,7 +268,6 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
               ))}
             </div>
 
-            {/* Interior Images */}
             {/* Interior Images */}
             <div className="flex flex-col w-full">
               <div className={styles.basic_detail_heading}>
@@ -323,8 +327,14 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                             backgroundSize: "cover",
                             backgroundPosition: "center",
                           }}
-                          className="w-full h-full"
-                        />
+                          className="w-full h-full relative"
+                        >
+                          <button
+                        className="text-black text-[24px] font-semibold absolute top-0 right-2 rotate-45"
+                          onClick={(index) => handleDeleteImage(index)}
+                        >+</button>
+                        </div>
+                        
                       </div>
                     ))}
                   </div>
