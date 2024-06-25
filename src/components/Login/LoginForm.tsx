@@ -44,7 +44,7 @@ const LoginForm = () => {
   };
 
   return (
-    <div>
+    <div className="w-full relative z-20">
       <ToastContainer />
 
       {otpSend && backBtnStatus && (
@@ -84,9 +84,9 @@ const LoginForm = () => {
           onSubmit={handleSubmit}
         >
           {({ isSubmitting }) => (
-            <Form>
-              <div className="flex flex-col">
-                <label className={styles.label_Style}>Mobile Number</label>
+            <Form >
+              <div className="flex flex-col w-full justify-center items-center">
+                <label className={`${styles.label_Style}  sm:!w-[430px] !w-full `}>Mobile Number</label>
                 <Field
                   name="mobileNumber"
                   type="text"
@@ -94,7 +94,7 @@ const LoginForm = () => {
                   placeholder="Enter your mobile number"
                 />
                 <ErrorMessage name="mobileNumber">
-                  {(msg) => <div className={styles.error_msg}>{msg}</div>}
+                  {(msg) => <div className={`${styles.error_msg}  sm:!w-[430px] !w-full`}>{msg}</div>}
                 </ErrorMessage>
               </div>
               <button
