@@ -15,6 +15,7 @@ import { sendOtp } from "@/services/firebase/firebaseAuthService";
 import instance from "@/network/axios";
 import { setLocalStorage } from "@/constants/constants";
 import Cookies from "universal-cookie";
+import login from "../../assets/responsive-login.png";
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -99,9 +100,8 @@ export default function SignupForm() {
         });
 
         if (response.status === 200) {
-
           cookies.set("token", response.data.data.token, { path: "/" });
-          setLocalStorage("user", JSON.stringify(response.data))
+          setLocalStorage("user", JSON.stringify(response.data));
           toast.success(response.data.message);
           router.push("/");
         }
@@ -162,13 +162,13 @@ export default function SignupForm() {
       <div className={`${styles.form_wrapper}`}>
         <div
           className={` ${styles.scrollbar} ${
-            otpSend && backBtnStatus && "flex flex-col justify-start"
+            otpSend && backBtnStatus && "flex flex-col !justify-start mt-8"
           }`}
         >
-          <div>
+          <div className="w-full">
             {otpSend && backBtnStatus && (
               <div
-                className="absolute left-16 flex gap-2 items-center cursor-pointer"
+                className="md:absolute md:left-16 left-0 flex gap-2 items-center cursor-pointer"
                 onClick={() => {
                   setBackBtnStatus(false);
                 }}
@@ -178,6 +178,7 @@ export default function SignupForm() {
                   alt="back-arrow"
                   width={32}
                   height={32}
+                  className="md:w-8 md:h-8 w-6 h-6"
                 />
                 <p className="text-secondary text-base font-rajdhani uppercase font-medium">
                   Back
@@ -197,7 +198,22 @@ export default function SignupForm() {
           </div>
 
           {otpSend && backBtnStatus ? (
-            <OtpVerification mobileNumber={mobileNumber} formData={formData} setBackBtnStatus={setBackBtnStatus}/>
+            <>
+              <OtpVerification
+                mobileNumber={mobileNumber}
+                formData={formData}
+                setBackBtnStatus={setBackBtnStatus}
+              />
+              <div
+                className="w-full h-[50vh] flex lg:hidden absolute bottom-0 z-10"
+                style={{
+                  backgroundImage: `url(${login.src})`,
+                  backgroundSize: "contain",
+                  backgroundPosition: "bottom",
+                  backgroundRepeat: "no-repeat",
+                }}
+              ></div>
+            </>
           ) : (
             <Formik
               initialValues={initialValues}

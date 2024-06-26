@@ -4,8 +4,8 @@
 import React from 'react'
 import styles from './styles.module.css'
 import SignupForm from './SignupForm'
-// import  {Images } from '@/assets/Images'
 import signup from '../../assets/signup_login.png'
+
 export default function Signup() {
 
  
@@ -14,12 +14,13 @@ export default function Signup() {
       <div id="recaptcha-container"></div>
 
         <div className={styles.left_wrapper}>
-            <div className='w-full h-full'  style={{
+            <div className='w-full h-full lg:flex hidden'  style={{
                     backgroundImage: `url(${signup.src})`,
                     backgroundSize: 'contain',
                     backgroundPosition: 'center',
                     backgroundRepeat:"no-repeat"
                 }}></div>
+                
         </div>
         <div className={styles.right_wrapper}>
           
