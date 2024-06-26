@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import styles from "./styles.module.css";
 import Button from "../Button";
 import Image from "next/image";
@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 
 export default function SubHeader() {
   const router = useRouter();
+  const [activeMidFilter, setActiveMidFilter] = useState("car");
   return (
     <div className={styles.wrapper}>
       {/* left  */}
@@ -17,16 +18,29 @@ export default function SubHeader() {
           <input className={styles.search_input} type="text" />
         </div>
         <div className={styles.responsive_filter_icon}>
-          <Image src={Images.responsiveFilter} alt="img" className="w-[24px] h-[24px]" />
-          
+          <Image
+            src={Images.responsiveFilter}
+            alt="img"
+            className="w-[24px] h-[24px]"
+          />
         </div>
       </div>
 
       {/* mid  */}
       <div className={styles.mid}>
         <div className={styles.mid_btn_wrapper}>
-          <Button otherStyles="uppercase md:w-[215px] w-1/2 m-[1px] ">cars</Button>
-          <button className="md:w-[190px] w-1/2 uppercase text-20 font-bold font-rajdhani text-subHeading">bike</button>
+          <Button
+            otherStyles={`uppercase md:w-[215px] w-1/2 m-[1px] ${activeMidFilter==='car'?'bg-primary text-white':'bg-transparent !text-subHeading'}`}
+            onclick={() => setActiveMidFilter("car")}
+          >
+            cars
+          </Button>
+          <button
+            className={`md:w-[190px] w-1/2 m-[1px] uppercase text-20 font-bold font-rajdhani rounded-[50px] ${activeMidFilter==='bike'?'text-white bg-primary':'text-subHeading bg-transparent'}`}
+            onClick={() => setActiveMidFilter("bike")}
+          >
+            bike
+          </button>
         </div>
       </div>
 

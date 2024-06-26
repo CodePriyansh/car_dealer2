@@ -17,7 +17,7 @@ export default function Signup() {
             <div className='w-full h-full'  style={{
                     backgroundImage: `url(${signup.src})`,
                     backgroundSize: 'contain',
-                    backgroundPosition: 'top',
+                    backgroundPosition: 'center',
                     backgroundRepeat:"no-repeat"
                 }}></div>
         </div>

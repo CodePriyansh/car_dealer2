@@ -1,8 +1,8 @@
 .wrapper{
-    @apply w-full flex px-4  lg:flex-row flex-col h-screen;
+    @apply w-full flex lg:flex-row flex-col-reverse h-screen;
 }
 .left_wrapper{
-    @apply lg:flex hidden flex-1 lg:w-1/2 w-full bg-[#f7f7f7] h-full
+    @apply lg:flex hidden lg:flex-1 lg:w-1/2 w-full bg-[#f7f7f7] md:h-full md:px-4 ;
 }
 .right_wrapper{
     @apply flex relative lg:w-1/2 w-full flex-1 flex-col  justify-center items-center px-4 md:px-8 bg-white h-full;
@@ -11,7 +11,7 @@
     @apply text-secondary font-bold capitalize font-rajdhani sm:text-[34px] text-center;
 }
 .heading{
-    @apply text-primary sm:text-[48px] text-[34px] font-bold pb-8 flex justify-center font-rajdhani;
+    @apply text-primary sm:text-[48px] md:text-[34px] text-24 font-bold pb-8 flex justify-center font-rajdhani;
 }
 .field_style{
     @apply py-4 px-4 border border-primary rounded-[50px] sm:w-[250px] 2xl:w-[280px] w-full placeholder:text-[14px] placeholder:text-greyy outline-none max-h-[50px] h-[50px]  text-black text-18 font-semibold font-rajdhani bg-transparent;

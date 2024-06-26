@@ -1,4 +1,4 @@
-import signup from './signup_login_image.png'
+import signup from './Character.png'
 import uploadImg from './upload_image.png'
 import logo from './logo.svg'
 import myCar from './my_car.png'
@@ -16,6 +16,7 @@ import frontRight from './front_right.svg'
 import leftSide from './left_side.svg'
 import rightSide from './right_side.svg'
 import downArrow from './down-arrow.svg'
+import responsiveLogin from './responsive-login.png'
 
 
 import menu from './menu.svg'
@@ -48,4 +49,5 @@ export const Images={
     search,
     downArrow,
     responsiveFilter,
+    responsiveLogin,
 }
