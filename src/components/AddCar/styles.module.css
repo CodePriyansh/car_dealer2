@@ -32,7 +32,7 @@
   @apply text-line font-rajdhani text-[16px] sm:text-[24px]  px-1 sm:whitespace-nowrap;
 }
 .next_btn {
-  @apply bg-secondary w-[300px] mx-auto text-white my-14;
+  @apply bg-secondary md:w-[300px] w-full mx-auto text-white my-14;
 }
 
 .dotted_box {
@@ -40,13 +40,13 @@
 }
 
 .line1 {
-  @apply h-1 bg-primary w-[104px];
+  @apply h-1 bg-primary md:w-[104px] w-[70px];
 }
 .line2 {
-  @apply h-1  w-[72px];
+  @apply h-1  md:w-[72px] w-[60px];
 }
 .line3 {
-  @apply h-1 bg-line w-[104px];
+  @apply h-1 bg-line md:w-[104px] w-[70px];
 }
 .circle1 {
   @apply  h-9 w-9 border-[2px] border-primary rounded-[50%] cursor-pointer;
@@ -61,10 +61,10 @@
   @apply text-base font-semibold font-rajdhani leading-5 text-primary absolute top-[-35px];
 }
 .step1 {
-  @apply left-[110px];
+  @apply md:left-[110px] left-[70px];
 }
 .step2 {
-  @apply left-[210px];
+  @apply md:left-[210px] left-[170px];
 }
 
 
@@ -75,8 +75,8 @@
   @apply text-subHeading font-rajdhani text-sm font-medium absolute top-[48px];
 }
 .car_details {
-  @apply left-[85px] ;
+  @apply md:left-[85px] left-[60px];
 }
 .photo_vedio {
-  @apply  left-[190px] ;
+  @apply  md:left-[190px] left-[150px];
 }
