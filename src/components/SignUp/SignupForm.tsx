@@ -223,7 +223,7 @@ export default function SignupForm() {
               {({ setFieldValue, isSubmitting, values }) => (
                 <Form>
                   <div>
-                    <div className="w-full flex md:flex-row flex-col gap-6">
+                    <div className="w-full md:w-fit md:mx-auto flex md:flex-row flex-col gap-6">
                       <div className="flex full flex-col md:gap-6 gap-4 md:w-[280px] w-full ">
                         <div className={styles.field_wrapper}>
                           <label className={styles.label_Style}>Name</label>
