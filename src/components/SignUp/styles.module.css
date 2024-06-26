@@ -2,7 +2,7 @@
     @apply w-full flex lg:flex-row flex-col-reverse h-screen;
 }
 .left_wrapper{
-    @apply lg:flex hidden lg:flex-1 lg:w-1/2 w-full bg-[#f7f7f7] md:h-full md:px-4 ;
+    @apply lg:flex hidden lg:flex-1 lg:w-1/2 w-full lg:bg-[#f7f7f7] md:h-full md:px-4 ;
 }
 .right_wrapper{
     @apply flex relative lg:w-1/2 w-full flex-1 flex-col  justify-center items-center px-4 md:px-8 bg-white h-full;
@@ -41,7 +41,7 @@
     @apply pt-2 text-greyy text-black font-rajdhani font-medium
 }
 .scrollbar{
-    @apply space-y-4 h-[90vh]  justify-center items-center overflow-y-scroll;
+    @apply space-y-4 h-[90vh] w-full justify-center items-center overflow-y-scroll;
 }
 .scrollbar::-webkit-scrollbar {
     width: 0;

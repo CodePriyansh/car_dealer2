@@ -99,7 +99,7 @@ const LoginForm = () => {
               </div>
               <button
                 type="submit"
-                className="w-full mx-auto mt-14"
+                className="w-full mx-auto md:mt-14 mt-6"
                 disabled={isSubmitting}
               >
                 <Button otherStyles="sm:w-[430px] w-full mx-auto uppercase">
