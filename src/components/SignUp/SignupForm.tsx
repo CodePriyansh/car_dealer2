@@ -223,8 +223,8 @@ export default function SignupForm() {
               {({ setFieldValue, isSubmitting, values }) => (
                 <Form>
                   <div>
-                    <div className="w-full flex sm:flex-row flex-col  gap-8">
-                      <div className="flex full flex-col md:gap-6 gap-4 md:w-1/2 w-full ">
+                    <div className="w-full flex md:flex-row flex-col gap-6">
+                      <div className="flex full flex-col md:gap-6 gap-4 md:w-[280px] w-full ">
                         <div className={styles.field_wrapper}>
                           <label className={styles.label_Style}>Name</label>
                           <Field
@@ -270,7 +270,7 @@ export default function SignupForm() {
                         </div>
                       </div>
 
-                      <div className="flex md:w-1/2 w-full flex-col md:gap-6 gap-4">
+                      <div className="flex w-full md:w-[280px] flex-col md:gap-6 gap-3">
                         <div className={styles.field_wrapper}>
                           <label className={styles.label_Style}>
                             Mobile Number
@@ -317,7 +317,7 @@ export default function SignupForm() {
                       </div>
                     </div>
 
-                    <div className="flex gap-6 my-6 flex-col">
+                    <div className="flex md:gap-6 gap-3 my-6 flex-col">
                       {/* shop Address */}
                       <div className={styles.field_wrapper}>
                         <label className={styles.label_Style}>
