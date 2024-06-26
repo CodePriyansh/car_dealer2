@@ -17,6 +17,7 @@ import leftSide from './left_side.svg'
 import rightSide from './right_side.svg'
 import downArrow from './down-arrow.svg'
 import responsiveLogin from './responsive-login.png'
+import demoCarfrom from './demo-car.png'
 
 
 import menu from './menu.svg'
@@ -24,6 +25,11 @@ import notification from './notification.svg'
 import subscription from './subscription.svg'
 import search from './search.svg'
 import responsiveFilter from './responsive-filter.svg'
+import cardDelete from './card-delete.svg'
+import cardView from './card-edit.svg'
+import cardEdit from './card-view.svg'
+
+
 export const Images={
     signup,
     logo,
@@ -50,4 +56,8 @@ export const Images={
     downArrow,
     responsiveFilter,
     responsiveLogin,
+    demoCarfrom,
+    cardDelete,
+    cardView,
+    cardEdit,
 }

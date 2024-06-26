@@ -41,6 +41,9 @@ p {
     text-wrap: balance;
   }
 }
+.large_layout {
+  @apply last-screen:w-[2000px] mx-auto;
+}
 
 /* For Chrome, Safari, Edge, Opera */
 input[type="number"]::-webkit-inner-spin-button,
