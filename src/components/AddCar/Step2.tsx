@@ -261,7 +261,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
               {carImages.map((image, index) => (
                 <div key={index} className={signupStyles.dotted_box}>
                   {imagePreviews[image.name] ? (
-                    <div className="relative w-16 h-16">
+                    <div className="relative w-full h-full p-4 border rounded ">
                       <Image
                         src={imagePreviews[image.name]}
                         alt={image.alt}
@@ -278,6 +278,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                       </button>
                     </div>
                   ) : (
+                    <>
                     <div
                       className="w-16 h-16"
                       onClick={() =>
@@ -290,7 +291,6 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                         className="w-full h-full"
                       />
                     </div>
-                  )}
                   <div onClick={() =>
                       fileInputRefs.current[index].current?.click()
                     }>
@@ -324,6 +324,9 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                     className="error_msg"
                   />
                   </div>
+                  </>
+                  )}
+
                 </div>
               ))}
             </div>
