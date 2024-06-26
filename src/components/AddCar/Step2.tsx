@@ -274,9 +274,9 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                 <p className={styles.sub_heading}>Interior Images</p>
                 <p className={styles.line}></p>
               </div>
-              <div className="flex w-full">
+              <div className="flex w-full md:flex-row flex-col items-center">
                 <div
-                  className={`${signupStyles.dotted_box} w-full !max-w-[224px] min-w-[200px]  !max-h-[224px] h-[224px]`}
+                  className={`${signupStyles.dotted_box} w-full md:!max-w-[224px] md:min-w-[200px] !max-h-[224px] h-[200px]`}
                   onClick={() => interiorImagesRef.current?.click()}
                 >
                   <Image
@@ -310,7 +310,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                   
                 </div>
 
-                <div className="flex flex-col w-fit overflow-x-scroll ml-4 custome-scrollbar scroll-smooth">
+                <div className="flex max-w-full flex-col w-fit overflow-x-scroll ml-4 custome-scrollbar scroll-smooth">
                   <div className="w-full flex gap-2">
                     {interiorImagesPreview.map((previewUrl, index) => (
                       <div
