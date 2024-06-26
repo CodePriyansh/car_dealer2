@@ -11,19 +11,19 @@ export default function CarCards({ car }) {
   };
   return (
     <div className={`border rounded-lg p-4 ${styles.carCard}`} onClick={handleClick}>
-      <img src={car.image} alt={car.name} className="w-full h-40 object-cover" />
+      <img src={car.images.front_image} alt={car.name} className="w-full h-40 object-cover" />
       <div className="flex justify-between mt-2">
         <h3 className="text-lg font-bold">{car.name}</h3>
         <span className={`px-2 py-1 rounded-full text-white ${car.status === 'Sold' ? 'bg-red-500' : 'bg-green-500'}`}>
-          {car.status}
+          {car.status || "Sold"}
         </span>
       </div>
       <p className="text-orange-500 font-bold">{car.price}</p>
       <div className="flex space-x-2 text-gray-500 text-sm mt-2">
-        <span>{car.year}</span>
+        <span>{car.modelYearMonth}</span>
         <span>{car.transmission}</span>
         <span>{car.color}</span>
-        <span>{car.fuel}</span>
+        <span>{car.fuelType}</span>
       </div>
     </div>
   );

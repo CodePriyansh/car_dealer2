@@ -3,10 +3,9 @@ import signupStyles from "../SignUp/styles.module.css";
 import Image from "next/image";
 import { Images } from "@/assets/Images";
 import Button from "../Common/Button";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import styles from "./styles.module.css";
-import axios from "axios"; // Assuming axios is being used for API calls
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import instance from "@/network/axios";
@@ -77,15 +76,12 @@ const carImages = [
 ];
 
 const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
-  const [interiorImagesPreview, setInteriorImagesPreview] = useState<
-    Array<string>
-  >([]);
+  const [interiorImagesPreview, setInteriorImagesPreview] = useState<Array<string>>([]);
+  
   useEffect(() => {
     return () => {
       // Clean up object URLs to prevent memory leaks
-      interiorImagesPreview.forEach((previewUrl) =>
-        URL.revokeObjectURL(previewUrl)
-      );
+      interiorImagesPreview.forEach((previewUrl) => URL.revokeObjectURL(previewUrl));
     };
   }, [interiorImagesPreview]);
 
@@ -95,6 +91,13 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
   const [fileNames, setFileNames] = useState(
     carImages.reduce((acc, image) => {
       acc[image.name] = "";
+      return acc;
+    }, {})
+  );
+
+  const [imagePreviews, setImagePreviews] = useState(
+    carImages.reduce((acc, image) => {
+      acc[image.name] = null;
       return acc;
     }, {})
   );
@@ -203,15 +206,43 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
           ...prevState,
           [image.name]: files[0].name,
         }));
+
+        const previewUrl = URL.createObjectURL(files[0]);
+        setImagePreviews((prevState) => ({
+          ...prevState,
+          [image.name]: previewUrl,
+        }));
       }
     }
   };
 
-  const handleDeleteImage = (index) => {
-    const updatedPreviews = [...interiorImagesPreview];
-    updatedPreviews.splice(index, 1);
-    setInteriorImagesPreview(updatedPreviews);
+  const handleRemoveImage = (setFieldValue, imageName, index) => {
+    setFieldValue(imageName, null);
+    setFileNames((prevState) => ({
+      ...prevState,
+      [imageName]: "",
+    }));
+    setImagePreviews((prevState) => ({
+      ...prevState,
+      [imageName]: null,
+    }));
+    
+    // Reset the file input value
+    if (fileInputRefs.current[index]?.current) {
+      fileInputRefs.current[index].current.value = "";
+    }
   };
+
+  const handleDeleteInteriorImage = (index, setFieldValue) => {
+    setInteriorImagesPreview((prev) => prev.filter((_, i) => i !== index));
+    setFieldValue("interior_images", (prev) => prev.filter((_, i) => i !== index));
+    
+    // Reset the file input value
+    if (interiorImagesRef.current) {
+      interiorImagesRef.current.value = "";
+    }
+  };
+
   return (
     <div>
       <Formik
@@ -228,17 +259,45 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
             </div>
             <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 w-full gap-6 my-4">
               {carImages.map((image, index) => (
-                <div
-                  key={index}
-                  className={signupStyles.dotted_box}
-                  onClick={() => fileInputRefs.current[index].current?.click()}
-                >
-                  <Image
-                    src={image.src}
-                    alt={image.alt}
-                    className="w-16 h-16"
-                  />
-                  <Button otherStyles="mt-[50px]">
+                <div key={index} className={signupStyles.dotted_box}>
+                  {imagePreviews[image.name] ? (
+                    <div className="relative w-16 h-16">
+                      <Image
+                        src={imagePreviews[image.name]}
+                        alt={image.alt}
+                        className="w-full h-full object-cover"
+                        width={30}
+                        height={30}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveImage(setFieldValue, image.name, index)}
+                        className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full"
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  ) : (
+                    <div
+                      className="w-16 h-16"
+                      onClick={() =>
+                        fileInputRefs.current[index].current?.click()
+                      }
+                    >
+                      <Image
+                        src={image.src}
+                        alt={image.alt}
+                        className="w-full h-full"
+                      />
+                    </div>
+                  )}
+                  <div onClick={() =>
+                      fileInputRefs.current[index].current?.click()
+                    }>
+                  <Button
+                    otherStyles="mt-[50px]"
+                    
+                  >
                     <Image
                       src={Images.plus}
                       alt="plus"
@@ -257,13 +316,14 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                     }
                   />
                   {fileNames[image.name] && (
-                    <p className="text-sm mt-2">{fileNames[image.name]}</p>
+                    <p className="text-sm m-2">{fileNames[image.name]}</p>
                   )}
                   <ErrorMessage
                     name={image.name}
                     component="div"
                     className="error_msg"
                   />
+                  </div>
                 </div>
               ))}
             </div>
@@ -307,7 +367,6 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                       )
                     }
                   />
-                  
                 </div>
 
                 <div className="flex flex-col w-fit overflow-x-scroll ml-4 custome-scrollbar scroll-smooth">
@@ -326,21 +385,24 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                           className="w-full h-full relative"
                         >
                           <button
-                        className="text-black text-[24px] font-semibold absolute top-0 right-2 rotate-45"
-                          onClick={(index) => handleDeleteImage(index)}
-                        >+</button>
+                            className="text-black text-[24px] font-semibold absolute top-0 right-2 rotate-45"
+                            onClick={() =>
+                              handleDeleteInteriorImage(index, setFieldValue)
+                            }
+                          >
+                            +
+                          </button>
                         </div>
-                        
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
               <ErrorMessage
-                    name="interior_images"
-                    component="div"
-                    className="error_msg"
-                  />
+                name="interior_images"
+                component="div"
+                className="error_msg"
+              />
             </div>
 
             {/* Video */}
