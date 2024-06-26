@@ -26,7 +26,7 @@ export default function Login() {
                 }}></div>
                 <Image src={Images.responsiveLogin} alt='login' className='w-full h-fit flex md:hidden absolute bottom-0 z-10'/>
         </div>
-        <div className={`${styles.right_wrapper} !justify-start !mt-10 md:mt-0 md:justify-center`}>
+        <div className={`${styles.right_wrapper} !justify-start !mt-10 md:mt-0 md:!justify-center`}>
            
            <LoginForm/>
             
