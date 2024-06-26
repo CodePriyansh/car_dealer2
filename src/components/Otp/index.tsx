@@ -128,7 +128,7 @@ const OtpVerification = ({ mobileNumber, formData }) => {
               onChange={(e) => handleChange(e, index)}
               onKeyDown={(e) => handleBackspace(e, index)}
               ref={(el) => (inputRefs.current[index] = el)}
-              className="w-12 h-12 text-xl text-center font-semibold border outline-none border-primary rounded"
+              className="w-9 h-9 sm:w-12 sm:h-12 text-xl text-center font-semibold border outline-none border-primary rounded"
             />
           ))}
         </div>

@@ -197,7 +197,7 @@ export default function SignupForm() {
           </div>
 
           {otpSend && backBtnStatus ? (
-            <OtpVerification mobileNumber={mobileNumber} formData={formData} />
+            <OtpVerification mobileNumber={mobileNumber} formData={formData} setBackBtnStatus={setBackBtnStatus}/>
           ) : (
             <Formik
               initialValues={initialValues}
@@ -208,7 +208,7 @@ export default function SignupForm() {
                 <Form>
                   <div>
                     <div className="w-full flex sm:flex-row flex-col  gap-8">
-                      <div className="flex full flex-col gap-6 md:w-1/2 w-full ">
+                      <div className="flex full flex-col md:gap-6 gap-4 md:w-1/2 w-full ">
                         <div className={styles.field_wrapper}>
                           <label className={styles.label_Style}>Name</label>
                           <Field
@@ -254,7 +254,7 @@ export default function SignupForm() {
                         </div>
                       </div>
 
-                      <div className="flex md:w-1/2 w-full flex-col gap-6">
+                      <div className="flex md:w-1/2 w-full flex-col md:gap-6 gap-4">
                         <div className={styles.field_wrapper}>
                           <label className={styles.label_Style}>
                             Mobile Number
