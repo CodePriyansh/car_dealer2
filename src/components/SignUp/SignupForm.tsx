@@ -317,7 +317,7 @@ export default function SignupForm() {
                       </div>
                     </div>
 
-                    <div className="flex md:gap-6 gap-3 my-6 flex-col">
+                    <div className="flex md:gap-6 gap-3 my-6 flex-col md:mx-auto !max-w-[584px] min-w-[560px]">
                       {/* shop Address */}
                       <div className={styles.field_wrapper}>
                         <label className={styles.label_Style}>
@@ -326,7 +326,7 @@ export default function SignupForm() {
                         <Field
                           name="shopAddress"
                           placeholder="Enter Shop Address"
-                          className={`${styles.field_style} !max-w-[584px] !w-full`}
+                          className={`${styles.field_style}  !w-full `}
                         />
                         <ErrorMessage
                           name="shopAddress"
