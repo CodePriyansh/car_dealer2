@@ -49,7 +49,7 @@ const LoginForm = () => {
 
       {otpSend && backBtnStatus && (
         <div
-          className="absolute left-16 flex gap-2 items-center cursor-pointer"
+          className="md:absolute md:left-16 left-0 flex gap-2 items-center cursor-pointer"
           onClick={() => {
             setBackBtnStatus(false);
           }}
@@ -59,6 +59,7 @@ const LoginForm = () => {
             alt="back-arrow"
             width={32}
             height={32}
+            className="md:w-8 md:h-8 w-6 h-6"
           />
           <p className="text-secondary text-base font-rajdhani uppercase font-medium">
             Back
