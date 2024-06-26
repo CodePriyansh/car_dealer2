@@ -3,21 +3,21 @@
 }
 
 .left{
-    @apply flex w-full md:w-auto gap-4 md:gap-0
+    @apply flex w-full lg:w-auto gap-4 lg:gap-0
 }
 
 .mid{
-    @apply flex w-full md:w-auto
+    @apply flex w-full lg:w-auto
 }
 
 .right{
-    @apply hidden md:flex gap-[14px]
+    @apply hidden lg:flex gap-[14px]
 }
 .fill_btn{
-    @apply gap-2 items-center;
+    @apply gap-2 items-center min-w-[125px];
 }
 .clear_fil_btn{
-    @apply gap-2 items-center bg-transparent text-primary border-primary border;
+    @apply gap-2 items-center bg-transparent text-primary border-primary border min-w-[135px];
 }
 
 .field_style {
