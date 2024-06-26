@@ -155,7 +155,7 @@ export default function SignupForm() {
   console.log(coverImageInputRef, shopImageInputRef);
 
   return (
-    <div className={`flex flex-col justify-center items-center`}>
+    <div className={`flex flex-col justify-center items-center w-full`}>
       {/* Form details */}
       <ToastContainer />
 
@@ -207,8 +207,8 @@ export default function SignupForm() {
               {({ setFieldValue, isSubmitting, values }) => (
                 <Form>
                   <div>
-                    <div className="w-full flex sm:flex-row flex-col gap-8">
-                      <div className="flex full flex-col gap-6">
+                    <div className="w-full flex sm:flex-row flex-col  gap-8">
+                      <div className="flex full flex-col gap-6 md:w-1/2 w-full ">
                         <div className={styles.field_wrapper}>
                           <label className={styles.label_Style}>Name</label>
                           <Field
@@ -254,7 +254,7 @@ export default function SignupForm() {
                         </div>
                       </div>
 
-                      <div className="flex sm:w-1/2 w-full flex-col gap-6">
+                      <div className="flex md:w-1/2 w-full flex-col gap-6">
                         <div className={styles.field_wrapper}>
                           <label className={styles.label_Style}>
                             Mobile Number
