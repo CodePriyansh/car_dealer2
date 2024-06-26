@@ -317,7 +317,7 @@ export default function SignupForm() {
                       </div>
                     </div>
 
-                    <div className="flex md:gap-6 gap-3 my-6 flex-col md:mx-auto !max-w-[584px] min-w-[560px]">
+                    <div className="flex md:gap-6 gap-3 my-6 flex-col md:mx-auto !max-w-[584px] md:min-w-[560px]">
                       {/* shop Address */}
                       <div className={styles.field_wrapper}>
                         <label className={styles.label_Style}>
