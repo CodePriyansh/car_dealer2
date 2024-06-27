@@ -28,7 +28,7 @@ const AddCarForm = () => {
                 ? "bg-white "
                 : "bg-primary justify-center flex "
             }`}
-            onClick={() => setShowActiveStep(1)}
+            // onClick={() => setShowActiveStep(1)}
           >
             {stepsData === null ? (
               ""
@@ -49,7 +49,7 @@ const AddCarForm = () => {
           <p className={`${styles.common_step} ${styles.step2}`}>Step2</p>
           <div
             className={styles.circle2}
-            onClick={() => setShowActiveStep(2)}
+            // onClick={() => setShowActiveStep(2)}
           />
           <p className={`${styles.common_text} ${styles.photo_vedio}`}>
             Photos/Video

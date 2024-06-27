@@ -491,11 +491,8 @@ export default function SignupForm() {
                         className="w-full mx-auto"
                         disabled={isSubmitting}
                       >
-                        <Button
-                          otherStyles="sm:w-[430px] w-full mx-auto uppercase"
-                         
-                        >
-                          Get OTP
+                        <Button otherStyles="sm:w-[430px] w-full mx-auto uppercase">
+                          { mobileNumber ? "Sign Up" : "Get OTP"}
                         </Button>
                       </button>
                       {/* Bottom info */}

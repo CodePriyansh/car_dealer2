@@ -98,6 +98,7 @@ const OtpVerification = ({ mobileNumber, formData }) => {
       } catch (error) {
         if (error.response && error.response.status === 404) {
           // User not found, redirect to signup
+          toast.info("User not found, redirecting to signup");
           const params = new URLSearchParams({
             mobileNumber,
             id: user.uid,

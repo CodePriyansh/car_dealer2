@@ -40,7 +40,7 @@
   @apply border border-dashed border-gray-300 sm:p-3 p-2 flex flex-col items-center justify-center;
 }
 .dotted_box_step2{
-  @apply border border-dashed border-gray-300 sm:p-3 p-2 flex flex-col items-center justify-center min-w-[16px] min-h-[160px] rounded-[10px] md:rounded-none;
+  @apply border border-dashed border-gray-300 sm:p-3 sm:p-5 p-2 flex flex-col items-center justify-center min-w-[16px] min-h-[160px] rounded-[10px] md:rounded-none;
 
 }
 .line1 {

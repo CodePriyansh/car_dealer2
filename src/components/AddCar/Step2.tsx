@@ -3,14 +3,15 @@ import signupStyles from "../SignUp/styles.module.css";
 import Image from "next/image";
 import { Images } from "@/assets/Images";
 import Button from "../Common/Button";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import styles from "./styles.module.css";
-import axios from "axios"; // Assuming axios is being used for API calls
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import instance from "@/network/axios";
 import Cookies from "universal-cookie";
+import "react-toastify/dist/ReactToastify.css";
+import { FaCross } from "react-icons/fa";
 
 interface Step2Props {
   stepsData: any;
@@ -77,15 +78,12 @@ const carImages = [
 ];
 
 const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
-  const [interiorImagesPreview, setInteriorImagesPreview] = useState<
-    Array<string>
-  >([]);
+  const [interiorImagesPreview, setInteriorImagesPreview] = useState<Array<string>>([]);
+  
   useEffect(() => {
     return () => {
       // Clean up object URLs to prevent memory leaks
-      interiorImagesPreview.forEach((previewUrl) =>
-        URL.revokeObjectURL(previewUrl)
-      );
+      interiorImagesPreview.forEach((previewUrl) => URL.revokeObjectURL(previewUrl));
     };
   }, [interiorImagesPreview]);
 
@@ -95,6 +93,13 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
   const [fileNames, setFileNames] = useState(
     carImages.reduce((acc, image) => {
       acc[image.name] = "";
+      return acc;
+    }, {})
+  );
+
+  const [imagePreviews, setImagePreviews] = useState(
+    carImages.reduce((acc, image) => {
+      acc[image.name] = null;
       return acc;
     }, {})
   );
@@ -186,6 +191,30 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
   const handleFileChange = (setFieldValue, image, event) => {
     const files = event.currentTarget.files;
     if (files && files.length > 0) {
+
+      if (image.name === "video") {
+        const supportedVideoTypes = [
+          "video/mp4",
+          "video/avi",
+          "video/mkv",
+          "video/mov",
+          "video/wmv",
+          "video/flv",
+          "video/webm",
+          "video/mpeg",
+          "video/3gpp",
+          "video/ogg",
+          "video/quicktime",
+          "video/x-msvideo",
+          "video/x-ms-wmv",
+        ];
+  
+        if (!supportedVideoTypes.includes(files[0].type)) {
+          toast.error("Unsupported video format. Please upload a supported format.");
+          return;
+        }
+      }
+
       if (image.name === "interior_images") {
         const fileList = Array.from(files);
         setFieldValue(image.name, fileList);
@@ -203,15 +232,43 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
           ...prevState,
           [image.name]: files[0].name,
         }));
+
+        const previewUrl = URL.createObjectURL(files[0]);
+        setImagePreviews((prevState) => ({
+          ...prevState,
+          [image.name]: previewUrl,
+        }));
       }
     }
   };
 
-  const handleDeleteImage = (index) => {
-    const updatedPreviews = [...interiorImagesPreview];
-    updatedPreviews.splice(index, 1);
-    setInteriorImagesPreview(updatedPreviews);
+  const handleRemoveImage = (setFieldValue, imageName, index) => {
+    setFieldValue(imageName, null);
+    setFileNames((prevState) => ({
+      ...prevState,
+      [imageName]: "",
+    }));
+    setImagePreviews((prevState) => ({
+      ...prevState,
+      [imageName]: null,
+    }));
+    
+    // Reset the file input value
+    if (fileInputRefs.current[index]?.current) {
+      fileInputRefs.current[index].current.value = "";
+    }
   };
+
+  const handleDeleteInteriorImage = (index, setFieldValue) => {
+    setInteriorImagesPreview((prev) => prev.filter((_, i) => i !== index));
+    setFieldValue("interior_images", (prev) => prev.filter((_, i) => i !== index));
+    
+    // Reset the file input value
+    if (interiorImagesRef.current) {
+      interiorImagesRef.current.value = "";
+    }
+  };
+
   return (
     <div>
       <Formik
@@ -228,17 +285,45 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
             </div>
             <div className="grid xl:grid-cols-4 md:grid-cols-3 grid-cols-2 w-full md:gap-6 gap-2 my-4">
               {carImages.map((image, index) => (
-                <div
-                  key={index}
-                  className={styles.dotted_box_step2} 
-                  onClick={() => fileInputRefs.current[index].current?.click()}
-                >
-                  <Image
-                    src={image.src}
-                    alt={image.alt}
-                    className="md:w-16 md:h-16 px-4 pt-2 md:!p-0"
-                  />
-                  <Button otherStyles={styles.btn_step2}>
+                <div key={index} className={styles.dotted_box_step2}>
+                  {imagePreviews[image.name] ? (
+                    <div className="relative w-full h-full p-4 border rounded ">
+                      <Image
+                        src={imagePreviews[image.name]}
+                        alt={image.alt}
+                        className="w-full h-full object-cover"
+                        width={30}
+                        height={30}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveImage(setFieldValue, image.name, index)}
+                        className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full"
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                    <div
+                      className="sm:w-20 sm:h-20 h-auto"
+                      onClick={() =>
+                        fileInputRefs.current[index].current?.click()
+                      }
+                    >
+                      <Image
+                        src={image.src}
+                        alt={image.alt}
+                        className="md:w-18 md:h-18 px-4 pt-2 md:!p-0 w-18 h-16"
+                      />
+                    </div>
+                  <div onClick={() =>
+                      fileInputRefs.current[index].current?.click()
+                    }>
+                  <Button
+                    otherStyles={styles.btn_step2}
+                    
+                  >
                     <Image
                       src={Images.plus}
                       alt="plus"
@@ -258,13 +343,17 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                     }
                   />
                   {fileNames[image.name] && (
-                    <p className="text-sm mt-2">{fileNames[image.name]}</p>
+                    <p className="text-sm m-2">{fileNames[image.name]}</p>
                   )}
                   <ErrorMessage
                     name={image.name}
                     component="div"
                     className="error_msg"
                   />
+                  </div>
+                  </>
+                  )}
+
                 </div>
               ))}
             </div>
@@ -309,7 +398,6 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                       )
                     }
                   />
-                  
                 </div>
 
                 <div className="flex max-w-full flex-col w-fit overflow-x-scroll ml-4 custome-scrollbar scroll-smooth">
@@ -328,21 +416,24 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                           className="w-full h-full relative"
                         >
                           <button
-                        className="text-black text-[24px] font-semibold absolute top-0 right-2 rotate-45"
-                          onClick={(index) => handleDeleteImage(index)}
-                        >+</button>
+                            className="text-black bg-white rounded-full text-[24px] font-semibold absolute top-0 right-2 rotate-45"
+                            onClick={() =>
+                              handleDeleteInteriorImage(index, setFieldValue)
+                            }
+                          >
+                            <FaCross></FaCross>
+                          </button>
                         </div>
-                        
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
               <ErrorMessage
-                    name="interior_images"
-                    component="div"
-                    className="error_msg"
-                  />
+                name="interior_images"
+                component="div"
+                className="error_msg"
+              />
             </div>
 
             {/* Video */}
@@ -393,6 +484,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
           </Form>
         )}
       </Formik>
+      <ToastContainer />
     </div>
   );
 };
