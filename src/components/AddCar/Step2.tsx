@@ -257,7 +257,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
               <p className={styles.sub_heading}>Images</p>
               <p className={styles.line}></p>
             </div>
-            <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 w-full gap-6 my-4">
+            <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-2 w-full sm:gap-6 gap-3 my-2 sm:my-4">
               {carImages.map((image, index) => (
                 <div key={index} className={signupStyles.dotted_box}>
                   {imagePreviews[image.name] ? (

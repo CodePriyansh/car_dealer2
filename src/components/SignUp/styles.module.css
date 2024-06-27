@@ -17,13 +17,13 @@
     @apply py-4 px-4 border border-primary rounded-[50px] md:w-[250px] 2xl:w-[280px] w-full placeholder:text-[14px] placeholder:text-greyy outline-none max-h-[50px] h-[50px]  text-black text-18 font-semibold font-rajdhani bg-transparent;
 }
 .label_Style{
-    @apply text-base text-para uppercase md:pb-[16px] pb-2 font-medium ;
+    @apply text-base text-para uppercase pb-[16px]  font-medium ;
 }
 .signup_img{
     @apply w-[80%] ;
 }
 .field_wrapper{
-    @apply flex flex-col w-full md:max-h-[110px] md:h-[110px] h-[90px];
+    @apply flex flex-col w-full md:max-h-[110px] h-[110px];
 }
 .info_text{
     @apply capitalize text-base py-1 text-para font-semibold;
