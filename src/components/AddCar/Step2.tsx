@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import instance from "@/network/axios";
 import Cookies from "universal-cookie";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Step2Props {
   stepsData: any;
@@ -189,6 +190,30 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
   const handleFileChange = (setFieldValue, image, event) => {
     const files = event.currentTarget.files;
     if (files && files.length > 0) {
+
+      if (image.name === "video") {
+        const supportedVideoTypes = [
+          "video/mp4",
+          "video/avi",
+          "video/mkv",
+          "video/mov",
+          "video/wmv",
+          "video/flv",
+          "video/webm",
+          "video/mpeg",
+          "video/3gpp",
+          "video/ogg",
+          "video/quicktime",
+          "video/x-msvideo",
+          "video/x-ms-wmv",
+        ];
+  
+        if (!supportedVideoTypes.includes(files[0].type)) {
+          toast.error("Unsupported video format. Please upload a supported format.");
+          return;
+        }
+      }
+
       if (image.name === "interior_images") {
         const fileList = Array.from(files);
         setFieldValue(image.name, fileList);
@@ -456,6 +481,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
           </Form>
         )}
       </Formik>
+      <ToastContainer />
     </div>
   );
 };
