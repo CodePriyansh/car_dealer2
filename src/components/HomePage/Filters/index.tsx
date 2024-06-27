@@ -6,6 +6,7 @@ import CommonReactSelect from "@/components/Common/Select";
 import Image from "next/image";
 import { Images } from "@/assets/Images";
 import Button from "@/components/Common/Button";
+import FilterDrawer from "../FilterDrawer";
 function Filters() {
   const fields = [
     {
@@ -67,6 +68,7 @@ function Filters() {
   const [selectedOptions, setSelectedOptions] = useState<{
     [key: string]: any;
   }>({});
+  const [openDrawer, setOpenDrawer] = useState(false)
   const handleChange = (name: string, selectedOption: any) => {
     setSelectedOptions({
       ...selectedOptions,
@@ -174,13 +176,16 @@ function Filters() {
               <div
                 key={index.toString()}
                 className={styles.responsive_filter_box}
+                onClick={()=>setOpenDrawer(true)}
               >
                 <p className={styles.responsive_filter_item}> {item}</p>
+                
               </div>
             );
           }
         )}
       </div>
+      {openDrawer && <FilterDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer}/>}
       <div> <Button otherStyles={styles.clear_fil_btn}>
           <Image
             src={Images.clearFilter}
