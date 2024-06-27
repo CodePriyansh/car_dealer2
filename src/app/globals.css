@@ -42,7 +42,10 @@ p {
   }
 }
 .large_layout {
-  @apply last-screen:w-[2000px] mx-auto;
+  @apply last-screen:w-[1920px] last-screen:max-w-[1920px]  mx-auto;
+}
+.container_space{
+  @apply  3xl:px-[125px] 2xl:px-[110px] xl:px-[90px] lg:px-[75px]  md:px-[60px] sm:px-[30px] px-4;
 }
 
 /* For Chrome, Safari, Edge, Opera */

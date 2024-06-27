@@ -10,7 +10,7 @@ export default function SubHeader() {
   const router = useRouter();
   const [activeMidFilter, setActiveMidFilter] = useState("car");
   return (
-    <div className={`${styles.wrapper} large_layout`}>
+    <div className={`${styles.wrapper} container_space large_layout`}>
       {/* left  */}
       <div className={styles.left}>
         <div className={styles.field_style}>

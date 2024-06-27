@@ -74,7 +74,7 @@ function Filters() {
     });
   };
   return (
-    <div className={`${styles.container} large_layout`}>
+    <div className={`${styles.container} container_space large_layout`}>
       <div className={styles.wrapper}>
         {/* filter box  */}
         <div className={styles.filters_wrapper}>

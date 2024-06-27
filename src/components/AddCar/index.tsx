@@ -13,7 +13,7 @@ const AddCarForm = () => {
   const [showActiveStep, setShowActiveStep] = useState<number>(1);
   const [stepsData, setStepsData] = useState<any>(null);
   return (
-    <div className={styles.wrapper}>
+    <div className={`container_space large_layout ${styles.wrapper}`}>
       <div className={styles.form_wrapper}>
         <p className={styles.heading}>Add Car</p>
 

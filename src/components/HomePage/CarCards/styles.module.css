@@ -30,7 +30,7 @@
     @apply flex w-full gap-2 mx-4 my-4 overflow-x-scroll max-w-full;
   }
   .feature_item{
-    @apply flex bg-[#f0f2f5] rounded-md 2xl:text-20 text-18 font-rajdhani font-medium leading-8 px-3 whitespace-nowrap
+    @apply flex bg-[#f0f2f5] rounded-md 2xl:text-20 md:text-18 text-14 font-rajdhani font-medium leading-8 px-3 whitespace-nowrap
   }
   .features_row::-webkit-scrollbar{
     display: none;

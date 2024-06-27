@@ -1,7 +1,7 @@
 /* styles.module.css */
 
 .wrapper {
-  @apply bg-f7f7f7 w-full md:px-[60px] px-4 md:py-[44px] py-[22px];
+  @apply bg-f7f7f7 w-full md:py-[44px] py-[22px] ;
 }
 .form_wrapper {
   @apply flex md:bg-white bg-transparent  md:p-8 p-0 flex-col;

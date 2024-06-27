@@ -6,7 +6,7 @@ import Button from "../Button";
 
 function Header() {
   return (
-    <div className={styles.wrapper}>
+    <div className={`container_space large_layout ${styles.wrapper}`}>
       <div>
         <Image src={Images.logo} alt="logo" width={85} height={85} />
       </div>
