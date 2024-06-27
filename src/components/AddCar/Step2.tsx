@@ -11,6 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 import instance from "@/network/axios";
 import Cookies from "universal-cookie";
 import "react-toastify/dist/ReactToastify.css";
+import { FaCross } from "react-icons/fa";
 
 interface Step2Props {
   stepsData: any;
@@ -282,9 +283,9 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
               <p className={styles.sub_heading}>Images</p>
               <p className={styles.line}></p>
             </div>
-            <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-2 w-full sm:gap-6 gap-3 my-2 sm:my-4">
+            <div className="grid xl:grid-cols-4 md:grid-cols-3 grid-cols-2 w-full md:gap-6 gap-2 my-4">
               {carImages.map((image, index) => (
-                <div key={index} className={signupStyles.dotted_box}>
+                <div key={index} className={styles.dotted_box_step2}>
                   {imagePreviews[image.name] ? (
                     <div className="relative w-full h-full p-4 border rounded ">
                       <Image
@@ -305,7 +306,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                   ) : (
                     <>
                     <div
-                      className="w-16 h-16"
+                      className="sm:w-20 sm:h-20 h-auto"
                       onClick={() =>
                         fileInputRefs.current[index].current?.click()
                       }
@@ -313,14 +314,14 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                       <Image
                         src={image.src}
                         alt={image.alt}
-                        className="w-full h-full"
+                        className="md:w-18 md:h-18 px-4 pt-2 md:!p-0 w-18 h-16"
                       />
                     </div>
                   <div onClick={() =>
                       fileInputRefs.current[index].current?.click()
                     }>
                   <Button
-                    otherStyles="mt-[50px]"
+                    otherStyles={styles.btn_step2}
                     
                   >
                     <Image
@@ -328,6 +329,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                       alt="plus"
                       width={20}
                       height={20}
+                      className={styles.step2_btn_img}
                     />
                     {image.label}
                   </Button>
@@ -364,7 +366,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
               </div>
               <div className="flex w-full md:flex-row flex-col items-center">
                 <div
-                  className={`${signupStyles.dotted_box} w-full md:!max-w-[224px] md:min-w-[200px] !max-h-[224px] h-[200px]`}
+                  className={`${styles.dotted_box_step2} w-full md:!max-w-[224px] md:min-w-[200px] !max-h-[224px] h-[200px]`}
                   onClick={() => interiorImagesRef.current?.click()}
                 >
                   <Image
@@ -372,12 +374,13 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                     alt="img"
                     className="w-8 h-8 mx-auto"
                   />
-                  <Button otherStyles="mt-[50px]">
+                  <Button otherStyles={styles.btn_step2}>
                     <Image
                       src={Images.plus}
                       alt="plus"
                       width={20}
                       height={20}
+                      className={styles.step2_btn_img}
                     />
                     Add Images
                   </Button>
@@ -413,12 +416,12 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                           className="w-full h-full relative"
                         >
                           <button
-                            className="text-black text-[24px] font-semibold absolute top-0 right-2 rotate-45"
+                            className="text-black bg-white rounded-full text-[24px] font-semibold absolute top-0 right-2 rotate-45"
                             onClick={() =>
                               handleDeleteInteriorImage(index, setFieldValue)
                             }
                           >
-                            +
+                            <FaCross></FaCross>
                           </button>
                         </div>
                       </div>
@@ -440,12 +443,12 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                 <p className={styles.line}></p>
               </div>
               <div
-                className={`${signupStyles.dotted_box}`}
+                className={`${styles.dotted_box_step2} `}
                 onClick={() => videoRef.current?.click()}
               >
                 <Image src={Images.uploadImg} alt="img" className="w-8 h-8" />
-                <Button otherStyles="mt-[50px]">
-                  <Image src={Images.plus} alt="plus" width={20} height={20} />
+                <Button otherStyles={styles.btn_step2}>
+                  <Image src={Images.plus} alt="plus" width={20} height={20} className={styles.step2_btn_img}/>
                   Add Video
                 </Button>
                 <input

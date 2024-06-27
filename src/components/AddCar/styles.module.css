@@ -1,23 +1,24 @@
 /* styles.module.css */
 
 .wrapper {
-  @apply bg-f7f7f7 w-full md:px-[60px] sm:px-[30px] px-4 md:py-[44px] py-[22px];
+  @apply bg-f7f7f7 w-full md:px-[60px] px-4 md:py-[44px] py-[22px];
 }
 .form_wrapper {
-  @apply flex bg-white p-8 flex-col;
-  box-shadow: 0px 0px 20px 0px #0000000f;
+  @apply flex md:bg-white bg-transparent  md:p-8 p-0 flex-col;
+  /* box-shadow: 0px 0px 20px 0px #0000000f; */
 }
+
 .heading {
   @apply text-primary sm:text-[36px] text-[32px] font-bold text-center w-full font-rajdhani md:mb-8 mb-4;
 }
 .basic_detail_heading {
-  @apply flex w-full items-center mt-8 flex-col sm:flex-row ;
+  @apply flex w-full items-center mt-8 ;
 }
 .sub_heading {
   @apply font-rajdhani whitespace-nowrap text-black font-bold text-[24px] pr-1;
 }
 .line {
-  @apply w-full h-[1px] bg-line hidden sm:flex;
+  @apply w-full h-[1px] bg-line flex;
 }
 .field_wrapper {
   @apply flex flex-col w-full sm:max-h-[110px] sm:h-[110px] h-[90px] max-h-[90px];
@@ -38,7 +39,10 @@
 .dotted_box {
   @apply border border-dashed border-gray-300 sm:p-3 p-2 flex flex-col items-center justify-center;
 }
+.dotted_box_step2{
+  @apply border border-dashed border-gray-300 sm:p-3 sm:p-5 p-2 flex flex-col items-center justify-center min-w-[16px] min-h-[160px] rounded-[10px] md:rounded-none;
 
+}
 .line1 {
   @apply h-1 bg-primary md:w-[104px] w-[70px];
 }
@@ -49,13 +53,11 @@
   @apply h-1 bg-line md:w-[104px] w-[70px];
 }
 .circle1 {
-  @apply  h-9 w-9 border-[2px] border-primary rounded-[50%] cursor-pointer;
+  @apply h-9 w-9 border-[2px] border-primary rounded-[50%] cursor-pointer;
 }
 .circle2 {
   @apply bg-white h-9 w-9 border-[2px] border-line rounded-[50%] cursor-pointer;
 }
-
-
 
 .common_step {
   @apply text-base font-semibold font-rajdhani leading-5 text-primary absolute top-[-35px];
@@ -67,16 +69,27 @@
   @apply md:left-[210px] left-[170px];
 }
 
-
-.description_and_dent_style{
-@apply border border-primary rounded-[15px]  px-4 py-2 outline-none focus:border-primary focus:border-2
+.description_and_dent_style {
+  @apply border border-primary rounded-[15px]  px-4 py-2 outline-none focus:border-primary focus:border-2;
 }
-.common_text{
+.common_text {
   @apply text-subHeading font-rajdhani text-sm font-medium absolute top-[48px];
 }
 .car_details {
   @apply md:left-[85px] left-[60px];
 }
 .photo_vedio {
-  @apply  md:left-[190px] left-[150px];
+  @apply md:left-[190px] left-[150px];
+}
+@media screen and (min-width: 768px) {
+  .form_wrapper {
+  box-shadow: 0px 0px 20px 0px #0000000f;
+
+  }
+}
+.btn_step2{
+  @apply md:mt-[30px] mt-[22px] py-2 px-3 md:px-4 md:py-3 gap-1 md:leading-[18px] leading-[15px] text-[14px] md:text-base
+}
+.step2_btn_img{
+@apply md:w-[20px] w-[16px] md:h-[20px] h-[16px]
 }
