@@ -236,7 +236,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                   <Image
                     src={image.src}
                     alt={image.alt}
-                    className="md:w-16 md:h-16 px-4 pt-2"
+                    className="md:w-16 md:h-16 px-4 pt-2 md:!p-0"
                   />
                   <Button otherStyles={styles.btn_step2}>
                     <Image
