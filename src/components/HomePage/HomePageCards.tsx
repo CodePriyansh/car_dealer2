@@ -27,7 +27,7 @@ useEffect(()=>{
 },[])
 
   return (
-    <div className="large_layout w-full grid md1:grid-cols-3 sm:grid-cols-2 grid-cols-1 md:px-[60px] sm:px-[30px] px-4 gap-8 bg-f7f7f7">
+    <div className="large_layout w-full grid md1:grid-cols-3 sm:grid-cols-2 grid-cols-1 md:px-[60px] sm:px-[30px] px-4 gap-8 md:bg-f7f7f7 py-10">
       {cars.map((car, index) => (
         <CarCards car={car} key={index} />
       ))}

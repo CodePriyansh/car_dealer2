@@ -5,6 +5,7 @@ import CommonReactSelect from "@/components/Common/Select";
 
 import Image from "next/image";
 import { Images } from "@/assets/Images";
+import Button from "@/components/Common/Button";
 function Filters() {
   const fields = [
     {
@@ -123,7 +124,7 @@ function Filters() {
           <button className="my-1 text-primary capitalize font-rajdhani text-18 font-bold flex w-fit gap-2 mx-auto items-center justify-center">
             view all
             <Image
-              src={Images.downArrow }
+              src={Images.downArrow}
               width={14}
               height={14}
               alt="down-arrow"
@@ -157,7 +158,7 @@ function Filters() {
           <button className="my-1 text-primary capitalize font-rajdhani text-18 font-bold flex w-fit gap-2 mx-auto items-center justify-center">
             view all
             <Image
-              src={Images.downArrow }
+              src={Images.downArrow}
               width={14}
               height={14}
               alt="down-arrow"
@@ -165,11 +166,29 @@ function Filters() {
           </button>
         </div>
       </div>
-      <div
-        className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 ${styles.carsGrid}`}
-      >
-       
+
+      <div className={styles.responsive_filters}>
+        {["price range", "brand", "model", "color", "type"]?.map(
+          (item, index) => {
+            return (
+              <div
+                key={index.toString()}
+                className={styles.responsive_filter_box}
+              >
+                <p className={styles.responsive_filter_item}> {item}</p>
+              </div>
+            );
+          }
+        )}
       </div>
+      <div> <Button otherStyles={styles.clear_fil_btn}>
+          <Image
+            src={Images.clearFilter}
+            alt="img"
+            className="w-[18px] h-[18px]"
+          />
+          clear filter
+        </Button></div>
     </div>
   );
 }
