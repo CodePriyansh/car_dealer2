@@ -15,7 +15,7 @@ export default function SubHeader() {
       <div className={styles.left}>
         <div className={styles.field_style}>
           <Image src={Images.search} alt="img" className="w-[18px] h-[18px]" />
-          <input className={styles.search_input} type="text" />
+          <input className={styles.search_input} type="text" placeholder="Search....." />
         </div>
         <div className={styles.responsive_filter_icon}>
           <Image

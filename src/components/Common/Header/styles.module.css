@@ -1,5 +1,5 @@
 .wrapper{
-    @apply h-[90px] bg-white border-b border-border-primary flex w-full justify-between items-center
+    @apply sm:h-[90px] h-[70px] bg-white border-b border-border-primary flex w-full justify-between items-center
 }
 .right_part{
     @apply md:flex gap-10 items-center hidden;
@@ -13,12 +13,12 @@
 }
 
 .responsive_right_part{
-    @apply flex md:hidden  gap-3;
+    @apply flex md:hidden gap-3;
 }
 .responsive_subscription{
-    @apply w-10 h-10 rounded-[50%] bg-secondary justify-center items-center
+    @apply w-10 h-10 rounded-[50%] bg-secondary justify-center items-center flex
 }
 .responsive_profile{
-    @apply w-10 h-10 rounded-[50%] bg-primary justify-center items-center
+    @apply w-10 h-10 rounded-[50%] bg-primary justify-center items-center flex
 
 }

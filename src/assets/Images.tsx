@@ -28,7 +28,9 @@ import responsiveFilter from './responsive-filter.svg'
 import cardDelete from './card-delete.svg'
 import cardView from './card-edit.svg'
 import cardEdit from './card-view.svg'
-
+import userProfile from './user-profile.svg'
+import demoProfile from './demo-profile.png'
+import availSoldSymbol from './avail-sold-symbol.svg'
 
 export const Images={
     signup,
@@ -48,7 +50,7 @@ export const Images={
     frontRight,
     leftSide,
     rightSide,
-
+    userProfile,
     menu,
     notification,
     subscription,
@@ -60,4 +62,6 @@ export const Images={
     cardDelete,
     cardView,
     cardEdit,
+    demoProfile,
+    availSoldSymbol
 }

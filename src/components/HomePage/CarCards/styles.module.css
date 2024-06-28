@@ -2,7 +2,8 @@
     @apply w-full flex rounded-[10px] flex-col max-w-full overflow-hidden mb-8;
     box-shadow: 0px 0px 14px 0px rgba(0, 89, 163, 0.06);
     background: rgba(247, 249, 253, 1);
-    border: 1px solid rgba(239, 110, 11, 0.3)
+    border: 1px solid rgba(239, 110, 11, 0.3);
+    position: relative;
   }
   .card_img_wrapper{
     @apply flex max-h-[306px] w-full;
@@ -11,7 +12,7 @@
     @apply flex w-full justify-between items-center px-4 py-3;
   }
   .header_left{
-    @apply font-rajdhani font-bold text-18 capitalize;
+    @apply font-rajdhani font-bold sm:text-24 text-14 capitalize;
   }
   .header_right{
     @apply flex gap-2
@@ -30,8 +31,19 @@
     @apply flex w-full gap-2 mx-4 my-4 overflow-x-scroll max-w-full;
   }
   .feature_item{
-    @apply flex bg-[#f0f2f5] rounded-md 2xl:text-20 md:text-18 text-14 font-rajdhani font-medium leading-8 px-3 whitespace-nowrap
+    @apply flex bg-[#f0f2f5] rounded-md 2xl:text-20 md:text-18 text-[12px] font-rajdhani font-medium leading-8 px-3 whitespace-nowrap
   }
   .features_row::-webkit-scrollbar{
     display: none;
+  }
+  .status_tag {
+    @apply absolute top-2 right-2;
+  }
+  
+  .status_avail {
+    @apply bg-availGreen text-white px-2 py-1 rounded-xl flex gap-1 font-rajdhani;
+  }
+
+  .status_sold {
+    @apply bg-soldRed text-white px-2 py-1 rounded-xl flex gap-1 font-rajdhani;
   }

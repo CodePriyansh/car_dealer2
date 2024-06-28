@@ -49,7 +49,7 @@ const AddCarForm = () => {
           <p className={`${styles.common_step} ${styles.step2}`}>Step2</p>
           <div
             className={styles.circle2}
-            // onClick={() => setShowActiveStep(2)}
+            // onClick={() => setShowActiveStep(1)}
           />
           <p className={`${styles.common_text} ${styles.photo_vedio}`}>
             Photos/Video

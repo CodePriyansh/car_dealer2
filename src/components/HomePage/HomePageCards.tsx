@@ -27,7 +27,7 @@ function HomePageCards() {
   }, []);
 
   return (
-    <div className="container_space large_layout w-full grid md1:grid-cols-3 sm:grid-cols-2 grid-cols-1  gap-8 md:bg-f7f7f7 py-10">
+    <div className="container_space large_layout w-full grid md1:grid-cols-3 sm:grid-cols-2 grid-cols-1  gap-6 md:bg-f7f7f7 py-10">
       {cars.map((car, index) => (
         <CarCards car={car} key={index} />
       ))}

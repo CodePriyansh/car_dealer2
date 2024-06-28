@@ -9,7 +9,7 @@ import path from "path";
 import { setLocalStorage } from "@/constants/constants";
 import Cookies from "universal-cookie";
 
-const OtpVerification = ({ mobileNumber, formData }) => {
+const OtpVerification = ({ mobileNumber, formData, setHeading }) => {
   const cookies = new Cookies();
   const [otp, setOtp] = useState(["", "", "", "", "", ``]);
   const [seconds, setSeconds] = useState(56);
@@ -41,6 +41,7 @@ const OtpVerification = ({ mobileNumber, formData }) => {
 
       if (newOtp.every((digit) => digit !== "")) {
         setIsOtpEntered(true);
+        setHeading("Confirm Otp")
       }
     }
   };
@@ -90,7 +91,7 @@ const OtpVerification = ({ mobileNumber, formData }) => {
         console.log(response, "response");
         if (response.status >= 200) {
           cookies.set("token", response.data.data.token, { path: "/" });
-          setLocalStorage("user", JSON.stringify(response.data))
+          setLocalStorage("user", JSON.stringify(response.data.data))
           // Redirect to the next page
           toast.success(response?.data.message);
           router.push("/");

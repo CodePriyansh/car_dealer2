@@ -150,8 +150,14 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
       console.log(values, "values");
       const formData = new FormData();
       Object.keys(values).forEach((key) => {
+      if (key === "interior_images") {
+        values[key].forEach((file, index) => {
+          formData.append(`interior_images`, file);
+        });
+      } else {
         formData.append(key, values[key]);
-      });
+      }
+    });
       Object.keys(stepsData).forEach((key) => {
         formData.append(key, stepsData[key]);
       });

@@ -15,10 +15,10 @@
   @apply flex w-full items-center mt-8 ;
 }
 .sub_heading {
-  @apply font-rajdhani whitespace-nowrap text-black font-bold text-[24px] pr-1;
+  @apply font-rajdhani whitespace-nowrap text-black font-bold sm:text-[24px] text-[18px] pr-1;
 }
 .line {
-  @apply w-full h-[1px] bg-line flex;
+  @apply sm:w-full sm:h-[1px] bg-line sm:flex hidden ;
 }
 .field_wrapper {
   @apply flex flex-col w-full sm:max-h-[110px] sm:h-[110px] h-[90px] max-h-[90px];
@@ -30,7 +30,7 @@
   @apply py-1 px-4 border border-primary rounded-[50px] w-full placeholder:text-[14px] placeholder:text-greyy max-h-[50px] h-[45px]  outline-none focus:border-primary focus:border-2 text-black text-18 font-semibold font-rajdhani bg-transparent;
 }
 .special_heading {
-  @apply text-line font-rajdhani text-[16px] sm:text-[24px]  px-1 sm:whitespace-nowrap;
+  @apply text-line font-rajdhani text-[14px] sm:text-[24px]  px-1 sm:whitespace-nowrap;
 }
 .next_btn {
   @apply bg-secondary md:w-[300px] w-full mx-auto text-white my-14;
@@ -70,7 +70,7 @@
 }
 
 .description_and_dent_style {
-  @apply border border-primary rounded-[15px]  px-4 py-2 outline-none focus:border-primary focus:border-2;
+  @apply border border-primary rounded-[15px]  px-4 py-2 outline-none focus:border-primary focus:border-2 min-h-[80px];
 }
 .common_text {
   @apply text-subHeading font-rajdhani text-sm font-medium absolute top-[48px];

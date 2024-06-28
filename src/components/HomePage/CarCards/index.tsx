@@ -11,9 +11,19 @@ export default function CarCards({ car }) {
   // const handleClick = () => {
   //   router.push(`/car/${car._id}`);
   // };
+
+  let status = "Avail" ? "Sold" : "Avail"
   return (
-  
     <div className={styles.card_wrapper}>
+      <div className={styles.status_tag}>
+        <div
+          className={
+            status === "Sold" ? styles.status_avail : styles.status_sold
+          }
+        >
+            <Image src={Images.availSoldSymbol} alt="Sell" ></Image>  {car.status === "Avail" ? "Avail " : "Sold "}
+        </div>
+      </div>
       <div className={styles.card_img_wrapper}>
         <Image src={Images.demoCarfrom} alt="image" />
       </div>
@@ -35,7 +45,11 @@ export default function CarCards({ car }) {
       <div className={`${styles.features_row}`}>
         {["2020", "automatic", "Metallic Maroon", "petrol"]?.map(
           (item, index) => {
-            return <div key={index.toString()} className={styles.feature_item}>{item}</div>;
+            return (
+              <div key={index.toString()} className={styles.feature_item}>
+                {item}
+              </div>
+            );
           }
         )}
       </div>

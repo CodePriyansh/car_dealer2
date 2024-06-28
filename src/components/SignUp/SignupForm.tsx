@@ -32,6 +32,7 @@ const schema = yup.object().shape({
 
 export default function SignupForm() {
   const cookies = new Cookies();
+  const [heading, setHeading] = useState('Signup Account');
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -101,7 +102,7 @@ export default function SignupForm() {
 
         if (response.status === 200) {
           cookies.set("token", response.data.data.token, { path: "/" });
-          setLocalStorage("user", JSON.stringify(response.data));
+          setLocalStorage("user", JSON.stringify(response.data.data));
           toast.success(response.data.message);
           router.push("/");
         }
@@ -117,6 +118,8 @@ export default function SignupForm() {
           setOtpSend(true);
           setSubmitting(false);
           setBackBtnStatus(true);
+          setHeading('OTP Verification');
+
           toast.success("OTP sent successfully!");
         })
         .catch((err) => {
@@ -171,6 +174,7 @@ export default function SignupForm() {
                 className="md:absolute md:left-16 left-0 flex gap-2 items-center cursor-pointer"
                 onClick={() => {
                   setBackBtnStatus(false);
+                  setHeading("Signup Account")
                 }}
               >
                 <Image
@@ -194,7 +198,7 @@ export default function SignupForm() {
               className="w-8 h-8 sm:w-12 sm:h-12 mx-auto"
             />
             <p className={styles.subheading}>My Car</p>
-            <p className={styles.heading}>Signup Account</p>
+            <p className={styles.heading}>{heading}</p>
           </div>
 
           {otpSend && backBtnStatus ? (
@@ -203,6 +207,7 @@ export default function SignupForm() {
                 mobileNumber={mobileNumber}
                 formData={formData}
                 setBackBtnStatus={setBackBtnStatus}
+                setHeading={setHeading}
               />
               <div
                 className="w-full h-[50vh] flex lg:hidden absolute bottom-0 z-10"

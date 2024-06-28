@@ -27,6 +27,8 @@ const config: Config = {
         'border-primary':'#0000001A',
         'f7f7f7':'#F7F7F7',
         'lightpara':'rgba(0, 0, 0, 0.6)',
+        availGreen: "#0D9212",
+        soldRed: "#FA2D2D"
       },
       fontSize: {
         48:"48",

@@ -23,7 +23,7 @@ const LoginForm = () => {
   const [otpSend, setOtpSend] = useState(false);
   const [backBtnStatus, setBackBtnStatus] = useState(true);
   const [mobileNumber, setMobileNumber] = useState('');
-
+  const [heading, setHeading] = useState('Login Account');
   const handleSubmit = (values, { setSubmitting }) => {
     console.log(values, "submitted values");
     sendOtp(`+91${values.mobileNumber}`)
@@ -34,6 +34,7 @@ const LoginForm = () => {
         setOtpSend(true);
         setSubmitting(false);
         setBackBtnStatus(true);
+        setHeading('OTP Verification');
         // toast.success("OTP sent successfully!");
       })
       .catch((err) => {
@@ -52,6 +53,7 @@ const LoginForm = () => {
           className="md:absolute md:left-16 left-0 flex gap-2 items-center cursor-pointer"
           onClick={() => {
             setBackBtnStatus(false);
+            setHeading("Login Account")
           }}
         >
           <Image
@@ -75,9 +77,9 @@ const LoginForm = () => {
         className="w-8 h-8 sm:w-12 sm:h-12 mx-auto"
       />
       <p className={styles.subheading}>My Car</p>
-      <p className={styles.heading}>Login Account</p>
+      <p className={styles.heading}>{heading}</p>
       {otpSend && backBtnStatus ? (
-        <OtpVerification mobileNumber={mobileNumber} formData={undefined}/>
+        <OtpVerification mobileNumber={mobileNumber} formData={undefined}   setHeading={setHeading}/>
       ) : (
         <Formik
           initialValues={{ mobileNumber: "" }}
