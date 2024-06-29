@@ -14,14 +14,14 @@ export default function SubHeader() {
       {/* left  */}
       <div className={styles.left}>
         <div className={styles.field_style}>
-          <Image src={Images.search} alt="img" className="w-[18px] h-[18px]" />
+          <Image src={Images.search} alt="img" className="sm:w-[18px] sm:h-[18px] h-4 w-4" />
           <input className={styles.search_input} type="text" placeholder="Search....." />
         </div>
         <div className={styles.responsive_filter_icon}>
           <Image
             src={Images.responsiveFilter}
             alt="img"
-            className="w-[24px] h-[24px]"
+            className="sm:w-[18px] sm:h-[18px] h-4 w-4 "
           />
         </div>
       </div>

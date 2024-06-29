@@ -2,12 +2,16 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import CommonReactSelect from "@/components/Common/Select";
-
+import { Slider, Typography } from '@mui/material';
 import Image from "next/image";
 import { Images } from "@/assets/Images";
 import Button from "@/components/Common/Button";
 import FilterDrawer from "../FilterDrawer";
+import { FaPlus } from "react-icons/fa";
+import PriceRangeSlider from "@/components/Common/PriceRange";
+import { useRouter } from "next/navigation";
 function Filters() {
+ const router = useRouter()
   const fields = [
     {
       name: "company",
@@ -97,7 +101,8 @@ function Filters() {
               </div>
             ))}
           </div>
-          <p className={styles.sub_heading}>Price Range</p>
+          {/* <p className={styles.sub_heading}>Price Range</p> */}
+          <PriceRangeSlider />
         </div>
 
         {/* car type box  */}
@@ -186,14 +191,28 @@ function Filters() {
         )}
       </div>
       {openDrawer && <FilterDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer}/>}
+
+      <div className="flex justify-between items-center">
+
       <div> <Button otherStyles={styles.clear_fil_btn}>
           <Image
             src={Images.clearFilter}
             alt="img"
-            className="w-[18px] h-[18px]"
+            className="w-[16px] h-[16px]"
           />
           clear filter
-        </Button></div>
+        </Button>
+        </div>
+        <div className="mt-[1px] mx-2">
+        <Button otherStyles={styles.fill_btn} onclick={()=> router.push("/addcar")}>
+          <Image
+            src={Images.whitePlus}
+            alt="img"
+            className="w-[18px] h-[18px]"
+          />
+        </Button>
+        </div>
+        </div>
     </div>
   );
 }

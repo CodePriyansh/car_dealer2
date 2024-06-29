@@ -1,0 +1,13 @@
+/* styles.module.css */
+.priceRangeContainer {
+    @apply w-full ;
+  }
+  
+  .slider {
+    @apply !text-primary; /* Customize the slider color */
+  }
+  
+  .sliderLabel {
+    @apply mb-8 text-black font-bold text-[18px] font-rajdhani ;
+  }
+  

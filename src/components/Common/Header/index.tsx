@@ -16,8 +16,8 @@ function Header() {
 
   return (
     <div className={`container_space large_layout ${styles.wrapper}`}>
-      <div>
-        <Image src={Images.logo} alt="logo" width={65} height={65} />
+      <div >
+        <Image src={Images.logo} alt="logo" width={40} height={40} className="sm:min-w-[65px] min-w-12" />
       </div>
 
       {/* Desktop View */}
@@ -48,6 +48,8 @@ function Header() {
           <ProfileDropdown user={user} />
         </div>
       </div>
+
+      
     </div>
   );
 }

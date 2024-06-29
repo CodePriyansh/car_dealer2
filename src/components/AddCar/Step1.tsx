@@ -196,9 +196,9 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
             {/* Basic Details */}
             <div className={styles.basic_detail_heading}>
               <p className={styles.sub_heading}>Basic Details</p>
-              <p className={styles.line}></p>
+              <p className={`${styles.line} h-[1px] w-full`}></p>
             </div>
-            <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 w-full gap-6 my-4">
+            <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 w-full sm:gap-6 sm:my-4 gap-2 my-2">
               {fields.map((field, index) => (
                 <div className={styles.field_wrapper} key={index}>
                   <label className={styles.label_Style}>
