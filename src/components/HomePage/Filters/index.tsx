@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import CommonReactSelect from "@/components/Common/Select";
-import { Slider, Typography } from '@mui/material';
+import { Slider, Typography } from "@mui/material";
 import Image from "next/image";
 import { Images } from "@/assets/Images";
 import Button from "@/components/Common/Button";
@@ -11,7 +11,7 @@ import { FaPlus } from "react-icons/fa";
 import PriceRangeSlider from "@/components/Common/PriceRange";
 import { useRouter } from "next/navigation";
 function Filters() {
- const router = useRouter()
+  const router = useRouter();
   const fields = [
     {
       name: "company",
@@ -72,7 +72,7 @@ function Filters() {
   const [selectedOptions, setSelectedOptions] = useState<{
     [key: string]: any;
   }>({});
-  const [openDrawer, setOpenDrawer] = useState(false)
+  const [openDrawer, setOpenDrawer] = useState(false);
   const handleChange = (name: string, selectedOption: any) => {
     setSelectedOptions({
       ...selectedOptions,
@@ -84,7 +84,7 @@ function Filters() {
       <div className={styles.wrapper}>
         {/* filter box  */}
         <div className={styles.filters_wrapper}>
-          <p className={styles.heading}>Filters </p>
+          <div className={styles.heading}>Filters </div>
           <div className={styles.selectors}>
             {fields.map((field, index) => (
               <div className={styles.field_wrapper} key={index}>
@@ -101,8 +101,9 @@ function Filters() {
               </div>
             ))}
           </div>
-          {/* <p className={styles.sub_heading}>Price Range</p> */}
-          <PriceRangeSlider />
+          <div>
+            <PriceRangeSlider />
+          </div>
         </div>
 
         {/* car type box  */}
@@ -181,38 +182,43 @@ function Filters() {
               <div
                 key={index.toString()}
                 className={styles.responsive_filter_box}
-                onClick={()=>setOpenDrawer(true)}
+                onClick={() => setOpenDrawer(true)}
               >
                 <p className={styles.responsive_filter_item}> {item}</p>
-                
               </div>
             );
           }
         )}
       </div>
-      {openDrawer && <FilterDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer}/>}
+      {openDrawer && (
+        <FilterDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} />
+      )}
 
       <div className="flex justify-between items-center">
-
-      <div> <Button otherStyles={styles.clear_fil_btn}>
-          <Image
-            src={Images.clearFilter}
-            alt="img"
-            className="w-[16px] h-[16px]"
-          />
-          clear filter
-        </Button>
+        <div>
+          {" "}
+          <Button otherStyles={styles.clear_fil_btn}>
+            <Image
+              src={Images.clearFilter}
+              alt="img"
+              className="w-[16px] h-[16px]"
+            />
+            clear filter
+          </Button>
         </div>
         <div className="mt-[1px] mx-2">
-        <Button otherStyles={styles.fill_btn} onclick={()=> router.push("/addcar")}>
-          <Image
-            src={Images.whitePlus}
-            alt="img"
-            className="w-[18px] h-[18px]"
-          />
-        </Button>
+          <Button
+            otherStyles={styles.fill_btn}
+            onclick={() => router.push("/addcar")}
+          >
+            <Image
+              src={Images.whitePlus}
+              alt="img"
+              className="w-[18px] h-[18px]"
+            />
+          </Button>
         </div>
-        </div>
+      </div>
     </div>
   );
 }

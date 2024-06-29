@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+"use client"
+import React, { useEffect, useState } from 'react';
 import { Slider, Typography } from '@mui/material';
 import styles from './styles.module.css'; // Ensure this path is correct
 
 const PriceRangeSlider = () => {
-  const [value, setValue] = useState<number[]>([100000, 2500000]);
+  const [value, setValue] = useState<number[]>([]);
+  useEffect(()=>{
+    setValue([100000, 2500000])
+  },[])
 
   const handleChange = (event: Event, newValue: number | number[]) => {
     setValue(newValue as number[]);
