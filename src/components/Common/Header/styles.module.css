@@ -1,5 +1,5 @@
 .wrapper{
-    @apply sm:h-[75px] h-[55px] bg-white border-b border-border-primary flex w-full justify-between items-center
+    @apply sm:h-[75px] h-[55px] bg-white border-b border-border-primary w-full justify-between items-center
 }
 .right_part{
     @apply md:flex gap-10 items-center hidden;

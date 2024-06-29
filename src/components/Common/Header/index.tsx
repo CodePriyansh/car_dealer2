@@ -7,7 +7,10 @@ import Button from "../Button";
 import { getLocalStorage } from "@/constants/constants";
 import ProfileDropdown from "./ProfileDropdown";
 
-function Header() {
+interface props{
+  page:string;
+}
+const Header: React.FC<props> = ({page='other'})=> {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -15,7 +18,7 @@ function Header() {
   }, []);
 
   return (
-    <div className={`container_space large_layout ${styles.wrapper}`}>
+    <div className={`container_space large_layout ${styles.wrapper} ${page === 'addCar'? 'md:flex hidden':'flex' }`}>
       <div >
         <Image src={Images.logo} alt="logo" width={40} height={40} className="sm:min-w-[65px] min-w-12" />
       </div>
@@ -40,6 +43,7 @@ function Header() {
       </div>
 
       {/* Mobile View */}
+      
       <div className={styles.responsive_right_part}>
         <div className={styles.responsive_subscription}>
           <Image src={Images.subscription} alt="subscription" width={20} height={20} />
@@ -48,6 +52,7 @@ function Header() {
           <ProfileDropdown user={user} />
         </div>
       </div>
+      
 
       
     </div>

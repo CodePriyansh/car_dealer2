@@ -4,7 +4,7 @@ import React from 'react'
 
 export default function AddCarPage() {
   return (
-    <div><Header/>
+    <div><Header page='addCar'/>
     <AddCarForm/></div>
   )
 }
