@@ -1,24 +1,33 @@
 .wrapper{
     @apply flex w-[80vw] flex-col p-8 relative pb-[62px];
 }
-.top_row{
-    @apply flex justify-end w-full;
-}
+
 .content_wrapper{
     @apply flex w-full flex-col;
 }
 .filter_heading{
-    @apply font-rajdhani text-base font-bold text-para;
+    @apply font-rajdhani text-base font-bold text-para capitalize;
 }
 .filter_ele_wrapper{
     @apply flex w-full my-2 flex-col;
 }
 .element{
-    @apply my-1 font-rajdhani text-sm text-para font-medium;
+    @apply my-1 font-rajdhani text-sm text-para font-medium capitalize;
 }
 .container{
     @apply flex w-full flex-col my-4;
 }
 .sticky_btn{
     @apply  bottom-0 z-10 w-[50vw] fixed py-2 bg-white;
+}
+.remove_filters{
+    @apply flex w-full justify-between mb-4
+}
+.back_btn{
+    @apply my-1 flex gap-1 items-center font-rajdhani text-base text-para font-medium capitalize -ml-6;
+    
+}
+.clear_filter{
+    @apply my-1 font-rajdhani text-base text-para font-medium capitalize -mr-4;
+
 }
