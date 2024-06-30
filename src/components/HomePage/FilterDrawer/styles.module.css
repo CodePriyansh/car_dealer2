@@ -1,0 +1,21 @@
+.wrapper{
+    @apply flex w-[80vw] flex-col  p-8;
+}
+.top_row{
+    @apply flex justify-end w-full;
+}
+.content_wrapper{
+    @apply flex w-full flex-col;
+}
+.filter_heading{
+    @apply font-rajdhani text-base font-bold text-para;
+}
+.filter_ele_wrapper{
+    @apply flex w-full my-2 flex-col;
+}
+.element{
+    @apply my-1 font-rajdhani text-sm text-para font-medium;
+}
+.container{
+    @apply flex w-full flex-col my-4;
+}

@@ -36,6 +36,7 @@ const config: Config = {
         20:"20",
         24:'24',
         14:'14',
+        12:'12',
       },
       screens: {
         md1: "930px",
