@@ -102,7 +102,7 @@ function Filters() {
             ))}
           </div>
           <div>
-            <PriceRangeSlider />
+            {/* <PriceRangeSlider /> */}
           </div>
         </div>
 

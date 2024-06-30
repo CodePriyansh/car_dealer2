@@ -8,6 +8,7 @@ import { Images } from "@/assets/Images";
 
 export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
   const [isOpen, setIsOpen] = React.useState(true);
+  const [updatedPriceRange, setUpdatedPriceRange] = React.useState([100000, 2500000])
 
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -87,12 +88,13 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
     console.log(selectedFilters);
   };
 
-  const handlePriceChange = (newPriceRange) => {
+  React.useEffect(()=>{
     setSelectedFilters((prevFilters) => ({
       ...prevFilters,
-      "Price Range": newPriceRange,
+      "Price Range": updatedPriceRange,
     }));
-  };
+  },[updatedPriceRange])
+ 
 
   return (
     <div>
@@ -114,7 +116,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
             </div>
 
             <div className="mx-6">
-              <PriceRangeSlider />
+              <PriceRangeSlider setUpdatedPriceRange={setUpdatedPriceRange}/>
             </div>
 
             <div className={styles.content_wrapper}>
