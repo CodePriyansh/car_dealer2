@@ -18,6 +18,8 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
       "Brand": [],
       "Variant": [],
       "color": [],
+      "Model Year":[],
+      "Price Range": [100000, 2500000],
     };
 
   const contentData = [
@@ -55,6 +57,15 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
         "Orange",
       ],
     },
+    {
+      filterName: "Model Year",
+      filters: [
+        "2022 - 2024",
+      "2019 - 2021",
+      "2016 - 2018",
+      "2013 - 2015"
+      ],
+    },
   ];
 
   const [selectedFilters, setSelectedFilters] = React.useState(initialFiltersState);
@@ -74,6 +85,13 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
 
   const handleApply = () => {
     console.log(selectedFilters);
+  };
+
+  const handlePriceChange = (newPriceRange) => {
+    setSelectedFilters((prevFilters) => ({
+      ...prevFilters,
+      "Price Range": newPriceRange,
+    }));
   };
 
   return (
