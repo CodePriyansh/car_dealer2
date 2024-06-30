@@ -8,6 +8,7 @@ import { Images } from "@/assets/Images";
 
 export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
   const [isOpen, setIsOpen] = React.useState(true);
+  const [updatedPriceRange, setUpdatedPriceRange] = React.useState([100000, 2500000])
 
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -18,6 +19,8 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
       "Brand": [],
       "Variant": [],
       "color": [],
+      "Model Year":[],
+      "Price Range": [100000, 2500000],
     };
 
   const contentData = [
@@ -55,6 +58,15 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
         "Orange",
       ],
     },
+    {
+      filterName: "Model Year",
+      filters: [
+        "2022 - 2024",
+      "2019 - 2021",
+      "2016 - 2018",
+      "2013 - 2015"
+      ],
+    },
   ];
 
   const [selectedFilters, setSelectedFilters] = React.useState(initialFiltersState);
@@ -76,6 +88,14 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
     console.log(selectedFilters);
   };
 
+  React.useEffect(()=>{
+    setSelectedFilters((prevFilters) => ({
+      ...prevFilters,
+      "Price Range": updatedPriceRange,
+    }));
+  },[updatedPriceRange])
+ 
+
   return (
     <div>
       <React.Fragment>
@@ -96,7 +116,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
             </div>
 
             <div className="mx-6">
-              <PriceRangeSlider />
+              <PriceRangeSlider setUpdatedPriceRange={setUpdatedPriceRange}/>
             </div>
 
             <div className={styles.content_wrapper}>
