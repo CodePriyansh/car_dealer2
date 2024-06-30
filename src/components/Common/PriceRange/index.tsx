@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { Slider, Typography } from '@mui/material';
 import styles from './styles.module.css'; 
 
-const PriceRangeSlider = ({setUpdatedPriceRange}) => {
+const PriceRangeSlider = ({setUpdatedPriceRange,updatedPriceRange}) => {
   const [value, setValue] = useState<number[]>([]);
   useEffect(()=>{
-    setValue([100000, 2500000])
-  },[])
+    setValue(updatedPriceRange)
+  },[updatedPriceRange])
 
   const handleChange = (event: Event, newValue: number | number[]) => {
     setValue(newValue as number[]);

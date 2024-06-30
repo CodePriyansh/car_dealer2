@@ -12,6 +12,8 @@ import PriceRangeSlider from "@/components/Common/PriceRange";
 import { useRouter } from "next/navigation";
 function Filters() {
   const router = useRouter();
+  const [updatedPriceRange, setUpdatedPriceRange] = React.useState([100000, 2500000])
+
   const fields = [
     {
       name: "company",
@@ -84,7 +86,10 @@ function Filters() {
       <div className={styles.wrapper}>
         {/* filter box  */}
         <div className={styles.filters_wrapper}>
+          <div className="flex w-full justify-between">
           <div className={styles.heading}>Filters </div>
+          <Button otherStyles="py-1">Apply Filters</Button>
+          </div>
           <div className={styles.selectors}>
             {fields.map((field, index) => (
               <div className={styles.field_wrapper} key={index}>
@@ -102,7 +107,7 @@ function Filters() {
             ))}
           </div>
           <div>
-            {/* <PriceRangeSlider /> */}
+            <PriceRangeSlider setUpdatedPriceRange={setUpdatedPriceRange} updatedPriceRange={updatedPriceRange}/>
           </div>
         </div>
 
