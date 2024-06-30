@@ -1,5 +1,5 @@
 .wrapper{
-    @apply flex w-[80vw] flex-col  p-8;
+    @apply flex w-[80vw] flex-col p-8 relative pb-[62px];
 }
 .top_row{
     @apply flex justify-end w-full;
@@ -18,4 +18,7 @@
 }
 .container{
     @apply flex w-full flex-col my-4;
+}
+.sticky_btn{
+    @apply  bottom-0 z-10 w-[50vw] fixed py-2 bg-white;
 }
