@@ -7,16 +7,17 @@ import Image from "next/image";
 import { Images } from "@/assets/Images";
 import Button from "@/components/Common/Button";
 import FilterDrawer from "../FilterDrawer";
-import { FaPlus } from "react-icons/fa";
 import PriceRangeSlider from "@/components/Common/PriceRange";
 import { useRouter } from "next/navigation";
+
 function Filters() {
   const router = useRouter();
   const [updatedPriceRange, setUpdatedPriceRange] = React.useState([100000, 2500000])
 
+ 
   const fields = [
     {
-      name: "company",
+      name: "barnd",
       type: "select",
       placeholder: "Select",
       options: [
@@ -26,24 +27,26 @@ function Filters() {
       ],
     },
     {
-      name: "company",
+      name: "car model",
       type: "select",
       placeholder: "Select",
       options: [
-        { value: "Toyota", label: "Toyota" },
-        { value: "Honda", label: "Honda" },
-        { value: "Ford", label: "Ford" },
+        { value: "Renault Kwid", label: "Renault Kwid" },
+        { value: "Datsun Redi-GO", label: "Datsun Redi-GO" },
+        { value: "Maruti Suzuki S-Presso", label: "Maruti Suzuki S-Presso" },
       ],
     },
     {
-      name: "company",
+      name: "model year",
       type: "select",
       placeholder: "Select",
       options: [
-        { value: "Toyota", label: "Toyota" },
-        { value: "Honda", label: "Honda" },
-        { value: "Ford", label: "Ford" },
+        { value: "2022 - 2024", label: "2022 - 2024" },
+        { value: "2019 - 2021", label: "2019 - 2021" },
+        { value: "2016 - 2018", label: "2016 - 2018" },
+        { value: "2013 - 2015", label: "2013 - 2015" },
       ],
+      
     },
   ];
 
@@ -51,12 +54,12 @@ function Filters() {
     "Sedan",
     "Van",
     "Pickup",
-    "Sedan",
-    "Van",
-    "Pickup",
-    "Sedan",
-    "Van",
-    "Pickup",
+    "Sedan2",
+    "Van2",
+    "Pickup2",
+    "Sedan3",
+    "Van3",
+    "Pickup3",
   ];
 
   const colors = [
@@ -73,7 +76,7 @@ function Filters() {
 
   const [selectedOptions, setSelectedOptions] = useState<{
     [key: string]: any;
-  }>({});
+  }>({ carType: [],color:[],priceRange:updatedPriceRange});
   const [openDrawer, setOpenDrawer] = useState(false);
   const handleChange = (name: string, selectedOption: any) => {
     setSelectedOptions({
@@ -81,6 +84,47 @@ function Filters() {
       [name]: selectedOption,
     });
   };
+
+const handleCarType=(value)=>{
+  const isChecked = selectedOptions.carType.includes(value);
+  let updatedCarTypes;
+  if (isChecked) {
+    updatedCarTypes = selectedOptions.carType.filter((type) => type !== value);
+  } else {
+    updatedCarTypes = [...selectedOptions.carType, value];
+  }
+  setSelectedOptions({
+    ...selectedOptions,
+    carType: updatedCarTypes,
+  });
+};
+
+const handleColorType=(value)=>{
+  const isChecked = selectedOptions.color.includes(value);
+  let updatedColorTypes;
+  if (isChecked) {
+    updatedColorTypes = selectedOptions.color.filter((type) => type !== value);
+  } else {
+    updatedColorTypes = [...selectedOptions.color, value];
+  }
+  setSelectedOptions({
+    ...selectedOptions,
+    color: updatedColorTypes,
+  });
+};
+
+useEffect(()=>{
+  setSelectedOptions({
+    ...selectedOptions,
+    priceRange: updatedPriceRange,
+  });
+},[
+  updatedPriceRange
+])
+
+const handleApply=()=>{
+  console.log(selectedOptions)
+}
   return (
     <div className={`${styles.container} container_space large_layout`}>
       <div className={styles.wrapper}>
@@ -88,7 +132,7 @@ function Filters() {
         <div className={styles.filters_wrapper}>
           <div className="flex w-full justify-between">
           <div className={styles.heading}>Filters </div>
-          <Button otherStyles="py-1">Apply Filters</Button>
+          <Button otherStyles="py-1" onclick={handleApply}>Apply Filters</Button>
           </div>
           <div className={styles.selectors}>
             {fields.map((field, index) => (
@@ -124,9 +168,9 @@ function Filters() {
                   <div className="custom-checkbox">
                     <input
                       type="checkbox"
-                      //   checked={checked}
-                      //   onChange={onChange}
-                    />
+                      onChange={() => handleCarType(item)}
+                      checked={selectedOptions?.carType?.includes(item)}
+                      />
                     <span className="checkmark"></span>
                   </div>
                   <span className={styles.checklist_item}>{item}</span>
@@ -141,7 +185,7 @@ function Filters() {
               width={14}
               height={14}
               alt="down-arrow"
-            />
+              />
           </button>
         </div>
 
@@ -152,14 +196,14 @@ function Filters() {
             {colors?.map((item, index) => {
               return (
                 <label
-                  key={index.toString()}
-                  className="flex items-center space-x-2"
+                key={index.toString()}
+                className="flex items-center space-x-2"
                 >
                   <div className="custom-checkbox">
                     <input
                       type="checkbox"
-                      //   checked={checked}
-                      //   onChange={onChange}
+                      onChange={() => handleColorType(item)}
+                      checked={selectedOptions?.color?.includes(item)}
                     />
                     <span className="checkmark"></span>
                   </div>
