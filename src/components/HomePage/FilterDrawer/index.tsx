@@ -1,7 +1,8 @@
 import * as React from "react";
 import Drawer from "@mui/material/Drawer";
 import Button from "@/components/Common/Button";
-import styles from './styles.module.css'
+import styles from "./styles.module.css";
+import PriceRangeSlider from "@/components/Common/PriceRange";
 
 export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
   const [isOpen, setIsOpen] = React.useState(true);
@@ -13,17 +14,6 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
     };
 
   const contentData = [
-    {
-      filterName: "Price Range",
-      filters: [
-        "Under ₹2 Lakh",
-        "₹2 Lakh - ₹3 Lakh",
-        "₹3 Lakh - ₹5 Lakh",
-        "₹5 Lakh - ₹8 Lakh",
-        "₹8 Lakh - ₹10 Lakh",
-        "Above ₹10 Lakh",
-      ],
-    },
     {
       filterName: "Brand",
       filters: [
@@ -69,35 +59,34 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
               <p onClick={toggleDrawer(false)}>close</p>
             </div>
 
+            <div className="mx-6">
+              <PriceRangeSlider />
+            </div>
+
             <div className={styles.content_wrapper}>
               {contentData?.map((item, index) => {
                 return (
-                  <div
-                    key={index.toString()}
-                    className={styles.container}
-                  >
+                  <div key={index.toString()} className={styles.container}>
                     <div className={styles.filter_heading}>
                       {item?.filterName}
                     </div>
                     <div className={styles.filter_ele_wrapper}>
                       {item.filters?.map((ele, ind) => {
                         return (
-                            <div
-                              key={ind.toString()}
-                              className="flex items-center space-x-2"
-                            >
-                              <div className="custom-checkbox">
-                                <input
-                                  type="checkbox"
-                                  //   checked={checked}
-                                  //   onChange={onChange}
-                                />
-                                <span className="checkmark"></span>
-                              </div>
-                              <span className={styles.element}>
-                                {ele}
-                              </span>
+                          <div
+                            key={ind.toString()}
+                            className="flex items-center space-x-2"
+                          >
+                            <div className="custom-checkbox">
+                              <input
+                                type="checkbox"
+                                //   checked={checked}
+                                //   onChange={onChange}
+                              />
+                              <span className="checkmark"></span>
                             </div>
+                            <span className={styles.element}>{ele}</span>
+                          </div>
                         );
                       })}
                     </div>
@@ -105,8 +94,9 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
                 );
               })}
             </div>
-
-            <Button otherStyles="py-2">Apply</Button>
+            <div className={styles.sticky_btn}>
+              <Button otherStyles={"py-2"}>Apply</Button>
+            </div>
           </div>
         </Drawer>
       </React.Fragment>
