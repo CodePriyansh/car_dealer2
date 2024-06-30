@@ -36,8 +36,8 @@
   @apply bg-secondary md:w-[300px] w-full mx-auto text-white my-14;
 }
 
-.dotted_box {
-  @apply border border-dashed border-gray-300 sm:p-3 p-2 flex flex-col items-center justify-center;
+.dotted_box{
+  @apply my-[10px] md:max-h-[260px] md:h-[200px] max-h-[200px] h-[200px] rounded border cursor-pointer border-dashed border-greyy w-full flex flex-col justify-center items-center py-7;
 }
 .dotted_box_step2{
   @apply border border-dashed border-gray-300 sm:p-3 sm:p-5 p-2 flex flex-col items-center justify-center min-w-[16px] min-h-[160px] rounded-[10px] md:rounded-none;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Slider, Typography } from '@mui/material';
-import styles from './styles.module.css'; // Ensure this path is correct
+import styles from './styles.module.css'; 
 
 const PriceRangeSlider = () => {
   const [value, setValue] = useState<number[]>([100000, 2500000]);

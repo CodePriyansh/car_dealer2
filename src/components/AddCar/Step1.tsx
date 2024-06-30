@@ -192,7 +192,7 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
         onSubmit={handleSubmit}
       >
         {({ values, isSubmitting, setFieldValue }) => (
-          <Form className="w-full">
+          <Form className="w-full sm:px-6">
             {/* Basic Details */}
             <div className={styles.basic_detail_heading}>
               <p className={styles.sub_heading}>Basic Details</p>
@@ -291,7 +291,7 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
                   </div>
 
                   <div
-                    className={signupStyles.dotted_box}
+                    className={styles.dotted_box}
                     onClick={() => profileImageInputRef.current?.click()}
                   >
                     <Image
