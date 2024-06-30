@@ -7,19 +7,14 @@ import Image from "next/image";
 import { Images } from "@/assets/Images";
 import Button from "@/components/Common/Button";
 import FilterDrawer from "../FilterDrawer";
-import { FaPlus } from "react-icons/fa";
 import PriceRangeSlider from "@/components/Common/PriceRange";
 import { useRouter } from "next/navigation";
+
 function Filters() {
   const router = useRouter();
   const [updatedPriceRange, setUpdatedPriceRange] = React.useState([100000, 2500000])
-  const initialFiltersState = {
-    "PriceRange": [100000, 2500000],
-    "Brand": [],
-    "ModelYear":[],
-    "CarType":[],
-    "Color": [],
-  };
+
+ 
   const fields = [
     {
       name: "barnd",
@@ -59,12 +54,12 @@ function Filters() {
     "Sedan",
     "Van",
     "Pickup",
-    "Sedan",
-    "Van",
-    "Pickup",
-    "Sedan",
-    "Van",
-    "Pickup",
+    "Sedan2",
+    "Van2",
+    "Pickup2",
+    "Sedan3",
+    "Van3",
+    "Pickup3",
   ];
 
   const colors = [
@@ -81,7 +76,7 @@ function Filters() {
 
   const [selectedOptions, setSelectedOptions] = useState<{
     [key: string]: any;
-  }>({});
+  }>({ carType: [],color:[],priceRange:updatedPriceRange});
   const [openDrawer, setOpenDrawer] = useState(false);
   const handleChange = (name: string, selectedOption: any) => {
     setSelectedOptions({
@@ -90,6 +85,43 @@ function Filters() {
     });
   };
   useEffect(()=>{console.log(selectedOptions)},[selectedOptions])
+
+const handleCarType=(value)=>{
+  const isChecked = selectedOptions.carType.includes(value);
+  let updatedCarTypes;
+  if (isChecked) {
+    updatedCarTypes = selectedOptions.carType.filter((type) => type !== value);
+  } else {
+    updatedCarTypes = [...selectedOptions.carType, value];
+  }
+  setSelectedOptions({
+    ...selectedOptions,
+    carType: updatedCarTypes,
+  });
+};
+
+const handleColorType=(value)=>{
+  const isChecked = selectedOptions.color.includes(value);
+  let updatedColorTypes;
+  if (isChecked) {
+    updatedColorTypes = selectedOptions.color.filter((type) => type !== value);
+  } else {
+    updatedColorTypes = [...selectedOptions.color, value];
+  }
+  setSelectedOptions({
+    ...selectedOptions,
+    color: updatedColorTypes,
+  });
+};
+
+useEffect(()=>{
+  setSelectedOptions({
+    ...selectedOptions,
+    priceRange: updatedPriceRange,
+  });
+},[
+  updatedPriceRange
+])
   return (
     <div className={`${styles.container} container_space large_layout`}>
       <div className={styles.wrapper}>
@@ -133,9 +165,9 @@ function Filters() {
                   <div className="custom-checkbox">
                     <input
                       type="checkbox"
-                      //   checked={checked}
-                      //   onChange={onChange}
-                    />
+                      onChange={() => handleCarType(item)}
+                      checked={selectedOptions?.carType?.includes(item)}
+                      />
                     <span className="checkmark"></span>
                   </div>
                   <span className={styles.checklist_item}>{item}</span>
@@ -150,7 +182,7 @@ function Filters() {
               width={14}
               height={14}
               alt="down-arrow"
-            />
+              />
           </button>
         </div>
 
@@ -161,14 +193,14 @@ function Filters() {
             {colors?.map((item, index) => {
               return (
                 <label
-                  key={index.toString()}
-                  className="flex items-center space-x-2"
+                key={index.toString()}
+                className="flex items-center space-x-2"
                 >
                   <div className="custom-checkbox">
                     <input
                       type="checkbox"
-                      //   checked={checked}
-                      //   onChange={onChange}
+                      onChange={() => handleColorType(item)}
+                      checked={selectedOptions?.color?.includes(item)}
                     />
                     <span className="checkmark"></span>
                   </div>
