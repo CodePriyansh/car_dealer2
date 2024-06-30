@@ -24,10 +24,10 @@
     @apply flex w-full justify-between mb-4
 }
 .back_btn{
-    @apply my-1 flex gap-1 items-center font-rajdhani text-base text-para font-medium capitalize -ml-6;
+    @apply my-1 flex gap-1 items-center font-rajdhani text-base text-para font-bold capitalize -ml-6;
     
 }
 .clear_filter{
-    @apply my-1 font-rajdhani text-base text-para font-medium capitalize -mr-4;
+    @apply my-1 font-rajdhani text-base text-para font-bold capitalize -mr-4;
 
 }
