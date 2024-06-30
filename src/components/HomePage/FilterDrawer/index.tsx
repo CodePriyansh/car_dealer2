@@ -82,6 +82,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
 
   const handleClearFilters = () => {
     setSelectedFilters(initialFiltersState);
+    setUpdatedPriceRange([100000, 2500000])
   };
 
   const handleApply = () => {
@@ -116,7 +117,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
             </div>
 
             <div className="mx-6">
-              <PriceRangeSlider setUpdatedPriceRange={setUpdatedPriceRange}/>
+              <PriceRangeSlider setUpdatedPriceRange={setUpdatedPriceRange} updatedPriceRange={updatedPriceRange}/>
             </div>
 
             <div className={styles.content_wrapper}>
