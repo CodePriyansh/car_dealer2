@@ -3,6 +3,8 @@ import Drawer from "@mui/material/Drawer";
 import Button from "@/components/Common/Button";
 import styles from "./styles.module.css";
 import PriceRangeSlider from "@/components/Common/PriceRange";
+import Image from "next/image";
+import { Images } from "@/assets/Images";
 
 export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
   const [isOpen, setIsOpen] = React.useState(true);
@@ -55,8 +57,18 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
       <React.Fragment>
         <Drawer anchor={"left"} open={isOpen} onClose={toggleDrawer(false)}>
           <div className={styles.wrapper}>
-            <div className={styles.top_row}>
-              <p onClick={toggleDrawer(false)}>close</p>
+            <div className={styles.remove_filters}>
+              <p className={styles.back_btn} onClick={toggleDrawer(false)}>
+                <Image
+                  src={Images.backArrow}
+                  alt="back-arrow"
+                  width={32}
+                  height={32}
+                  className="w-6 h-6"
+                />
+                back
+              </p>
+              <p className={styles.clear_filter}>clear filters</p>
             </div>
 
             <div className="mx-6">
