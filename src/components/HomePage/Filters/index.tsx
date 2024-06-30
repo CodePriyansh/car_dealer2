@@ -13,10 +13,16 @@ import { useRouter } from "next/navigation";
 function Filters() {
   const router = useRouter();
   const [updatedPriceRange, setUpdatedPriceRange] = React.useState([100000, 2500000])
-
+  const initialFiltersState = {
+    "PriceRange": [100000, 2500000],
+    "Brand": [],
+    "ModelYear":[],
+    "CarType":[],
+    "Color": [],
+  };
   const fields = [
     {
-      name: "company",
+      name: "barnd",
       type: "select",
       placeholder: "Select",
       options: [
@@ -26,24 +32,26 @@ function Filters() {
       ],
     },
     {
-      name: "company",
+      name: "car model",
       type: "select",
       placeholder: "Select",
       options: [
-        { value: "Toyota", label: "Toyota" },
-        { value: "Honda", label: "Honda" },
-        { value: "Ford", label: "Ford" },
+        { value: "Renault Kwid", label: "Renault Kwid" },
+        { value: "Datsun Redi-GO", label: "Datsun Redi-GO" },
+        { value: "Maruti Suzuki S-Presso", label: "Maruti Suzuki S-Presso" },
       ],
     },
     {
-      name: "company",
+      name: "model year",
       type: "select",
       placeholder: "Select",
       options: [
-        { value: "Toyota", label: "Toyota" },
-        { value: "Honda", label: "Honda" },
-        { value: "Ford", label: "Ford" },
+        { value: "2022 - 2024", label: "2022 - 2024" },
+        { value: "2019 - 2021", label: "2019 - 2021" },
+        { value: "2016 - 2018", label: "2016 - 2018" },
+        { value: "2013 - 2015", label: "2013 - 2015" },
       ],
+      
     },
   ];
 
@@ -81,6 +89,7 @@ function Filters() {
       [name]: selectedOption,
     });
   };
+  useEffect(()=>{console.log(selectedOptions)},[selectedOptions])
   return (
     <div className={`${styles.container} container_space large_layout`}>
       <div className={styles.wrapper}>
