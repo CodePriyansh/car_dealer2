@@ -84,7 +84,6 @@ function Filters() {
       [name]: selectedOption,
     });
   };
-  useEffect(()=>{console.log(selectedOptions)},[selectedOptions])
 
 const handleCarType=(value)=>{
   const isChecked = selectedOptions.carType.includes(value);
@@ -122,6 +121,10 @@ useEffect(()=>{
 },[
   updatedPriceRange
 ])
+
+const handleApply=()=>{
+  console.log(selectedOptions)
+}
   return (
     <div className={`${styles.container} container_space large_layout`}>
       <div className={styles.wrapper}>
@@ -129,7 +132,7 @@ useEffect(()=>{
         <div className={styles.filters_wrapper}>
           <div className="flex w-full justify-between">
           <div className={styles.heading}>Filters </div>
-          <Button otherStyles="py-1">Apply Filters</Button>
+          <Button otherStyles="py-1" onclick={handleApply}>Apply Filters</Button>
           </div>
           <div className={styles.selectors}>
             {fields.map((field, index) => (

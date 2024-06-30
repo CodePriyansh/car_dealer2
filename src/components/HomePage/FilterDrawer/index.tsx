@@ -5,8 +5,12 @@ import styles from "./styles.module.css";
 import PriceRangeSlider from "@/components/Common/PriceRange";
 import Image from "next/image";
 import { Images } from "@/assets/Images";
+import instance from "@/network/axios";
+import Cookies from "universal-cookie";
+
 
 export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
+  const cookies = new Cookies();
   const [isOpen, setIsOpen] = React.useState(true);
   const [updatedPriceRange, setUpdatedPriceRange] = React.useState([100000, 2500000])
 
@@ -85,8 +89,28 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
     setUpdatedPriceRange([100000, 2500000])
   };
 
+  const ApplyFilterApiCall=()=>{
+    let token = cookies.get("token");
+
+    const response = instance.post("/api/cars/all", {
+      "priceMin": "150",
+      "priceMax": "30000"
+      ,"type": ["SUV"],   
+      "color": ["Black"],
+      "company": "Toyota",
+    }, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(response,"ppp")
+  }
+
+
   const handleApply = () => {
     console.log(selectedFilters);
+    ApplyFilterApiCall()
   };
 
   React.useEffect(()=>{
