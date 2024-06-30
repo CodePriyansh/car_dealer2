@@ -14,6 +14,11 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
       setIsOpen(open);
       setOpenDrawer(open);
     };
+    const initialFiltersState = {
+      "Brand": [],
+      "Variant": [],
+      "color": [],
+    };
 
   const contentData = [
     {
@@ -52,6 +57,25 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
     },
   ];
 
+  const [selectedFilters, setSelectedFilters] = React.useState(initialFiltersState);
+
+ const handleCheckboxChange = (filterName, filterValue) => {
+    setSelectedFilters((prevFilters) => ({
+      ...prevFilters,
+      [filterName]: prevFilters[filterName].includes(filterValue)
+        ? prevFilters[filterName].filter((item) => item !== filterValue)
+        : [...prevFilters[filterName], filterValue],
+    }));
+  };
+
+  const handleClearFilters = () => {
+    setSelectedFilters(initialFiltersState);
+  };
+
+  const handleApply = () => {
+    console.log(selectedFilters);
+  };
+
   return (
     <div>
       <React.Fragment>
@@ -68,7 +92,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
                 />
                 back
               </p>
-              <p className={styles.clear_filter}>clear filters</p>
+              <p className={styles.clear_filter} onClick={handleClearFilters}>clear filters</p>
             </div>
 
             <div className="mx-6">
@@ -92,8 +116,10 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
                             <div className="custom-checkbox">
                               <input
                                 type="checkbox"
-                                //   checked={checked}
-                                //   onChange={onChange}
+                                checked={selectedFilters[item.filterName].includes(
+                                  ele
+                                )}
+                                onChange={() => handleCheckboxChange(item.filterName, ele)}
                               />
                               <span className="checkmark"></span>
                             </div>
@@ -107,7 +133,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
               })}
             </div>
             <div className={styles.sticky_btn}>
-              <Button otherStyles={"py-2"}>Apply</Button>
+              <Button otherStyles={"py-2"} onclick={handleApply}>Apply</Button>
             </div>
           </div>
         </Drawer>
