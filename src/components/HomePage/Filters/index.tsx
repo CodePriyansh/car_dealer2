@@ -125,23 +125,27 @@ useEffect(()=>{
   updatedPriceRange
 ])
 
-const handleApply=()=>{
-  console.log(selectedOptions);
-    let token = cookies.get("token");
+const ApplyFilterApiCall=()=>{
+  let token = cookies.get("token");
 
-    const response = instance.post("/api/cars/all", {
-      "priceMin": "150",
-      "priceMax": "30000"
-      ,"type": ["SUV"],   
-      "color": ["Black"],
-      "company": "Toyota",
-    }, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    console.log(response,"ppp")
+  const response = instance.post("/api/cars/all", {
+    "priceMin": selectedOptions?.priceRange[0]    ,
+    "priceMax": selectedOptions?.priceRange[1] ,
+    "type": selectedOptions?.carType,   
+    "color": selectedOptions?.color,
+    "company": selectedOptions?.barnd?.value,
+  }, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NzU5MmZhY2E2YmY4NWFmNDY5MDY3ZSIsInBob25lTnVtYmVyIjoiMTIzNDU2Nzg5OCIsImZpcmViYXNlVXNlcklkIjoiMGE1RnFzejZLN1B5eUJsUHJ3UmZPMzliOHhVMiIsImlhdCI6MTcxOTg0OTEzMCwiZXhwIjoxNzE5OTM1NTMwfQ.qg_EW3648W_gtQ7LaaipDNQHJVPKuKzh7p-IYyMoJW0`,
+    },
+  });
+  console.log(response,"filter data")
+}
+
+const handleApply=()=>{
+  ApplyFilterApiCall()
+  console.log(selectedOptions);
 }
   return (
     <div className={`${styles.container} container_space large_layout`}>
@@ -242,7 +246,7 @@ const handleApply=()=>{
         </div>
       </div>
 
-      {/* <div className={styles.responsive_filters}>
+      <div className={styles.responsive_filters}>
         {["price range", "brand", "model", "color", "type"]?.map(
           (item, index) => {
             return (
@@ -256,7 +260,7 @@ const handleApply=()=>{
             );
           }
         )}
-      </div> */}
+      </div>
       {openDrawer && (
         <FilterDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} />
       )}
