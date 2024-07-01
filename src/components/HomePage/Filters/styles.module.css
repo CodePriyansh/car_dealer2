@@ -2,7 +2,7 @@
     @apply w-full md:bg-f7f7f7;
 }
 .wrapper{
-@apply w-full hidden lg:flex border border-line rounded-[10px] p-4 ;
+@apply w-full hidden lg:flex border border-line rounded-[10px] p-4 relative;
 }
 .filters_wrapper{
     @apply flex w-[40%] border-r border-line flex-col pr-6;

@@ -9,10 +9,13 @@ import Button from "@/components/Common/Button";
 import FilterDrawer from "../FilterDrawer";
 import PriceRangeSlider from "@/components/Common/PriceRange";
 import { useRouter } from "next/navigation";
+import Cookies from "universal-cookie";
+import instance from "@/network/axios";
 
 function Filters() {
   const router = useRouter();
   const [updatedPriceRange, setUpdatedPriceRange] = React.useState([100000, 2500000])
+  const cookies = new Cookies();
 
  
   const fields = [
@@ -123,7 +126,22 @@ useEffect(()=>{
 ])
 
 const handleApply=()=>{
-  console.log(selectedOptions)
+  console.log(selectedOptions);
+    let token = cookies.get("token");
+
+    const response = instance.post("/api/cars/all", {
+      "priceMin": "150",
+      "priceMax": "30000"
+      ,"type": ["SUV"],   
+      "color": ["Black"],
+      "company": "Toyota",
+    }, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(response,"ppp")
 }
   return (
     <div className={`${styles.container} container_space large_layout`}>
@@ -132,7 +150,7 @@ const handleApply=()=>{
         <div className={styles.filters_wrapper}>
           <div className="flex w-full justify-between">
           <div className={styles.heading}>Filters </div>
-          <Button otherStyles="py-1" onclick={handleApply}>Apply Filters</Button>
+          <Button otherStyles="absolute top-0 right-0 rounded-[10px] !py-2" onclick={handleApply}>Apply Filters</Button>
           </div>
           <div className={styles.selectors}>
             {fields.map((field, index) => (
@@ -224,7 +242,7 @@ const handleApply=()=>{
         </div>
       </div>
 
-      <div className={styles.responsive_filters}>
+      {/* <div className={styles.responsive_filters}>
         {["price range", "brand", "model", "color", "type"]?.map(
           (item, index) => {
             return (
@@ -238,7 +256,7 @@ const handleApply=()=>{
             );
           }
         )}
-      </div>
+      </div> */}
       {openDrawer && (
         <FilterDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} />
       )}

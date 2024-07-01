@@ -23,12 +23,13 @@ function HomePageCards() {
   //   }, []);
 
   useEffect(() => {
-    setCars([1, 2, 3, 3, 4, 5, 6, 7, 8, 9, 1, 11, 21, 34, 5, 6, 7, 8]);
+    // setCars([1, 2, 3, 3, 4, 5, 6, 7, 8, 9, 1, 11, 21, 34, 5, 6, 7, 8]);
+    setCars([]);
   }, []);
 
   return (
     <div className="container_space large_layout w-full grid md1:grid-cols-3 sm:grid-cols-2 grid-cols-1  gap-6 md:bg-f7f7f7 py-4">
-      {cars.map((car, index) => (
+      { cars.length < 1 ? <div>there is no car added</div> :  cars.map((car, index) => (
         <CarCards car={car} key={index} />
       ))}
     </div>

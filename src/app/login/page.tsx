@@ -4,6 +4,9 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function LoginPage() {
   return (
-   <Login/>
+    <>
+     <div id="recaptcha-container"></div>
+     <Login/>
+     </>
   )
 }

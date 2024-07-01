@@ -44,6 +44,15 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
       ],
     },
     {
+      filterName: "Model Year",
+      filters: [
+        "2022 - 2024",
+      "2019 - 2021",
+      "2016 - 2018",
+      "2013 - 2015"
+      ],
+    },
+    {
       filterName: "Variant",
       filters: ["Renault Kwid", "Datsun Redi-GO", "Maruti Suzuki S-Presso"],
     },
@@ -62,15 +71,14 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
         "Orange",
       ],
     },
-    {
-      filterName: "Model Year",
-      filters: [
-        "2022 - 2024",
-      "2019 - 2021",
-      "2016 - 2018",
-      "2013 - 2015"
-      ],
-    },
+    // {
+    //   filterName: "Fuel Type",
+    //   filters: ["Petrol", "Diesel", "CNG"],
+    // },
+    // {
+    //   filterName: "Owner",
+    //   filters: ["First Owner", "Second Owner", "Third Owner"],
+    // },
   ];
 
   const [selectedFilters, setSelectedFilters] = React.useState(initialFiltersState);
@@ -90,6 +98,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
   };
 
   const ApplyFilterApiCall=()=>{
+    console.log(selectedFilters,"selected")
     let token = cookies.get("token");
 
     const response = instance.post("/api/cars/all", {

@@ -5,10 +5,13 @@ import Button from "../Button";
 import Image from "next/image";
 import { Images } from "@/assets/Images";
 import { useRouter } from "next/navigation";
+import FilterDrawer from "@/components/HomePage/FilterDrawer";
 
 export default function SubHeader() {
   const router = useRouter();
   const [activeMidFilter, setActiveMidFilter] = useState("car");
+  const [openDrawer, setOpenDrawer] = useState(false);
+
   return (
     <div className={`${styles.wrapper} container_space large_layout`}>
       {/* left  */}
@@ -17,7 +20,7 @@ export default function SubHeader() {
           <Image src={Images.search} alt="img" className="sm:w-[18px] sm:h-[18px] h-4 w-4" />
           <input className={styles.search_input} type="text" placeholder="Search....." />
         </div>
-        <div className={styles.responsive_filter_icon}>
+        <div className={styles.responsive_filter_icon} onClick={() => setOpenDrawer(true)}>
           <Image
             src={Images.responsiveFilter}
             alt="img"
@@ -25,6 +28,10 @@ export default function SubHeader() {
           />
         </div>
       </div>
+
+      {openDrawer && (
+        <FilterDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} />
+      )}
 
       {/* mid  */}
       <div className={styles.mid}>
