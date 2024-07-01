@@ -18,7 +18,7 @@ const Header: React.FC<props> = ({page='other'})=> {
   }, []);
 
   return (
-    <div className={`container_space large_layout ${styles.wrapper} ${page === 'addCar'? 'md:flex hidden':'flex' }`}>
+    <div className={`container_space large_layout sticky top-0 z-10 ${styles.wrapper} ${page === 'addCar'? 'md:flex hidden':'flex' }`}>
       <div >
         <Image src={Images.logo} alt="logo" width={40} height={40} className="sm:min-w-[65px] min-w-12" />
       </div>

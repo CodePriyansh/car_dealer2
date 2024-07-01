@@ -50,7 +50,7 @@ const LoginForm = () => {
 
       {otpSend && backBtnStatus && (
         <div
-          className="md:absolute md:left-16 left-0 flex gap-2 items-center cursor-pointer"
+          className="md:absolute md:left-16 left-0 md:top-[-100px]  flex gap-2 items-center cursor-pointer"
           onClick={() => {
             setBackBtnStatus(false);
             setHeading("Login Account")
