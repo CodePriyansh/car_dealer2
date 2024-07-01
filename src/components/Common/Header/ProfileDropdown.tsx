@@ -3,11 +3,12 @@ import { Avatar, Menu, MenuItem, Divider, ListItemIcon } from "@mui/material";
 import { Person, PrivacyTip, Settings, Logout } from "@mui/icons-material";
 import { Images } from "@/assets/Images";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const ProfileDropdown = ({ user }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-
+const router = useRouter()
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -16,6 +17,10 @@ const ProfileDropdown = ({ user }) => {
     setAnchorEl(null);
   };
 
+  const handleLogout = () => {
+    handleClose();
+    router.push("/login");  // Navigate to the login page
+  };
   return (
     <>
       <div onClick={handleClick} className="cursor-pointer">
@@ -115,7 +120,7 @@ const ProfileDropdown = ({ user }) => {
           Settings
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Image src={Images.logout} alt="profile" width={15} height={15} />
           </ListItemIcon>
