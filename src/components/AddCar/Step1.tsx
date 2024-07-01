@@ -215,6 +215,7 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
                         setFieldValue(field.name, option ? option.value : "");
                       }}
                       className={styles.field_style}
+                      isCreatable={['company', 'modelName', 'color'].includes(field.name)}
                     />
                   ) : (
                     <Field
