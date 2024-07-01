@@ -3,28 +3,32 @@ import React, { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import instance from "@/network/axios";
 import CarCards from "./CarCards";
+import axios from "axios";
 function HomePageCards() {
   const [cars, setCars] = useState([]);
   const cookies = new Cookies();
 
-  //   const fetchCars =  () => {
-  //     let token = cookies.get("token");
-  //     const response =  instance.get("/api/cars/all", {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     response.then(res=>console.log(res))
-  //     setCars(response);
-  //   };
-  //   useEffect(() => {
-  //     fetchCars();
-  //   }, []);
+  const fetchCars = () => {
+    let token = cookies.get("token");
+    const response = instance.post(
+      "api/cars/all",
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NzU5MmZhY2E2YmY4NWFmNDY5MDY3ZSIsInBob25lTnVtYmVyIjoiMTIzNDU2Nzg5OCIsImZpcmViYXNlVXNlcklkIjoiMGE1RnFzejZLN1B5eUJsUHJ3UmZPMzliOHhVMiIsImlhdCI6MTcxOTg0OTEzMCwiZXhwIjoxNzE5OTM1NTMwfQ.qg_EW3648W_gtQ7LaaipDNQHJVPKuKzh7p-IYyMoJW0`,
+        },
+      }
+    );
+    response
+      .then((res) => {
+        setCars(res?.data?.data);
+      })
+      .catch((err) => console.log(err));
+  };
 
   useEffect(() => {
-    // setCars([1, 2, 3, 3, 4, 5, 6, 7, 8, 9, 1, 11, 21, 34, 5, 6, 7, 8]);
-    setCars([]);
+    fetchCars();
   }, []);
 
   return (

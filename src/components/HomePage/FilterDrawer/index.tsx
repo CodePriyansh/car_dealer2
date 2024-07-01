@@ -23,8 +23,8 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
       "Brand": [],
       "Variant": [],
       "color": [],
-      "Model Year":[],
-      "Price Range": [100000, 2500000],
+      "ModelYear":[],
+      "PriceRange": [100000, 2500000],
     };
 
   const contentData = [
@@ -44,7 +44,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
       ],
     },
     {
-      filterName: "Model Year",
+      filterName: "ModelYear",
       filters: [
         "2022 - 2024",
       "2019 - 2021",
@@ -97,25 +97,25 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
     setUpdatedPriceRange([100000, 2500000])
   };
 
-  const ApplyFilterApiCall=()=>{
-    console.log(selectedFilters,"selected")
-    let token = cookies.get("token");
 
+  const ApplyFilterApiCall=()=>{
+    let token = cookies.get("token");
+  
     const response = instance.post("/api/cars/all", {
-      "priceMin": "150",
-      "priceMax": "30000"
-      ,"type": ["SUV"],   
-      "color": ["Black"],
-      "company": "Toyota",
+      "priceMin": selectedFilters?.PriceRange[0]    ,
+      "priceMax": selectedFilters?.PriceRange[1] ,
+      "type": selectedFilters?.Variant,   
+      "color": selectedFilters?.color,
+      "company": selectedFilters?.Brand,
     }, {
       headers: {
         "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NzU5MmZhY2E2YmY4NWFmNDY5MDY3ZSIsInBob25lTnVtYmVyIjoiMTIzNDU2Nzg5OCIsImZpcmViYXNlVXNlcklkIjoiMGE1RnFzejZLN1B5eUJsUHJ3UmZPMzliOHhVMiIsImlhdCI6MTcxOTg0OTEzMCwiZXhwIjoxNzE5OTM1NTMwfQ.qg_EW3648W_gtQ7LaaipDNQHJVPKuKzh7p-IYyMoJW0`,
       },
     });
-    console.log(response,"ppp")
+    console.log(response,"filter data")
   }
-
+  
 
   const handleApply = () => {
     console.log(selectedFilters);
@@ -125,7 +125,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
   React.useEffect(()=>{
     setSelectedFilters((prevFilters) => ({
       ...prevFilters,
-      "Price Range": updatedPriceRange,
+      "PriceRange": updatedPriceRange,
     }));
   },[updatedPriceRange])
  
@@ -170,7 +170,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
                             <div className="custom-checkbox">
                               <input
                                 type="checkbox"
-                                checked={selectedFilters[item.filterName].includes(
+                                checked={selectedFilters[item.filterName]?.includes(
                                   ele
                                 )}
                                 onChange={() => handleCheckboxChange(item.filterName, ele)}
@@ -187,7 +187,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
               })}
             </div>
             <div className={styles.sticky_btn}>
-              <Button otherStyles={"py-2"} onclick={handleApply}>Apply</Button>
+              <Button otherStyles={"py-2"} onclick={()=>handleApply()}>Apply</Button>
             </div>
           </div>
         </Drawer>
