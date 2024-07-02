@@ -8,24 +8,24 @@ import { Images } from "@/assets/Images";
 import instance from "@/network/axios";
 import Cookies from "universal-cookie";
 
-
 export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
   const cookies = new Cookies();
   const [isOpen, setIsOpen] = React.useState(true);
-  const [updatedPriceRange, setUpdatedPriceRange] = React.useState([100000, 2500000])
+  const [updatedPriceRange, setUpdatedPriceRange] = React.useState([100000, 2500000]);
 
-  const toggleDrawer =
-    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-      setIsOpen(open);
-      setOpenDrawer(open);
-    };
-    const initialFiltersState = {
-      "Brand": [],
-      "Variant": [],
-      "color": [],
-      "ModelYear":[],
-      "PriceRange": [100000, 2500000],
-    };
+  const toggleDrawer = (open) => (event) => {
+    setIsOpen(open);
+    setOpenDrawer(open);
+  };
+
+  const initialFiltersState = {
+    Brand: [],
+    color: [],
+    ModelYear: [],
+    Transmission: [],
+    CarType: [],
+    PriceRange: [100000, 2500000],
+  };
 
   const contentData = [
     {
@@ -45,45 +45,25 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
     },
     {
       filterName: "ModelYear",
-      filters: [
-        "2022 - 2024",
-      "2019 - 2021",
-      "2016 - 2018",
-      "2013 - 2015"
-      ],
-    },
-    {
-      filterName: "Variant",
-      filters: ["Renault Kwid", "Datsun Redi-GO", "Maruti Suzuki S-Presso"],
+      filters: ["2022 - 2024", "2019 - 2021", "2016 - 2018", "2013 - 2015"],
     },
     {
       filterName: "color",
-      filters: [
-        "Red",
-        "Blue",
-        "Black",
-        "White",
-        "Silver",
-        "Grey",
-        "Green",
-        "Yellow",
-        "Brown",
-        "Orange",
-      ],
+      filters: ["Red", "Blue", "Black", "White", "Silver", "Grey", "Green", "Yellow", "Brown", "Orange"],
     },
-    // {
-    //   filterName: "Fuel Type",
-    //   filters: ["Petrol", "Diesel", "CNG"],
-    // },
-    // {
-    //   filterName: "Owner",
-    //   filters: ["First Owner", "Second Owner", "Third Owner"],
-    // },
+    {
+      filterName: "Transmission",
+      filters: ["Manual", "Automatic"],
+    },
+    {
+      filterName: "CarType",
+      filters: ["SUV", "Sedan", "Hatchback"],
+    },
   ];
 
   const [selectedFilters, setSelectedFilters] = React.useState(initialFiltersState);
 
- const handleCheckboxChange = (filterName, filterValue) => {
+  const handleCheckboxChange = (filterName, filterValue) => {
     setSelectedFilters((prevFilters) => ({
       ...prevFilters,
       [filterName]: prevFilters[filterName].includes(filterValue)
@@ -94,41 +74,39 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
 
   const handleClearFilters = () => {
     setSelectedFilters(initialFiltersState);
-    setUpdatedPriceRange([100000, 2500000])
+    setUpdatedPriceRange([100000, 2500000]);
   };
 
-
-  const ApplyFilterApiCall=()=>{
+  const ApplyFilterApiCall = async () => {
     let token = cookies.get("token");
-  
-    const response = instance.post("/api/cars/all", {
-      "priceMin": selectedFilters?.PriceRange[0]    ,
-      "priceMax": selectedFilters?.PriceRange[1] ,
-      "type": selectedFilters?.Variant,   
-      "color": selectedFilters?.color,
-      "company": selectedFilters?.Brand,
+    const response = await instance.post("/api/cars/all", {
+      priceMin: selectedFilters?.PriceRange[0],
+      priceMax: selectedFilters?.PriceRange[1],
+      type: selectedFilters?.Variant,
+      color: selectedFilters?.color,
+      company: selectedFilters?.Brand,
+      transmission: selectedFilters?.Transmission,
+      carType: selectedFilters?.CarType,
     }, {
       headers: {
         "Content-Type": "multipart/form-data",
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NzU5MmZhY2E2YmY4NWFmNDY5MDY3ZSIsInBob25lTnVtYmVyIjoiMTIzNDU2Nzg5OCIsImZpcmViYXNlVXNlcklkIjoiMGE1RnFzejZLN1B5eUJsUHJ3UmZPMzliOHhVMiIsImlhdCI6MTcxOTg0OTEzMCwiZXhwIjoxNzE5OTM1NTMwfQ.qg_EW3648W_gtQ7LaaipDNQHJVPKuKzh7p-IYyMoJW0`,
+        Authorization: `Bearer ${token}`,
       },
     });
-    console.log(response,"filter data")
-  }
-  
+    console.log(response, "filter data");
+  };
 
   const handleApply = () => {
     console.log(selectedFilters);
-    ApplyFilterApiCall()
+    ApplyFilterApiCall();
   };
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     setSelectedFilters((prevFilters) => ({
       ...prevFilters,
-      "PriceRange": updatedPriceRange,
+      PriceRange: updatedPriceRange,
     }));
-  },[updatedPriceRange])
- 
+  }, [updatedPriceRange]);
 
   return (
     <div>
@@ -150,7 +128,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
             </div>
 
             <div className="mx-6">
-              <PriceRangeSlider setUpdatedPriceRange={setUpdatedPriceRange} updatedPriceRange={updatedPriceRange}/>
+              <PriceRangeSlider setUpdatedPriceRange={setUpdatedPriceRange} updatedPriceRange={updatedPriceRange} />
             </div>
 
             <div className={styles.content_wrapper}>
@@ -170,9 +148,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
                             <div className="custom-checkbox">
                               <input
                                 type="checkbox"
-                                checked={selectedFilters[item.filterName]?.includes(
-                                  ele
-                                )}
+                                checked={selectedFilters[item.filterName]?.includes(ele)}
                                 onChange={() => handleCheckboxChange(item.filterName, ele)}
                               />
                               <span className="checkmark"></span>
@@ -187,7 +163,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
               })}
             </div>
             <div className={styles.sticky_btn}>
-              <Button otherStyles={"py-2"} onclick={()=>handleApply()}>Apply</Button>
+              <Button otherStyles={"py-2"} onclick={() => handleApply()}>Apply</Button>
             </div>
           </div>
         </Drawer>

@@ -47,6 +47,9 @@ p {
 .container_space{
   @apply  3xl:px-[125px] 2xl:px-[110px] xl:px-[90px] lg:px-[75px]  md:px-[60px] sm:px-[30px] px-4;
 }
+body {
+  @apply sm:bg-f7f7f7
+}
 
 /* For Chrome, Safari, Edge, Opera */
 input[type="number"]::-webkit-inner-spin-button,

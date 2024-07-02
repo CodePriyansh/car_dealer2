@@ -1,9 +1,15 @@
 "use client";
 
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage, FormikErrors } from "formik";
 import * as yup from "yup";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import {
+  MutableRefObject,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import styles from "./styles.module.css";
 import Image from "next/image";
 import { Images } from "@/assets/Images";
@@ -16,11 +22,11 @@ import instance from "@/network/axios";
 import { setLocalStorage } from "@/constants/constants";
 import Cookies from "universal-cookie";
 import login from "../../assets/responsive-login.png";
-
+import { AiOutlineCloseCircle } from "react-icons/ai";
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
   phoneNumber: yup.string().required("Phone Number is required"),
-  telephoneNumber: yup.string().required("Telephone Number is required"),
+  telephoneNumber: yup.string().optional(),
   email: yup.string().email("Invalid email").required("Email is required"),
   city: yup.string().required("City is required"),
   state: yup.string().required("State is required"),
@@ -32,7 +38,7 @@ const schema = yup.object().shape({
 
 export default function SignupForm() {
   const cookies = new Cookies();
-  const [heading, setHeading] = useState('Signup Account');
+  const [heading, setHeading] = useState("Signup Account");
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -69,7 +75,54 @@ export default function SignupForm() {
     router.push("/login");
   };
 
-  const onSubmit = async (values, { setSubmitting }) => {
+  const handleImageChange = (event, setFieldValue, fieldName) => {
+    const file = event.currentTarget.files[0];
+    if (file) {
+      // Check if the selected file is an image
+      if (file.type.includes("image")) {
+        setFieldValue(fieldName, file);
+      } else {
+        toast.error("Only image files are allowed.");
+      }
+    }
+  };
+
+  const handleRemoveImage = (
+    setFieldValue: {
+      (
+        field: string,
+        value: any,
+        shouldValidate?: boolean | undefined
+      ): Promise<void | FormikErrors<{
+        name: string;
+        phoneNumber: string;
+        telephoneNumber: string;
+        email: string;
+        city: string;
+        state: string;
+        shopAddress: string;
+        coverImage: null;
+        profileImage: null;
+        shopImage: null;
+      }>>;
+      (arg0: any, arg1: null): void;
+    },
+    fieldName: string,
+    inputRef: MutableRefObject<HTMLInputElement | null>
+  ) => {
+    setFieldValue(fieldName, null);
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+  };
+
+  const onSubmit = async (
+    values: {
+      [x: string]: string | Blob;
+      mobileNumber: SetStateAction<string>;
+    },
+    { setSubmitting }: any
+  ) => {
     console.log(values, "--------------------");
     setBackBtnStatus(true);
     console.log(values, "values");
@@ -118,7 +171,7 @@ export default function SignupForm() {
           setOtpSend(true);
           setSubmitting(false);
           setBackBtnStatus(true);
-          setHeading('OTP Verification');
+          setHeading("OTP Verification");
 
           toast.success("OTP sent successfully!");
         })
@@ -131,24 +184,6 @@ export default function SignupForm() {
           toast.error("Failed to send OTP. Please try again.");
         });
     }
-
-    // try {
-    //   const response = await axios.post("YOUR_API_ENDPOINT", formData, {
-    //     headers: {
-    //       "Content-Type": "multipart/form-data",
-    //     },
-    //   });
-    //     toast.success("dealer added successfully")
-    // } catch (error) {
-    //   setMessage("Failed to register dealer.");
-    //   setOtpSend(false);
-    // } finally {
-    //   setLoading(false);
-    //   setSubmitting(false);
-    //   setOtpSend(false);
-    // }
-    // ye line comment kar dena jab api call sai chale tab
-    // setOtpSend(true);
   };
 
   const coverImageInputRef = useRef<HTMLInputElement | null>(null);
@@ -174,7 +209,7 @@ export default function SignupForm() {
                 className="md:absolute md:left-16 left-0 flex gap-2 items-center cursor-pointer"
                 onClick={() => {
                   setBackBtnStatus(false);
-                  setHeading("Signup Account")
+                  setHeading("Signup Account");
                 }}
               >
                 <Image
@@ -348,39 +383,68 @@ export default function SignupForm() {
                           className={styles.dotted_box}
                           onClick={() => coverImageInputRef.current?.click()}
                         >
-                          <Image
-                            src={Images.uploadImg}
-                            alt="img"
-                            className="w-8 h-8"
-                          />
-                          <Button otherStyles="mt-[50px]">
-                            <Image
-                              src={Images.plus}
-                              alt="plus"
-                              width={20}
-                              height={20}
-                            />
-                            Add Cover Image
-                          </Button>
+                          {values.coverImage ? (
+                            <>
+                              <Image
+                                src={URL.createObjectURL(values.coverImage)}
+                                alt="Cover Image"
+                                className="sm:w-auto w-[80%] rounded sm:h-auto h-[100%]"
+                                width={20}
+                                height={20}
+                              />
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleRemoveImage(
+                                    setFieldValue,
+                                    "coverImage",
+                                    coverImageInputRef
+                                  )
+                                }
+                                className={styles.remove_button}
+                              >
+                                <AiOutlineCloseCircle />
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <Image
+                                src={Images.uploadImg}
+                                alt="img"
+                                className="w-8 h-8"
+                              />
+                              <Button otherStyles="mt-[50px]">
+                                <Image
+                                  src={Images.plus}
+                                  alt="plus"
+                                  width={20}
+                                  height={20}
+                                />
+                                Add Cover Image
+                              </Button>
+                            </>
+                          )}
+
                           <input
                             type="file"
                             ref={coverImageInputRef}
-                            onChange={(
-                              event: React.ChangeEvent<HTMLInputElement>
-                            ) => {
-                              const files = event.currentTarget.files;
-                              if (files && files.length > 0) {
-                                setFieldValue("coverImage", files[0]);
-                              }
-                            }}
+                            // onChange={(
+                            //   event: React.ChangeEvent<HTMLInputElement>
+                            // ) => {
+                            //   const files = event.currentTarget.files;
+                            //   if (files && files.length > 0) {
+                            //     setFieldValue("coverImage", files[0]);
+                            //   }
+                            // }}
+                            onChange={(event) => handleImageChange(event, setFieldValue, "coverImage")}
                             style={{ display: "none" }}
                             name="coverImage"
                           />
-                          {values.coverImage && (
+                          {/* {values.coverImage && (
                             <p className={styles.selected_file}>
                               {values.coverImage.name}
                             </p>
-                          )}
+                          )} */}
                         </div>
                         <ErrorMessage
                           name="coverImage"
@@ -399,39 +463,61 @@ export default function SignupForm() {
                             Add Profile Image
                           </label>
                           <div className={styles.dotted_box}>
-                            <Image
-                              src={Images.uploadImg}
-                              alt="img"
-                              className="w-8 h-8"
-                            />
-                            <Button otherStyles="mt-[50px]">
-                              <Image
-                                src={Images.plus}
-                                alt="plus"
-                                width={20}
-                                height={20}
-                              />
-                              Add Profile Image
-                            </Button>
+                            {values.profileImage ? (
+                              <>
+                                <>
+                                  <Image
+                                    src={URL.createObjectURL(
+                                      values.profileImage
+                                    )}
+                                    alt="Profile Image"
+                                    className="sm:w-auto w-[80%] rounded sm:h-auto h-[100%]"
+                                    width={20}
+                                    height={20}
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      handleRemoveImage(
+                                        setFieldValue,
+                                        "profileImage",
+                                        profileImageInputRef
+                                      )
+                                    }
+                                    className={styles.remove_button}
+                                  >
+                                    <AiOutlineCloseCircle />
+                                  </button>
+                                </>
+                              </>
+                            ) : (
+                              <>
+                                <Image
+                                  src={Images.uploadImg}
+                                  alt="img"
+                                  className="w-8 h-8"
+                                />
+                                <Button otherStyles="mt-[50px]">
+                                  <Image
+                                    src={Images.plus}
+                                    alt="plus"
+                                    width={20}
+                                    height={20}
+                                  />
+                                  Add Profile Image
+                                </Button>
+                              </>
+                            )}
+
                             <input
                               type="file"
                               ref={profileImageInputRef}
                               style={{ display: "none" }}
-                              onChange={(
-                                event: React.ChangeEvent<HTMLInputElement>
-                              ) => {
-                                const files = event.currentTarget.files;
-                                if (files && files.length > 0) {
-                                  setFieldValue("profileImage", files[0]);
-                                }
-                              }}
+                              onChange={(event) => handleImageChange(event, setFieldValue, "profileImage")}
+
                               name="profileImage"
                             />
-                            {values.profileImage && (
-                              <p className={styles.selected_file}>
-                                {values.profileImage.name}
-                              </p>
-                            )}
+
                           </div>
                           <ErrorMessage
                             name="profileImage"
@@ -449,39 +535,58 @@ export default function SignupForm() {
                             className={styles.dotted_box}
                             onClick={() => shopImageInputRef.current?.click()}
                           >
-                            <Image
-                              src={Images.uploadImg}
-                              alt="img"
-                              className="w-8 h-8"
-                            />
-                            <Button otherStyles="mt-[50px]">
-                              <Image
-                                src={Images.plus}
-                                alt="plus"
-                                width={20}
-                                height={20}
-                              />
-                              Add Shop Image
-                            </Button>
+                            {values.shopImage ? (
+                              <>
+                                  <Image
+                                    src={URL.createObjectURL(
+                                      values.shopImage
+                                    )}
+                                    alt="Shop Image"
+                                    className="sm:w-auto w-[80%] rounded sm:h-auto h-[100%]"
+                                    width={20}
+                                    height={20}
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      handleRemoveImage(
+                                        setFieldValue,
+                                        "shopImage",
+                                        profileImageInputRef
+                                      )
+                                    }
+                                    className={styles.remove_button}
+                                  >
+                                    <AiOutlineCloseCircle />
+                                  </button>
+                              </>
+                            ) : (
+                              <>
+                                <Image
+                                  src={Images.uploadImg}
+                                  alt="img"
+                                  className="w-8 h-8"
+                                />
+                                <Button otherStyles="mt-[50px]">
+                                  <Image
+                                    src={Images.plus}
+                                    alt="plus"
+                                    width={20}
+                                    height={20}
+                                  />
+                                  Add Shop Image
+                                </Button>
+                              </>
+                            )}
                             <input
                               type="file"
                               ref={shopImageInputRef}
-                              onChange={(
-                                event: React.ChangeEvent<HTMLInputElement>
-                              ) => {
-                                const files = event.currentTarget.files;
-                                if (files && files.length > 0) {
-                                  setFieldValue("shopImage", files[0]);
-                                }
-                              }}
+                              onChange={(event) => handleImageChange(event, setFieldValue, "shopImage")}
+                              accept="image/*"
                               style={{ display: "none" }}
                               name="shopImage"
                             />
-                            {values.shopImage && (
-                              <p className={styles.selected_file}>
-                                {values.shopImage.name}
-                              </p>
-                            )}
+
                           </div>
                           <ErrorMessage
                             name="shopImage"
@@ -497,7 +602,7 @@ export default function SignupForm() {
                         disabled={isSubmitting}
                       >
                         <Button otherStyles="sm:w-[430px] w-full mx-auto uppercase">
-                          { mobileNumber ? "Sign Up" : "Get OTP"}
+                          {mobileNumber ? "Sign Up" : "Get OTP"}
                         </Button>
                       </button>
                       {/* Bottom info */}

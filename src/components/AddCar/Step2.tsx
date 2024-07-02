@@ -304,7 +304,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                       <button
                         type="button"
                         onClick={() => handleRemoveImage(setFieldValue, image.name, index)}
-                        className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full"
+                        className="absolute top-0 right-0 p-1 bg-primary text-white rounded-full"
                       >
                         &times;
                       </button>

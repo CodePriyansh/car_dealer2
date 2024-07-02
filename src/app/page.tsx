@@ -15,7 +15,7 @@ console.log(user,"ih");
   const showPlanExpiredBanner = true
 
   return (
-    <div className="md:bg-f7f7f7">
+    <div>
       <Header />
       <SubHeader />
       <Filters />

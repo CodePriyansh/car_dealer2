@@ -307,7 +307,7 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
                         width={20}
                         height={20}
                       />
-                      Add Profile Image
+                      Add Image
                     </Button>
                     <input
                       type="file"

@@ -22,6 +22,7 @@ function HomePageCards() {
     );
     response
       .then((res) => {
+        console.log(req.data.data)
         setCars(res?.data?.data);
       })
       .catch((err) => console.log(err));
@@ -34,7 +35,7 @@ function HomePageCards() {
   return (
     <>
       {cars.length < 1 ? (
-        <div> There is no car added</div>
+        <div className="text-center"> There is no car added!</div>
       ) : (
         <div className="container_space large_layout w-full grid md1:grid-cols-3 sm:grid-cols-2 grid-cols-1  gap-6 md:bg-f7f7f7 py-4">
           {cars.map((car, index) => (
