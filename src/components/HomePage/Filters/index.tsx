@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import CommonReactSelect from "@/components/Common/Select";
-import { Slider, Typography } from "@mui/material";
 import Image from "next/image";
 import { Images } from "@/assets/Images";
 import Button from "@/components/Common/Button";
@@ -10,9 +9,9 @@ import FilterDrawer from "../FilterDrawer";
 import PriceRangeSlider from "@/components/Common/PriceRange";
 import { useRouter } from "next/navigation";
 import Cookies from "universal-cookie";
-import instance from "@/network/axios";
+import CarApi from "../CarApi/index";
 
-function Filters() {
+function Filters({setCars}) {
   const router = useRouter();
   const [updatedPriceRange, setUpdatedPriceRange] = React.useState([
     100000, 2500000,
@@ -126,39 +125,6 @@ function Filters() {
     });
   };
 
-  const ApplyFilterApiCall = async () => {
-    let token = cookies.get("token");
-
-    try {
-      const response = await instance.post(
-        "/api/cars/all",
-        {
-          priceMin: selectedOptions?.priceRange[0],
-          priceMax: selectedOptions?.priceRange[1],
-          type: selectedOptions?.carType,
-          color: selectedOptions?.color,
-          company: selectedOptions?.brand?.value,
-          modelName: selectedOptions?.carmodel?.value,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NzU5MmZhY2E2YmY4NWFmNDY5MDY3ZSIsInBob25lTnVtYmVyIjoiMTIzNDU2Nzg5OCIsImZpcmViYXNlVXNlcklkIjoiMGE1RnFzejZLN1B5eUJsUHJ3UmZPMzliOHhVMiIsImlhdCI6MTcxOTk0MDEwNSwiZXhwIjoxNzIwMDI2NTA1fQ.3zzuyuT0SvQRzxqgQodrJe7_RW-0V-lE4cNf82MXMgk`,
-          },
-        }
-      );
-
-      console.log(response.data, "filter data");
-    } catch (error) {
-      console.error("Error applying filters:", error);
-    }
-  };
-
-  const handleApply = () => {
-    ApplyFilterApiCall();
-    console.log(selectedOptions);
-  };
-
   useEffect(() => {
     setSelectedOptions({
       ...selectedOptions,
@@ -175,10 +141,9 @@ function Filters() {
             <div className={styles.heading}>Filters </div>
             <Button
               otherStyles="absolute top-0 right-0 rounded-[10px] !py-2"
-              onclick={handleApply}
             >
-              Apply Filters
-            </Button>
+            <CarApi selectedOptions={selectedOptions} initial={false} setCars={setCars}/>
+            </Button> 
           </div>
           <div className={styles.selectors}>
             {fields.map((field, index) => (
@@ -282,7 +247,7 @@ function Filters() {
         )}
       </div>
       {openDrawer && (
-        <FilterDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} />
+        <FilterDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} setCars={setCars}/>
       )}
 
       <div className="flex justify-between items-center">

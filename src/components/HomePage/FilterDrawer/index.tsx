@@ -5,8 +5,8 @@ import styles from "./styles.module.css";
 import PriceRangeSlider from "@/components/Common/PriceRange";
 import Image from "next/image";
 import { Images } from "@/assets/Images";
-import instance from "@/network/axios";
 import Cookies from "universal-cookie";
+import CarApi from "../CarApi/index";
 
 export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
   const cookies = new Cookies();
@@ -77,31 +77,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
     setUpdatedPriceRange([100000, 2500000]);
   };
 
-  const ApplyFilterApiCall = async () => {
-    let token = cookies.get("token");
-    const response = await instance.post("/api/cars/all", {
-      priceMin: selectedFilters?.PriceRange[0],
-      priceMax: selectedFilters?.PriceRange[1],
-      type: selectedFilters?.Variant,
-      color: selectedFilters?.color,
-      company: selectedFilters?.Brand,
-      transmission: selectedFilters?.Transmission,
-      carType: selectedFilters?.CarType,
-    }, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NzU5MmZhY2E2YmY4NWFmNDY5MDY3ZSIsInBob25lTnVtYmVyIjoiMTIzNDU2Nzg5OCIsImZpcmViYXNlVXNlcklkIjoiMGE1RnFzejZLN1B5eUJsUHJ3UmZPMzliOHhVMiIsImlhdCI6MTcxOTk0MDEwNSwiZXhwIjoxNzIwMDI2NTA1fQ.3zzuyuT0SvQRzxqgQodrJe7_RW-0V-lE4cNf82MXMgk`,
-      },
-    });
-    console.log(response, "filter data");
-  };
-
-  const handleApply = () => {
-    console.log(selectedFilters);
-    ApplyFilterApiCall();
-  };
-
-  React.useEffect(() => {
+   React.useEffect(() => {
     setSelectedFilters((prevFilters) => ({
       ...prevFilters,
       PriceRange: updatedPriceRange,
@@ -163,7 +139,10 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
               })}
             </div>
             <div className={styles.sticky_btn}>
-              <Button otherStyles={"py-2"} onclick={() => handleApply()}>Apply</Button>
+              <Button otherStyles={"py-2"} >
+            <CarApi selectedOptions={selectedFilters} initial={false} setCars={setCars}/>
+                
+              </Button>
             </div>
           </div>
         </Drawer>
