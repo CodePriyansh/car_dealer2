@@ -5,8 +5,8 @@ import styles from "./styles.module.css";
 import PriceRangeSlider from "@/components/Common/PriceRange";
 import Image from "next/image";
 import { Images } from "@/assets/Images";
-import instance from "@/network/axios";
 import Cookies from "universal-cookie";
+import CarApi from "../CarApi/index";
 
 export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
   const cookies = new Cookies();
@@ -19,17 +19,17 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
   };
 
   const initialFiltersState = {
-    Brand: [],
+    company: [],
     color: [],
-    ModelYear: [],
-    Transmission: [],
-    CarType: [],
-    PriceRange: [100000, 2500000],
+    modelYear: [],
+    transmission: [],
+    carType: [],
+    priceRange: [0, 2500000],
   };
 
   const contentData = [
     {
-      filterName: "Brand",
+      filterName: "company",
       filters: [
         "Maruti Suzuki",
         "Hyundai",
@@ -44,7 +44,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
       ],
     },
     {
-      filterName: "ModelYear",
+      filterName: "modelYear",
       filters: ["2022 - 2024", "2019 - 2021", "2016 - 2018", "2013 - 2015"],
     },
     {
@@ -52,11 +52,11 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
       filters: ["Red", "Blue", "Black", "White", "Silver", "Grey", "Green", "Yellow", "Brown", "Orange"],
     },
     {
-      filterName: "Transmission",
+      filterName: "transmission",
       filters: ["Manual", "Automatic"],
     },
     {
-      filterName: "CarType",
+      filterName: "carType",
       filters: ["SUV", "Sedan", "Hatchback"],
     },
   ];
@@ -74,37 +74,13 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
 
   const handleClearFilters = () => {
     setSelectedFilters(initialFiltersState);
-    setUpdatedPriceRange([100000, 2500000]);
+    setUpdatedPriceRange([0, 2500000]);
   };
 
-  const ApplyFilterApiCall = async () => {
-    let token = cookies.get("token");
-    const response = await instance.post("/api/cars/all", {
-      priceMin: selectedFilters?.PriceRange[0],
-      priceMax: selectedFilters?.PriceRange[1],
-      type: selectedFilters?.Variant,
-      color: selectedFilters?.color,
-      company: selectedFilters?.Brand,
-      transmission: selectedFilters?.Transmission,
-      carType: selectedFilters?.CarType,
-    }, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    console.log(response, "filter data");
-  };
-
-  const handleApply = () => {
-    console.log(selectedFilters);
-    ApplyFilterApiCall();
-  };
-
-  React.useEffect(() => {
+   React.useEffect(() => {
     setSelectedFilters((prevFilters) => ({
       ...prevFilters,
-      PriceRange: updatedPriceRange,
+      priceRange: updatedPriceRange,
     }));
   }, [updatedPriceRange]);
 
@@ -163,7 +139,10 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
               })}
             </div>
             <div className={styles.sticky_btn}>
-              <Button otherStyles={"py-2"} onclick={() => handleApply()}>Apply</Button>
+              <Button otherStyles={"py-2"} >
+            <CarApi selectedOptions={selectedFilters} initial={false} />
+                
+              </Button>
             </div>
           </div>
         </Drawer>
