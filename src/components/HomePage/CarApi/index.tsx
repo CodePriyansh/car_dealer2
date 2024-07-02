@@ -50,7 +50,7 @@ const CarApi = ({ selectedOptions, initial, setCars }) => {
     if (initial) {
       ApplyFilterApiCall();
     }
-  }, [initial]);
+  }, []);
 
   return <div onClick={handleApply}>{initial ? "" : "Apply Filters"}</div>;
 };

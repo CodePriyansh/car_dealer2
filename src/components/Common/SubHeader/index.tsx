@@ -60,6 +60,7 @@ export default function SubHeader() {
             className="w-[18px] h-[18px]"
           />
           clear filter
+
         </Button>
         <Button
           otherStyles={styles.fill_btn}
