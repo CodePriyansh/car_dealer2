@@ -1,5 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 import { verifyOtp, sendOtp } from "@/services/firebase/firebaseAuthService"; // Import sendOtp and verifyOtp functions
 import styles from "../SignUp/styles.module.css";
 import { useRouter } from "next/navigation";
@@ -84,6 +86,9 @@ const OtpVerification = ({ mobileNumber, formData, setHeading }) => {
       console.log("Login API called with mobile number:", mobileNumber);
       try {
         const url = formData ? "/api/dealers/signup" : "/api/dealers/login";
+        if(formData){
+           formData.set("firebaseUserId",user.uid)
+        }
         const payload = formData ? formData : { phoneNumber: mobileNumber };
         console.log(payload, "Pay");
 
@@ -92,14 +97,12 @@ const OtpVerification = ({ mobileNumber, formData, setHeading }) => {
         if (response.status >= 200) {
           cookies.set("token", response.data.data.token, { path: "/" });
           setLocalStorage("user", JSON.stringify(response.data.data))
-          // Redirect to the next page
           toast.success(response?.data.message);
           router.push("/");
         }
       } catch (error) {
         if (error.response && error.response.status === 404) {
-          // User not found, redirect to signup
-          toast.info("User not found, redirecting to signup");
+          toast.info("User not found, redirecting to signup", 2000);
           const params = new URLSearchParams({
             mobileNumber,
             id: user.uid,
@@ -107,7 +110,8 @@ const OtpVerification = ({ mobileNumber, formData, setHeading }) => {
           router.push(`/signup?${params.toString()}`);
         } else {
           console.error("Failed to call API", error);
-          toast.error("Failed to call API. Please try again.");
+          toast.error(error?.response?.data?.message);
+          router.push("/signup")
         }
       }
     } catch (error) {

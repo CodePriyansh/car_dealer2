@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import instance from "@/network/axios";
 import CarCards from "./CarCards";
-import axios from "axios";
 function HomePageCards() {
   const [cars, setCars] = useState([]);
   const cookies = new Cookies();
@@ -16,7 +15,7 @@ function HomePageCards() {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NzU5MmZhY2E2YmY4NWFmNDY5MDY3ZSIsInBob25lTnVtYmVyIjoiMTIzNDU2Nzg5OCIsImZpcmViYXNlVXNlcklkIjoiMGE1RnFzejZLN1B5eUJsUHJ3UmZPMzliOHhVMiIsImlhdCI6MTcxOTg0OTEzMCwiZXhwIjoxNzE5OTM1NTMwfQ.qg_EW3648W_gtQ7LaaipDNQHJVPKuKzh7p-IYyMoJW0`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
