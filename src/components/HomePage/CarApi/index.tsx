@@ -3,50 +3,52 @@ import instance from "@/network/axios";
 import Cookies from "universal-cookie";
 
 const CarApi = ({ selectedOptions, initial, setCars }) => {
+  const [storeInitialValue, setStoreInitialValue] = useState(false);
   const [payload, setPayload] = useState({});
   const cookies = new Cookies();
   let token = cookies.get("authToken");
 
   useEffect(() => {
-    console.log(selectedOptions);
-    if (initial) {
-        setPayload({});
+    setStoreInitialValue(initial);
+  }, [initial]);
+
+  useEffect(() => {
+    // console.log(selectedOptions);
+    if (storeInitialValue) {
+      setPayload({});
     } else {
-        const updatedPayload:any = {};
+      const updatedPayload: any = {};
 
-        if (selectedOptions?.priceRange) {
-            updatedPayload.priceMax = selectedOptions.priceRange[1];
-        }
-        if (selectedOptions?.priceRange) {
-            updatedPayload.priceMin = selectedOptions.priceRange[0];
-        }
-        if (selectedOptions?.carType?.length) {
-            updatedPayload.type = selectedOptions.carType;
-        }
-        if (selectedOptions?.color?.length) {
-            updatedPayload.color = selectedOptions.color;
-        }
-        if (selectedOptions?.company) {
-            updatedPayload.company = selectedOptions.company;
-        }
-        if (selectedOptions?.modelName) {
-            updatedPayload.modelName = selectedOptions.modelName;
-        }
-        if (selectedOptions?.modelYear?.length) {
-            updatedPayload.modelYear = selectedOptions.modelYear;
-        }
-        if (selectedOptions?.transmission?.length) {
-            updatedPayload.transmission = selectedOptions.transmission;
-        }
+      if (selectedOptions?.priceRange) {
+        updatedPayload.priceMax = selectedOptions.priceRange[1];
+      }
+      if (selectedOptions?.priceRange) {
+        updatedPayload.priceMin = selectedOptions.priceRange[0];
+      }
+      if (selectedOptions?.carType?.length) {
+        updatedPayload.type = selectedOptions.carType;
+      }
+      if (selectedOptions?.color?.length) {
+        updatedPayload.color = selectedOptions.color;
+      }
+      if (selectedOptions?.company) {
+        updatedPayload.company = selectedOptions.company;
+      }
+      if (selectedOptions?.modelName) {
+        updatedPayload.modelName = selectedOptions.modelName;
+      }
+      if (selectedOptions?.modelYear?.length) {
+        updatedPayload.modelYear = selectedOptions.modelYear;
+      }
+      if (selectedOptions?.transmission?.length) {
+        updatedPayload.transmission = selectedOptions.transmission;
+      }
 
-        setPayload(updatedPayload);
+      setPayload(updatedPayload);
     }
-}, [selectedOptions, initial]);
-
+  }, [selectedOptions, initial]);
 
   const ApplyFilterApiCall = async () => {
-    console.log(token,"token")
-    console.log(payload,"payload");
     try {
       const response = await instance.post("/api/cars/all", payload, {
         headers: {
@@ -55,7 +57,7 @@ const CarApi = ({ selectedOptions, initial, setCars }) => {
         },
       });
       setCars(response?.data?.data);
-      console.log(response.data, "filter data");
+      // console.log(response.data, "filter data");
     } catch (error) {
       console.error("Error applying filters:", error);
     }
@@ -66,12 +68,12 @@ const CarApi = ({ selectedOptions, initial, setCars }) => {
   };
 
   useEffect(() => {
-    if (initial) {
+    if (storeInitialValue === true) {
       ApplyFilterApiCall();
     }
-  }, []);
+  }, [storeInitialValue]);
 
-  return <div onClick={handleApply}>{initial ? "" : "Apply Filters"}</div>;
+  return <>{storeInitialValue ? "" : <div onClick={handleApply}>Apply Filters</div>}</>;
 };
 
 export default CarApi;

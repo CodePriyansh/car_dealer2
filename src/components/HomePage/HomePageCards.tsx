@@ -1,12 +1,9 @@
 "use client";
-import Cookies from "universal-cookie";
 import CarCards from "./CarCards";
-import CarApi from "./CarApi";
-function HomePageCards({cars,setCars}) {
+function HomePageCards({cars}) {
 
   return (
     <>
-        <CarApi selectedOptions={null} initial={true} setCars={setCars}/>
       {cars.length < 1 ? (
         <div className="text-center"> There is no car added!</div>
       ) : (

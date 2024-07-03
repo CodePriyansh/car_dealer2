@@ -9,14 +9,14 @@ const HomeEnteries=()=> {
   const showPlanExpiredBanner = false;
   const [cars, setCars] = useState([]);
 useEffect(()=>{
-    console.log(cars,"pppppppppppppppppppppppppppppp")
+    // console.log(cars,"pppppppppppppppppppppppppppppp")
 },[cars])
 
   return (
     <div><SubHeader setCars={setCars}/>
     <Filters setCars={setCars}/>
     {showPlanExpiredBanner && <PlanExpiredBanner />}
-    <HomePageCards cars={cars} setCars={setCars}/></div>
+    <HomePageCards cars={cars}/></div>
   )
 }
 
