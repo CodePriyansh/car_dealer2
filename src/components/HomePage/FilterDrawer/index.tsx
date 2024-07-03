@@ -145,7 +145,6 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer,setCars }) {
                   setOpenDrawer(false)
                 }}>
             <CarApi selectedOptions={selectedFilters} initial={false} setCars={setCars} />
-            Apply Filter
               </Button>
             </div>
           </div>
