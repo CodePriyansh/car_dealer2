@@ -240,7 +240,7 @@ function Filters({setCars}) {
         </div>
       </div>
 
-      <div className={styles.responsive_filters}>
+      {/* <div className={styles.responsive_filters}>
         {["price range", "brand", "model", "color", "type"].map(
           (item, index) => (
             <div
@@ -252,7 +252,7 @@ function Filters({setCars}) {
             </div>
           )
         )}
-      </div>
+      </div> */}
       {openDrawer && (
         <FilterDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} setCars={setCars}/>
       )}

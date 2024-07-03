@@ -8,20 +8,39 @@ const CarApi = ({ selectedOptions, initial, setCars }) => {
   useEffect(() => {
     console.log(selectedOptions);
     if (initial) {
-      setPayload({});
+        setPayload({});
     } else {
-      setPayload({
-        priceMax: selectedOptions?.priceRange[1],
-        priceMin: selectedOptions?.priceRange[0],
-        type: selectedOptions?.carType,
-        color: selectedOptions?.color,
-        company: selectedOptions?.company ,
-        modelName: selectedOptions?.modelName?.value,
-        modelYear: selectedOptions?.modelYear,
-        transmission: selectedOptions?.transmission,
-      });
+        const updatedPayload:any = {};
+
+        if (selectedOptions?.priceRange) {
+            updatedPayload.priceMax = selectedOptions.priceRange[1];
+        }
+        if (selectedOptions?.priceRange) {
+            updatedPayload.priceMin = selectedOptions.priceRange[0];
+        }
+        if (selectedOptions?.carType?.length) {
+            updatedPayload.type = selectedOptions.carType;
+        }
+        if (selectedOptions?.color?.length) {
+            updatedPayload.color = selectedOptions.color;
+        }
+        if (selectedOptions?.company) {
+            updatedPayload.company = selectedOptions.company;
+        }
+        if (selectedOptions?.modelName) {
+            updatedPayload.modelName = selectedOptions.modelName;
+        }
+        if (selectedOptions?.modelYear?.length) {
+            updatedPayload.modelYear = selectedOptions.modelYear;
+        }
+        if (selectedOptions?.transmission?.length) {
+            updatedPayload.transmission = selectedOptions.transmission;
+        }
+
+        setPayload(updatedPayload);
     }
-  }, [selectedOptions, initial]);
+}, [selectedOptions, initial]);
+
 
   const ApplyFilterApiCall = async () => {
     const cookies = new Cookies();
@@ -31,7 +50,7 @@ const CarApi = ({ selectedOptions, initial, setCars }) => {
       const response = await instance.post("/api/cars/all", payload, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ODQ1Mjc1NjlkODJmNTdlNDIwZGI2YyIsInBob25lTnVtYmVyIjoiODk2NTk4NDM5OCIsImZpcmViYXNlVXNlcklkIjoiODRCRzUyWjhIa1ptU2ZmWDZjRjNDb1FRaTRtMiIsInByb2ZpbGVJbWFnZSI6Imh0dHBzOi8vZmlyZWJhc2VzdG9yYWdlLmdvb2dsZWFwaXMuY29tL3YwL2IvbXktY2FyLTc2NTU0LmFwcHNwb3QuY29tL28vcHJvZmlsZV9pbWFnZXMlMkYxNzE5OTQ3ODkyMTc4X3RoJTIwKDE5KS5qcGc_YWx0PW1lZGlhJnRva2VuPTI5YThhZjRlLTk4Y2EtNDZiMy1hMjNhLTIyNGE1ZTdjYmUxMyIsIm5hbWUiOiJib3JpbmdjYW52YXNUb2tlbiIsImlhdCI6MTcxOTk0Nzg5MywiZXhwIjoxNzIwMDM0MjkzfQ.xT7vGNyPOKGvLVw2eRDAh6EMojoylNJbPQLD2y8IFn8`,
+          Authorization: `Bearer ${token}`,
         },
       });
       setCars(response?.data?.data);
