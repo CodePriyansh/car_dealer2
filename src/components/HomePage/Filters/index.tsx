@@ -272,7 +272,7 @@ function Filters({setCars}) {
             clear filter
           </Button>
         </div>
-        <div className="mt-[1px] mx-2">
+        <div className="mt-[1px] ml-2">
           <Button
             otherStyles={styles.fill_btn}
             onclick={() => router.push("/addcar")}
