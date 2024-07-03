@@ -56,6 +56,7 @@ const CarApi = ({ selectedOptions, initial, setCars }) => {
         },
       });
       setCars(response?.data?.data);
+      setStoreInitialValue(false)
     } catch (error) {
       console.error("Error applying filters:", error);
     }
@@ -70,6 +71,7 @@ const CarApi = ({ selectedOptions, initial, setCars }) => {
       ApplyFilterApiCall();
     }
   }, [storeInitialValue]);
+
 
   return <>{storeInitialValue ? "" : <div onClick={handleApply}>Apply Filters</div>}</>;
 };

@@ -92,9 +92,9 @@ export default function SubHeader({ setCars, setSelectedOptions }) {
             className="w-[18px] h-[18px]"
           />
           clear filter
+          <CarApi selectedOptions={null} initial={true} setCars={setCars} />
         
         </Button>
-          <CarApi selectedOptions={null} initial={true} setCars={setCars} />
         <Button
           otherStyles={styles.fill_btn}
           onclick={() => router.push("/addcar")}
