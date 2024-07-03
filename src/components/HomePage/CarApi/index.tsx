@@ -10,20 +10,39 @@ const CarApi = ({ selectedOptions, initial, setCars }) => {
   useEffect(() => {
     console.log(selectedOptions);
     if (initial) {
-      setPayload({});
+        setPayload({});
     } else {
-      setPayload({
-        priceMax: selectedOptions?.priceRange[1],
-        priceMin: selectedOptions?.priceRange[0],
-        type: selectedOptions?.carType,
-        color: selectedOptions?.color,
-        company: selectedOptions?.company ,
-        modelName: selectedOptions?.modelName?.value,
-        modelYear: selectedOptions?.modelYear,
-        transmission: selectedOptions?.transmission,
-      });
+        const updatedPayload:any = {};
+
+        if (selectedOptions?.priceRange) {
+            updatedPayload.priceMax = selectedOptions.priceRange[1];
+        }
+        if (selectedOptions?.priceRange) {
+            updatedPayload.priceMin = selectedOptions.priceRange[0];
+        }
+        if (selectedOptions?.carType?.length) {
+            updatedPayload.type = selectedOptions.carType;
+        }
+        if (selectedOptions?.color?.length) {
+            updatedPayload.color = selectedOptions.color;
+        }
+        if (selectedOptions?.company) {
+            updatedPayload.company = selectedOptions.company;
+        }
+        if (selectedOptions?.modelName) {
+            updatedPayload.modelName = selectedOptions.modelName;
+        }
+        if (selectedOptions?.modelYear?.length) {
+            updatedPayload.modelYear = selectedOptions.modelYear;
+        }
+        if (selectedOptions?.transmission?.length) {
+            updatedPayload.transmission = selectedOptions.transmission;
+        }
+
+        setPayload(updatedPayload);
     }
-  }, [selectedOptions, initial]);
+}, [selectedOptions, initial]);
+
 
   const ApplyFilterApiCall = async () => {
     console.log(token,"token")
