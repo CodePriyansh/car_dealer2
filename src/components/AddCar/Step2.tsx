@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import instance from "@/network/axios";
 import Cookies from "universal-cookie";
-import "react-toastify/dist/ReactToastify.css";
+// import "react-toastify/dist/ReactToastify.css";
 import { FaCross } from "react-icons/fa";
 
 interface Step2Props {
@@ -490,7 +490,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
           </Form>
         )}
       </Formik>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </div>
   );
 };

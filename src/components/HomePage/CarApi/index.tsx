@@ -65,12 +65,12 @@ const CarApi = ({ selectedOptions, initial, setCars }) => {
     } catch (error) {
       console.error("Error applying filters:", error);
 
-      if( error.response.status == 404){
+      if(!initial && error.response.status == 404){
         console.error("No cars found matching the selected criteria.")
-        // toast.error("No cars found matching the selected criteria.")
+        toast.error("No cars found matching the selected criteria.")
         setCars([]);
       }else{
-        console.log("No cars found matching the selected criteria")
+        console.log("No cars found")
       }
     }
   };
@@ -90,7 +90,7 @@ const CarApi = ({ selectedOptions, initial, setCars }) => {
       <div onClick={handleApply} >
         {text}
       </div>
-      <ToastContainer/>
+      {/* <ToastContainer/> */}
     </>
   );
 };

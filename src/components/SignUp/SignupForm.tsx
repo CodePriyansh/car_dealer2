@@ -174,7 +174,7 @@ export default function SignupForm() {
           setBackBtnStatus(true);
           setHeading("OTP Verification");
 
-          // toast.success("OTP sent successfully!");
+          toast.success("OTP sent successfully!");
         })
         .catch((err) => {
           console.log(err);
@@ -196,7 +196,7 @@ export default function SignupForm() {
   return (
     <div className={`flex flex-col justify-center items-center w-full`}>
       {/* Form details */}
-      <ToastContainer />
+      {/* <ToastContainer /> */}
 
       <div className={`${styles.form_wrapper}`}>
         <div

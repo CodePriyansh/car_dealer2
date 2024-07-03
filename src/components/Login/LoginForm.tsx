@@ -35,7 +35,7 @@ const LoginForm = () => {
         setSubmitting(false);
         setBackBtnStatus(true);
         setHeading('OTP Verification');
-        // toast.success("OTP sent successfully!");
+        toast.success("OTP sent successfully!");
       })
       .catch((err) => {
         console.log(err);
