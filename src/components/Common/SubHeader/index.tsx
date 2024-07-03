@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import FilterDrawer from "@/components/HomePage/FilterDrawer";
 import CarApi from "@/components/HomePage/CarApi";
 
-export default function SubHeader({setCars}) {
+export default function SubHeader({ setCars, setSelectedOptions }) {
   const router = useRouter();
   const [activeMidFilter, setActiveMidFilter] = useState("car");
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -18,10 +18,21 @@ export default function SubHeader({setCars}) {
       {/* left  */}
       <div className={styles.left}>
         <div className={styles.field_style}>
-          <Image src={Images.search} alt="img" className="sm:w-[18px] sm:h-[18px] h-4 w-4" />
-          <input className={styles.search_input} type="text" placeholder="Search....." />
+          <Image
+            src={Images.search}
+            alt="img"
+            className="sm:w-[18px] sm:h-[18px] h-4 w-4"
+          />
+          <input
+            className={styles.search_input}
+            type="text"
+            placeholder="Search....."
+          />
         </div>
-        <div className={styles.responsive_filter_icon} onClick={() => setOpenDrawer(true)}>
+        <div
+          className={styles.responsive_filter_icon}
+          onClick={() => setOpenDrawer(true)}
+        >
           <Image
             src={Images.responsiveFilter}
             alt="img"
@@ -38,13 +49,21 @@ export default function SubHeader({setCars}) {
       <div className={styles.mid}>
         <div className={styles.mid_btn_wrapper}>
           <Button
-            otherStyles={`uppercase md:w-[215px] w-1/2 m-[1px] ${activeMidFilter==='car'?'bg-primary text-white':'bg-transparent !text-subHeading'}`}
+            otherStyles={`uppercase md:w-[215px] w-1/2 m-[1px] ${
+              activeMidFilter === "car"
+                ? "bg-primary text-white"
+                : "bg-transparent !text-subHeading"
+            }`}
             onclick={() => setActiveMidFilter("car")}
           >
             cars
           </Button>
           <button
-            className={`md:w-[190px] w-1/2 m-[1px] uppercase text-20 font-bold font-rajdhani rounded-[50px] ${activeMidFilter==='bike'?'text-white bg-primary':'text-subHeading bg-transparent'}`}
+            className={`md:w-[190px] w-1/2 m-[1px] uppercase text-20 font-bold font-rajdhani rounded-[50px] ${
+              activeMidFilter === "bike"
+                ? "text-white bg-primary"
+                : "text-subHeading bg-transparent"
+            }`}
             onClick={() => setActiveMidFilter("bike")}
           >
             bike
@@ -54,17 +73,28 @@ export default function SubHeader({setCars}) {
 
       {/* right  */}
       <div className={styles.right}>
-        <Button otherStyles={styles.clear_fil_btn}>
+        <Button
+          otherStyles={styles.clear_fil_btn}
+          onclick={() => {
+            setSelectedOptions({
+              carType: [],
+              color: [],
+              priceRange: [0,0],
+              modelName: "",
+              company: "",
+              modelYear: "",
+            });
+          }}
+        >
           <Image
             src={Images.clearFilter}
             alt="img"
             className="w-[18px] h-[18px]"
           />
-        <CarApi selectedOptions={null} initial={true} setCars={setCars}/>
-
           clear filter
-
+        
         </Button>
+          <CarApi selectedOptions={null} initial={true} setCars={setCars} />
         <Button
           otherStyles={styles.fill_btn}
           onclick={() => router.push("/addcar")}

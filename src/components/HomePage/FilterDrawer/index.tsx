@@ -139,9 +139,11 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
               })}
             </div>
             <div className={styles.sticky_btn}>
-              <Button otherStyles={"py-2"}>
+              <Button otherStyles={"py-2"} onclick={()=>{
+                  setIsOpen(false)
+                  setOpenDrawer(false)
+                }}>
             <CarApi selectedOptions={selectedFilters} initial={false}  />
-                
               </Button>
             </div>
           </div>

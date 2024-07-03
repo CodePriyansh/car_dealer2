@@ -13,7 +13,6 @@ const CarApi = ({ selectedOptions, initial, setCars }) => {
   }, [initial]);
 
   useEffect(() => {
-    // console.log(selectedOptions);
     if (storeInitialValue) {
       setPayload({});
     } else {
@@ -57,7 +56,6 @@ const CarApi = ({ selectedOptions, initial, setCars }) => {
         },
       });
       setCars(response?.data?.data);
-      // console.log(response.data, "filter data");
     } catch (error) {
       console.error("Error applying filters:", error);
     }

@@ -10,6 +10,7 @@ import PriceRangeSlider from "@/components/Common/PriceRange";
 import { useRouter } from "next/navigation";
 import Cookies from "universal-cookie";
 import CarApi from "../CarApi/index";
+import SubHeader from "@/components/Common/SubHeader";
 
 function Filters({setCars}) {
   const router = useRouter();
@@ -140,6 +141,9 @@ function Filters({setCars}) {
   }, [updatedPriceRange]);
 
   return (
+    <>
+    <SubHeader setCars={setCars} setSelectedOptions={setSelectedOptions}/>
+
     <div className={`${styles.container} container_space large_layout`}>
       <div className={styles.wrapper}>
         {/* filter box  */}
@@ -282,6 +286,8 @@ function Filters({setCars}) {
         </div>
       </div>
     </div>
+    </>
+
   );
 }
 
