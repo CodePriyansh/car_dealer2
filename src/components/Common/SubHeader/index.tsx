@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import FilterDrawer from "@/components/HomePage/FilterDrawer";
 import CarApi from "@/components/HomePage/CarApi";
 
-export default function SubHeader({ setCars, setSelectedOptions }) {
+export default function SubHeader({ setCars, setSelectedOptions,setClickMobileClear }) {
   const router = useRouter();
   const [activeMidFilter, setActiveMidFilter] = useState("car");
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -31,7 +31,9 @@ export default function SubHeader({ setCars, setSelectedOptions }) {
         </div>
         <div
           className={styles.responsive_filter_icon}
-          onClick={() => setOpenDrawer(true)}
+          onClick={() =>{ setOpenDrawer(true)
+            setClickMobileClear(false)
+          }}
         >
           <Image
             src={Images.responsiveFilter}
@@ -42,7 +44,7 @@ export default function SubHeader({ setCars, setSelectedOptions }) {
       </div>
 
       {openDrawer && (
-        <FilterDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} />
+        <FilterDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} setCars={setCars}/>
       )}
 
       {/* mid  */}
