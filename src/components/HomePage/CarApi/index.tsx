@@ -3,38 +3,37 @@ import instance from "@/network/axios";
 import Cookies from "universal-cookie";
 
 const CarApi = ({ selectedOptions, initial, setCars }) => {
-  const [payload, setPayload] = useState(null);
+  const [payload, setPayload] = useState({});
 
   useEffect(() => {
+    console.log(selectedOptions);
     if (initial) {
-      setPayload();
+      setPayload({});
     } else {
       setPayload({
-        priceMax: 2500000,
-        priceMin: 0,
+        priceMax: selectedOptions?.priceRange[1],
+        priceMin: selectedOptions?.priceRange[0],
         type: selectedOptions?.carType,
         color: selectedOptions?.color,
-        company: selectedOptions?.brand?.value,
-        modelName: selectedOptions?.carmodel?.value,
+        company: selectedOptions?.company ,
+        modelName: selectedOptions?.modelName?.value,
+        modelYear: selectedOptions?.modelYear,
+        transmission: selectedOptions?.transmission,
       });
     }
-  }, [selectedOptions,initial]);
+  }, [selectedOptions, initial]);
 
   const ApplyFilterApiCall = async () => {
     const cookies = new Cookies();
     let token = cookies.get("token");
-
+    console.log(payload);
     try {
-      const response = await instance.post(
-        "/api/cars/all",
-        { payload },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NzU5MmZhY2E2YmY4NWFmNDY5MDY3ZSIsInBob25lTnVtYmVyIjoiMTIzNDU2Nzg5OCIsImZpcmViYXNlVXNlcklkIjoiMGE1RnFzejZLN1B5eUJsUHJ3UmZPMzliOHhVMiIsImlhdCI6MTcxOTk0MDEwNSwiZXhwIjoxNzIwMDI2NTA1fQ.3zzuyuT0SvQRzxqgQodrJe7_RW-0V-lE4cNf82MXMgk`,
-          },
-        }
-      );
+      const response = await instance.post("/api/cars/all", payload, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ODQ1Mjc1NjlkODJmNTdlNDIwZGI2YyIsInBob25lTnVtYmVyIjoiODk2NTk4NDM5OCIsImZpcmViYXNlVXNlcklkIjoiODRCRzUyWjhIa1ptU2ZmWDZjRjNDb1FRaTRtMiIsInByb2ZpbGVJbWFnZSI6Imh0dHBzOi8vZmlyZWJhc2VzdG9yYWdlLmdvb2dsZWFwaXMuY29tL3YwL2IvbXktY2FyLTc2NTU0LmFwcHNwb3QuY29tL28vcHJvZmlsZV9pbWFnZXMlMkYxNzE5OTQ3ODkyMTc4X3RoJTIwKDE5KS5qcGc_YWx0PW1lZGlhJnRva2VuPTI5YThhZjRlLTk4Y2EtNDZiMy1hMjNhLTIyNGE1ZTdjYmUxMyIsIm5hbWUiOiJib3JpbmdjYW52YXNUb2tlbiIsImlhdCI6MTcxOTk0Nzg5MywiZXhwIjoxNzIwMDM0MjkzfQ.xT7vGNyPOKGvLVw2eRDAh6EMojoylNJbPQLD2y8IFn8`,
+        },
+      });
       setCars(response?.data?.data);
       console.log(response.data, "filter data");
     } catch (error) {

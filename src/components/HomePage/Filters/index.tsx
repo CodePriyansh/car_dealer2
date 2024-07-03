@@ -14,25 +14,32 @@ import CarApi from "../CarApi/index";
 function Filters({setCars}) {
   const router = useRouter();
   const [updatedPriceRange, setUpdatedPriceRange] = React.useState([
-    100000, 2500000,
+    0, 2500000,
   ]);
   const cookies = new Cookies();
 
   const fields = [
     {
-      name: "brand", // corrected spelling from 'barnd' to 'brand'
+      name: "company", 
       type: "select",
-      placeholder: "Select",
+      placeholder: "Company",
       options: [
         { value: "Toyota", label: "Toyota" },
         { value: "Honda", label: "Honda" },
+        { value: "Tata Motors", label: "Tata" },
+        { value: "Mahindra", label: "Mahindra" },
+        { value: "Maruti Suzuki", label: "Maruti Suzuki" },
+        { value: "Hyundai", label: "Hyundai" },
+        { value: "Skoda", label: "Skoda" },
+        { value: "Kia", label: "Kia" },
         { value: "Ford", label: "Ford" },
+        { value: "Volkswagen", label: "Volkswagen" },
       ],
     },
     {
-      name: "carmodel",
+      name: "modelName",
       type: "select",
-      placeholder: "Select",
+      placeholder: "Car Model",
       options: [
         { value: "Renault Kwid", label: "Renault Kwid" },
         { value: "Datsun Redi-GO", label: "Datsun Redi-GO" },
@@ -40,9 +47,9 @@ function Filters({setCars}) {
       ],
     },
     {
-      name: "modelyear",
+      name: "modelYear",
       type: "select",
-      placeholder: "Select",
+      placeholder: "Model Year",
       options: [
         { value: "2022 - 2024", label: "2022 - 2024" },
         { value: "2019 - 2021", label: "2019 - 2021" },
@@ -80,18 +87,18 @@ function Filters({setCars}) {
     carType: [],
     color: [],
     priceRange: updatedPriceRange,
-    brand: null,
     modelName: "",
     company: "",
+    modelYear: ""
   });
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const handleChange = (name, selectedOption) => {
     setSelectedOptions({
       ...selectedOptions,
-      [name]: selectedOption,
+      [name]: selectedOption.value,
     });
-  };
+  };  
 
   const handleCarType = (value) => {
     const isChecked = selectedOptions.carType.includes(value);
@@ -140,7 +147,7 @@ function Filters({setCars}) {
           <div className="flex w-full justify-between">
             <div className={styles.heading}>Filters </div>
             <Button
-              otherStyles="absolute top-0 right-0 rounded-[10px] !py-2"
+              otherStyles="absolute top-0 right-0 !rounded-[10px] !py-2"
             >
             <CarApi selectedOptions={selectedOptions} initial={false} setCars={setCars}/>
             </Button> 
@@ -151,7 +158,7 @@ function Filters({setCars}) {
                 <CommonReactSelect
                   options={field.options}
                   placeholder={field.placeholder}
-                  selectedOption={selectedOptions[field.name]}
+                  selectedOption={field.options.find(option => option.value === selectedOptions[field.name]) || null}
                   setSelectedOption={(option) => {
                     handleChange(field.name, option);
                   }}

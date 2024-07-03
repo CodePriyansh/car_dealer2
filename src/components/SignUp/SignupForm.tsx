@@ -143,7 +143,7 @@ export default function SignupForm() {
     console.log([...formData.entries()], "signup form data");
     setFormData(formData);
 
-    if (searchParams.get("mobileNumber")) {
+    if (searchParams.get("mobileNumber") && searchParams.get("mobileNumber") == values.phoneNumber ) {
       try {
         const url = "/api/dealers/signup";
         const payload = formData;
@@ -164,16 +164,17 @@ export default function SignupForm() {
         toast.error(error.message);
       }
     } else {
-      sendOtp(`+91${values.mobileNumber}`)
+      console.log(values,"wefnwfewwe")
+      sendOtp(`+91${values.phoneNumber}`)
         .then(() => {
           console.log("OTP sent successfully");
-          setMobileNumber(values.mobileNumber);
+          setMobileNumber(values.phoneNumber);
           setOtpSend(true);
           setSubmitting(false);
           setBackBtnStatus(true);
           setHeading("OTP Verification");
 
-          toast.success("OTP sent successfully!");
+          // toast.success("OTP sent successfully!");
         })
         .catch((err) => {
           console.log(err);
@@ -261,7 +262,7 @@ export default function SignupForm() {
               onSubmit={onSubmit}
             >
               {({ setFieldValue, isSubmitting, values }) => (
-                <Form>
+                <Form className="m-1">
                   <div>
                     <div className="w-full md:w-fit md:mx-auto flex md:flex-row flex-col gap-6">
                       <div className="flex full flex-col md:gap-6 gap-6 md:w-[280px] w-full ">

@@ -1,5 +1,5 @@
 .wrapper{
-@apply flex w-full flex-col-reverse md:flex-row justify-between items-center  md:py-[10px] py-2 xl:py-[10px] gap-4 md:bg-f7f7f7;
+@apply flex w-full flex-col-reverse md:flex-row justify-between items-center  md:py-[15px] py-2 xl:py-[18px] gap-4 md:bg-f7f7f7;
 }
 
 .left{
@@ -14,7 +14,7 @@
     @apply hidden lg:flex gap-[14px]
 }
 .fill_btn{
-    @apply gap-2 items-center h-9 sm:h-12;
+    @apply gap-2 items-center h-9 sm:h-12 sm:w-[120px];
 }
 .clear_fil_btn{
     @apply gap-2 items-center bg-transparent text-primary border-primary border h-9 sm:h-12;

@@ -87,7 +87,7 @@ const LoginForm = () => {
           onSubmit={handleSubmit}
         >
           {({ isSubmitting }) => (
-            <Form >
+            <Form className="my-6" >
               <div className="flex flex-col w-full justify-center items-center">
                 <label className={`${styles.label_Style}  sm:!w-[430px] !w-full `}>Mobile Number</label>
                 <Field
@@ -102,7 +102,7 @@ const LoginForm = () => {
               </div>
               <button
                 type="submit"
-                className="w-full mx-auto md:mt-14 mt-6"
+                className="w-full mx-auto md:mt-10 mt-6"
                 disabled={isSubmitting}
               >
                 <Button otherStyles="sm:w-[430px] w-full mx-auto uppercase">
