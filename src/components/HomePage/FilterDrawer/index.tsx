@@ -11,7 +11,7 @@ import CarApi from "../CarApi/index";
 export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
   const cookies = new Cookies();
   const [isOpen, setIsOpen] = React.useState(true);
-  const [updatedPriceRange, setUpdatedPriceRange] = React.useState([100000, 2500000]);
+  const [updatedPriceRange, setUpdatedPriceRange] = React.useState([0, 2500000]);
 
   const toggleDrawer = (open) => (event) => {
     setIsOpen(open);

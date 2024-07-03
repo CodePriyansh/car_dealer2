@@ -11,12 +11,12 @@ const CarApi = ({ selectedOptions, initial, setCars }) => {
       setPayload({});
     } else {
       setPayload({
-        priceMax: selectedOptions?.priceMax,
-        priceMin: selectedOptions?.priceMin,
+        priceMax: selectedOptions?.priceRange[1],
+        priceMin: selectedOptions?.priceRange[0],
         type: selectedOptions?.carType,
         color: selectedOptions?.color,
         company: selectedOptions?.company ,
-        modelName: selectedOptions?.carmodel?.value,
+        modelName: selectedOptions?.modelName?.value,
         modelYear: selectedOptions?.modelYear,
         transmission: selectedOptions?.transmission,
       });

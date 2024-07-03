@@ -20,17 +20,24 @@ function Filters({setCars}) {
 
   const fields = [
     {
-      name: "brand", // corrected spelling from 'barnd' to 'brand'
+      name: "company", 
       type: "select",
       placeholder: "Company",
       options: [
         { value: "Toyota", label: "Toyota" },
         { value: "Honda", label: "Honda" },
+        { value: "Tata Motors", label: "Tata" },
+        { value: "Mahindra", label: "Mahindra" },
+        { value: "Maruti Suzuki", label: "Maruti Suzuki" },
+        { value: "Hyundai", label: "Hyundai" },
+        { value: "Skoda", label: "Skoda" },
+        { value: "Kia", label: "Kia" },
         { value: "Ford", label: "Ford" },
+        { value: "Volkswagen", label: "Volkswagen" },
       ],
     },
     {
-      name: "carmodel",
+      name: "modelName",
       type: "select",
       placeholder: "Car Model",
       options: [
@@ -40,7 +47,7 @@ function Filters({setCars}) {
       ],
     },
     {
-      name: "modelyear",
+      name: "modelYear",
       type: "select",
       placeholder: "Model Year",
       options: [
@@ -80,18 +87,18 @@ function Filters({setCars}) {
     carType: [],
     color: [],
     priceRange: updatedPriceRange,
-    brand: null,
-    modelName: [],
-    company: [],
+    modelName: "",
+    company: "",
+    modelYear: ""
   });
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const handleChange = (name, selectedOption) => {
     setSelectedOptions({
       ...selectedOptions,
-      [name]: selectedOption,
+      [name]: selectedOption.value,
     });
-  };
+  };  
 
   const handleCarType = (value) => {
     const isChecked = selectedOptions.carType.includes(value);
@@ -106,39 +113,6 @@ function Filters({setCars}) {
     setSelectedOptions({
       ...selectedOptions,
       carType: updatedCarTypes,
-    });
-  };
-
-  const handleModelName = (value) => {
-    const isChecked = selectedOptions.modelName.includes(value);
-    let updatedModelName;
-    if (isChecked) {
-      updatedModelName = selectedOptions.carType.filter(
-        (type) => type !== value
-      );
-    } else {
-      updatedModelName = [...selectedOptions.carType, value];
-    }
-    setSelectedOptions({
-      ...selectedOptions,
-      modelName: updatedModelName,
-    });
-  };
-
-
-  const handleCompany = (value) => {
-    const isChecked = selectedOptions.company.includes(value);
-    let updatedCompany;
-    if (isChecked) {
-      updatedCompany = selectedOptions.company.filter(
-        (type) => type !== value
-      );
-    } else {
-      updatedCompany = [...selectedOptions.company, value];
-    }
-    setSelectedOptions({
-      ...selectedOptions,
-      company: updatedCompany,
     });
   };
 
@@ -184,7 +158,7 @@ function Filters({setCars}) {
                 <CommonReactSelect
                   options={field.options}
                   placeholder={field.placeholder}
-                  selectedOption={selectedOptions[field.name]}
+                  selectedOption={field.options.find(option => option.value === selectedOptions[field.name]) || null}
                   setSelectedOption={(option) => {
                     handleChange(field.name, option);
                   }}

@@ -24,7 +24,7 @@ const PriceRangeSlider = ({setUpdatedPriceRange,updatedPriceRange}) => {
         onChange={handleChange}
         valueLabelDisplay="on"
         aria-labelledby="range-slider"
-        min={100000}
+        min={0}
         max={2500000}
         step={10000}
         valueLabelFormat={(x) => `₹${x.toLocaleString()}`}
