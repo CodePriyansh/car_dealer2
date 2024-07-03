@@ -95,7 +95,6 @@ export default function SubHeader({ setCars, setSelectedOptions,setClickMobileCl
           />
           clear filter
           <CarApi selectedOptions={null} initial={true} setCars={setCars} />
-        
         </Button>
         <Button
           otherStyles={styles.fill_btn}
