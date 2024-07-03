@@ -14,6 +14,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer,setCars }) {
   const [updatedPriceRange, setUpdatedPriceRange] = React.useState([0, 2500000]);
 
   const toggleDrawer = (open) => (event) => {
+
     setIsOpen(open);
     setOpenDrawer(open);
   };
@@ -144,6 +145,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer,setCars }) {
                   setOpenDrawer(false)
                 }}>
             <CarApi selectedOptions={selectedFilters} initial={false} setCars={setCars} />
+            Apply Filter
               </Button>
             </div>
           </div>
