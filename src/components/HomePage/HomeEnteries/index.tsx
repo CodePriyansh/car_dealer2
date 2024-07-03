@@ -13,7 +13,7 @@ useEffect(()=>{
 },[cars])
 
   return (
-    <div><SubHeader />
+    <div><SubHeader setCars={setCars}/>
     <Filters setCars={setCars}/>
     {showPlanExpiredBanner && <PlanExpiredBanner />}
     <HomePageCards cars={cars} setCars={setCars}/></div>

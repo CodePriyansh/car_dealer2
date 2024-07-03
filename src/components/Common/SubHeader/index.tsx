@@ -6,8 +6,9 @@ import Image from "next/image";
 import { Images } from "@/assets/Images";
 import { useRouter } from "next/navigation";
 import FilterDrawer from "@/components/HomePage/FilterDrawer";
+import CarApi from "@/components/HomePage/CarApi";
 
-export default function SubHeader() {
+export default function SubHeader({setCars}) {
   const router = useRouter();
   const [activeMidFilter, setActiveMidFilter] = useState("car");
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -59,6 +60,8 @@ export default function SubHeader() {
             alt="img"
             className="w-[18px] h-[18px]"
           />
+        <CarApi selectedOptions={null} initial={true} setCars={setCars}/>
+
           clear filter
 
         </Button>
