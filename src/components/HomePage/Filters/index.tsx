@@ -5,7 +5,6 @@ import CommonReactSelect from "@/components/Common/Select";
 import Image from "next/image";
 import { Images } from "@/assets/Images";
 import Button from "@/components/Common/Button";
-import FilterDrawer from "../FilterDrawer";
 import PriceRangeSlider from "@/components/Common/PriceRange";
 import { useRouter } from "next/navigation";
 import Cookies from "universal-cookie";
@@ -92,7 +91,7 @@ function Filters({setCars}) {
     company: "",
     modelYear: ""
   });
-  const [openDrawer, setOpenDrawer] = useState(false);
+  const [clickMobileClear, setClickMobileClear] = useState(false)
 
   const handleChange = (name, selectedOption) => {
     setSelectedOptions({
@@ -133,6 +132,7 @@ function Filters({setCars}) {
     });
   };
 
+
   useEffect(() => {
     setSelectedOptions({
       ...selectedOptions,
@@ -142,7 +142,10 @@ function Filters({setCars}) {
 
   return (
     <>
-    <SubHeader setCars={setCars} setSelectedOptions={setSelectedOptions}/>
+    {clickMobileClear && 
+          <CarApi selectedOptions={null} initial={true} setCars={setCars} />
+        }
+    <SubHeader setCars={setCars} setSelectedOptions={setSelectedOptions} setClickMobileClear={setClickMobileClear}/>
 
     <div className={`${styles.container} container_space large_layout`}>
       <div className={styles.wrapper}>
@@ -257,13 +260,11 @@ function Filters({setCars}) {
           )
         )}
       </div> */}
-      {openDrawer && (
-        <FilterDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} setCars={setCars}/>
-      )}
+     
 
       <div className="flex justify-between items-center">
         <div>
-          <Button otherStyles={styles.clear_fil_btn}>
+          <Button otherStyles={styles.clear_fil_btn} onclick={()=>setClickMobileClear(true)}>
             <Image
               src={Images.clearFilter}
               alt="img"

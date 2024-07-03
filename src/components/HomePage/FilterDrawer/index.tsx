@@ -8,7 +8,7 @@ import { Images } from "@/assets/Images";
 import Cookies from "universal-cookie";
 import CarApi from "../CarApi/index";
 
-export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
+export default function FilterDrawer({ setOpenDrawer, openDrawer,setCars }) {
   const cookies = new Cookies();
   const [isOpen, setIsOpen] = React.useState(true);
   const [updatedPriceRange, setUpdatedPriceRange] = React.useState([0, 2500000]);
@@ -143,7 +143,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer }) {
                   setIsOpen(false)
                   setOpenDrawer(false)
                 }}>
-            <CarApi selectedOptions={selectedFilters} initial={false}  />
+            <CarApi selectedOptions={selectedFilters} initial={false} setCars={setCars} />
               </Button>
             </div>
           </div>
