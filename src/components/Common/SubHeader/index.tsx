@@ -8,13 +8,17 @@ import { useRouter } from "next/navigation";
 import FilterDrawer from "@/components/HomePage/FilterDrawer";
 import CarApi from "@/components/HomePage/CarApi";
 
-export default function SubHeader({ setCars, setSelectedOptions,setClickMobileClear }) {
+export default function SubHeader({ clickWebClear,setClickWebClear,setCars, setSelectedOptions,setClickMobileClear }) {
   const router = useRouter();
   const [activeMidFilter, setActiveMidFilter] = useState("car");
   const [openDrawer, setOpenDrawer] = useState(false);
 
+
   return (
     <div className={`${styles.wrapper} container_space large_layout`}>
+       {clickWebClear && 
+          <CarApi selectedOptions={null} initial={true} setCars={setCars} />
+        }
       {/* left  */}
       <div className={styles.left}>
         <div className={styles.field_style}>
@@ -78,6 +82,7 @@ export default function SubHeader({ setCars, setSelectedOptions,setClickMobileCl
         <Button
           otherStyles={styles.clear_fil_btn}
           onclick={() => {
+            setClickWebClear(true)
             setSelectedOptions({
               carType: [],
               color: [],
