@@ -11,16 +11,17 @@ import Cookies from "universal-cookie";
 import CarApi from "../CarApi/index";
 import SubHeader from "@/components/Common/SubHeader";
 
-function Filters({setCars}) {
+function Filters({ setCars }) {
   const router = useRouter();
   const [updatedPriceRange, setUpdatedPriceRange] = React.useState([
     0, 2500000,
   ]);
   const cookies = new Cookies();
+  const [showView, setShowView] = useState(false)
 
   const fields = [
     {
-      name: "company", 
+      name: "company",
       type: "select",
       placeholder: "Company",
       options: [
@@ -63,12 +64,12 @@ function Filters({setCars}) {
     "Sedan",
     "Van",
     "Pickup",
-    "Sedan2",
-    "Van2",
-    "Pickup2",
-    "Sedan3",
-    "Van3",
-    "Pickup3",
+    "SUV",
+    "Minivan",
+    "Coupes",
+    "Hatchbacks",
+    "Wagon",
+    "Truck",
   ];
 
   const colors = [
@@ -89,16 +90,17 @@ function Filters({setCars}) {
     priceRange: updatedPriceRange,
     modelName: "",
     company: "",
-    modelYear: ""
+    modelYear: "",
   });
-  const [clickMobileClear, setClickMobileClear] = useState(false)
+  const [clickMobileClear, setClickMobileClear] = useState(false);
+  const [clickWebClear, setClickWebClear] = useState(false);
 
   const handleChange = (name, selectedOption) => {
     setSelectedOptions({
       ...selectedOptions,
       [name]: selectedOption.value,
     });
-  };  
+  };
 
   const handleCarType = (value) => {
     const isChecked = selectedOptions.carType.includes(value);
@@ -132,7 +134,6 @@ function Filters({setCars}) {
     });
   };
 
-
   useEffect(() => {
     setSelectedOptions({
       ...selectedOptions,
@@ -142,112 +143,127 @@ function Filters({setCars}) {
 
   return (
     <>
-    {clickMobileClear && 
-          <CarApi selectedOptions={null} initial={true} setCars={setCars} />
-        }
-    <SubHeader setCars={setCars} setSelectedOptions={setSelectedOptions} setClickMobileClear={setClickMobileClear}/>
+      {clickMobileClear && (
+        <CarApi selectedOptions={null} initial={true} setCars={setCars} />
+      )}
+      <SubHeader
+        setCars={setCars}
+        setSelectedOptions={setSelectedOptions}
+        setClickMobileClear={setClickMobileClear}
+        setClickWebClear={setClickWebClear}
+        clickWebClear={clickWebClear}
+      />
 
-    <div className={`${styles.container} container_space large_layout`}>
-      <div className={styles.wrapper}>
-        {/* filter box  */}
-        <div className={styles.filters_wrapper}>
-          <div className="flex w-full justify-between">
-            <div className={styles.heading}>Filters </div>
-            <Button
-              otherStyles="absolute top-0 right-0 !rounded-[10px] !py-2"
-            >
-            <CarApi selectedOptions={selectedOptions} initial={false} setCars={setCars}/>
-            </Button> 
-          </div>
-          <div className={styles.selectors}>
-            {fields.map((field, index) => (
-              <div className={styles.field_wrapper} key={index}>
-                <CommonReactSelect
-                  options={field.options}
-                  placeholder={field.placeholder}
-                  selectedOption={field.options.find(option => option.value === selectedOptions[field.name]) || null}
-                  setSelectedOption={(option) => {
-                    handleChange(field.name, option);
-                  }}
-                  className={`${styles.field_style} !bg-transparent`}
+      <div className={`${styles.container} container_space large_layout`}>
+        <div className={styles.wrapper}>
+          {/* filter box  */}
+          <div className={styles.filters_wrapper}>
+            <div className="flex w-full justify-between">
+              <div className={styles.heading}>Filters </div>
+              <Button
+                otherStyles="absolute top-0 right-0 !rounded-[10px] !py-2"
+                onclick={() => setClickWebClear(false)}
+              >
+                <CarApi
+                  selectedOptions={selectedOptions}
+                  initial={false}
+                  setCars={setCars}
                 />
-              </div>
-            ))}
-          </div>
-          <div>
-            <PriceRangeSlider
-              setUpdatedPriceRange={setUpdatedPriceRange}
-              updatedPriceRange={updatedPriceRange}
-            />
-          </div>
-        </div>
-
-        {/* car type box  */}
-        <div className={styles.car_type_wrapper}>
-          <p className={styles.sub_heading}>Car Type</p>
-          <div className={styles.checklist_wrapper}>
-            {carType.map((item, index) => (
-              <label
-                key={index.toString()}
-                className="flex items-center space-x-2"
-              >
-                <div className="custom-checkbox">
-                  <input
-                    type="checkbox"
-                    onChange={() => handleCarType(item)}
-                    checked={selectedOptions.carType.includes(item)}
+              </Button>
+            </div>
+            <div className={styles.selectors}>
+              {fields.map((field, index) => (
+                <div className={styles.field_wrapper} key={index}>
+                  <CommonReactSelect
+                    options={field.options}
+                    placeholder={field.placeholder}
+                    selectedOption={
+                      field.options.find(
+                        (option) => option.value === selectedOptions[field.name]
+                      ) || null
+                    }
+                    setSelectedOption={(option) => {
+                      handleChange(field.name, option);
+                    }}
+                    className={`${styles.field_style} !bg-transparent`}
                   />
-                  <span className="checkmark"></span>
                 </div>
-                <span className={styles.checklist_item}>{item}</span>
-              </label>
-            ))}
+              ))}
+            </div>
+            <div>
+              <PriceRangeSlider
+                setUpdatedPriceRange={setUpdatedPriceRange}
+                updatedPriceRange={updatedPriceRange}
+              />
+            </div>
           </div>
-          <button className="my-1 text-primary capitalize font-rajdhani text-18 font-bold flex w-fit gap-2 mx-auto items-center justify-center">
-            view all
-            <Image
-              src={Images.downArrow}
-              width={14}
-              height={14}
-              alt="down-arrow"
-            />
-          </button>
+
+          {/* car type box  */}
+          <div className={styles.car_type_wrapper}>
+            <p className={styles.sub_heading}>Car Type</p>
+            <div className={styles.checklist_wrapper}>
+              {carType.map((item, index) => (
+                <label
+                  key={index.toString()}
+                  className="flex items-center space-x-2"
+                >
+                  <div className="custom-checkbox">
+                    <input
+                      type="checkbox"
+                      onChange={() => handleCarType(item)}
+                      checked={selectedOptions.carType.includes(item)}
+                    />
+                    <span className="checkmark"></span>
+                  </div>
+                  <span className={styles.checklist_item}>{item}</span>
+                </label>
+              ))}
+            </div>
+            {/* <button className="my-1 text-primary capitalize font-rajdhani text-18 font-bold flex w-fit gap-2 mx-auto items-center justify-center">
+              view all
+              <Image
+                src={Images.downArrow}
+                width={14}
+                height={14}
+                alt="down-arrow"
+              />
+            </button> */}
+          </div>
+
+          {/* color box  */}
+          <div className={styles.color_wrapper}>
+            <p className={styles.sub_heading}>Color</p>
+            <div className={styles.checklist_wrapper}>
+              {colors.map((item, index) => (
+                <label
+                  key={index.toString()}
+                  className="flex items-center space-x-2"
+                >
+                  <div className="custom-checkbox">
+                    <input
+                      type="checkbox"
+                      onChange={() => handleColorType(item)}
+                      checked={selectedOptions.color.includes(item)}
+                    />
+                    <span className="checkmark"></span>
+                  </div>
+                  <span className={styles.checklist_item}>{item}</span>
+                </label>
+              ))}
+            </div>
+            {/* <button className="my-1 text-primary capitalize font-rajdhani text-18 font-bold flex w-fit gap-2 mx-auto items-center justify-center">
+              view all
+              <Image
+                src={Images.downArrow}
+                width={14}
+                height={14}
+                alt="down-arrow"
+              />
+            </button> */}
+          </div>
         </div>
 
-        {/* color box  */}
-        <div className={styles.color_wrapper}>
-          <p className={styles.sub_heading}>Color</p>
-          <div className={styles.checklist_wrapper}>
-            {colors.map((item, index) => (
-              <label
-                key={index.toString()}
-                className="flex items-center space-x-2"
-              >
-                <div className="custom-checkbox">
-                  <input
-                    type="checkbox"
-                    onChange={() => handleColorType(item)}
-                    checked={selectedOptions.color.includes(item)}
-                  />
-                  <span className="checkmark"></span>
-                </div>
-                <span className={styles.checklist_item}>{item}</span>
-              </label>
-            ))}
-          </div>
-          <button className="my-1 text-primary capitalize font-rajdhani text-18 font-bold flex w-fit gap-2 mx-auto items-center justify-center">
-            view all
-            <Image
-              src={Images.downArrow}
-              width={14}
-              height={14}
-              alt="down-arrow"
-            />
-          </button>
-        </div>
-      </div>
-
-      {/* <div className={styles.responsive_filters}>
+        {/* <div className={styles.responsive_filters}>
         {["price range", "brand", "model", "color", "type"].map(
           (item, index) => (
             <div
@@ -260,35 +276,36 @@ function Filters({setCars}) {
           )
         )}
       </div> */}
-     
 
-      <div className="flex justify-between items-center">
-        <div>
-          <Button otherStyles={styles.clear_fil_btn} onclick={()=>setClickMobileClear(true)}>
-            <Image
-              src={Images.clearFilter}
-              alt="img"
-              className="w-[16px] h-[16px]"
-            />
-            clear filter
-          </Button>
-        </div>
-        <div className="mt-[1px] ml-2">
-          <Button
-            otherStyles={styles.fill_btn}
-            onclick={() => router.push("/addcar")}
-          >
-            <Image
-              src={Images.whitePlus}
-              alt="img"
-              className="w-[18px] h-[18px]"
-            />
-          </Button>
+        <div className="flex justify-between items-center">
+          <div>
+            <Button
+              otherStyles={styles.clear_fil_btn}
+              onclick={() => setClickMobileClear(true)}
+            >
+              <Image
+                src={Images.clearFilter}
+                alt="img"
+                className="w-[16px] h-[16px]"
+              />
+              clear filter
+            </Button>
+          </div>
+          <div className="mt-[1px] ml-2">
+            <Button
+              otherStyles={styles.fill_btn}
+              onclick={() => router.push("/addcar")}
+            >
+              <Image
+                src={Images.whitePlus}
+                alt="img"
+                className="w-[18px] h-[18px]"
+              />
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
     </>
-
   );
 }
 

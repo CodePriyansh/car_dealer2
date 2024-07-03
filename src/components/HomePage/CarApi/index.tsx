@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import instance from "@/network/axios";
 import Cookies from "universal-cookie";
+import { ToastContainer, toast } from "react-toastify";
 
 const CarApi = ({ selectedOptions, initial, setCars }) => {
   const [storeInitialValue, setStoreInitialValue] = useState(false);
   const [payload, setPayload] = useState({});
-  const [text, setText] = useState("Apply Filter")
+  const [text, setText] = useState("Apply Filter");
   const cookies = new Cookies();
   let token = cookies.get("authToken");
 
   useEffect(() => {
     setStoreInitialValue(initial);
+    if (initial) {
+      setText(" ");
+    }
   }, [initial]);
 
   useEffect(() => {
@@ -57,9 +61,17 @@ const CarApi = ({ selectedOptions, initial, setCars }) => {
         },
       });
       setCars(response?.data?.data);
-      setStoreInitialValue(false)
+      setStoreInitialValue(false);
     } catch (error) {
       console.error("Error applying filters:", error);
+
+      if( error.response.status == 404){
+        console.error("No cars found matching the selected criteria.")
+        // toast.error("No cars found matching the selected criteria.")
+        setCars([]);
+      }else{
+        console.log("No cars found matching the selected criteria")
+      }
     }
   };
 
@@ -70,12 +82,17 @@ const CarApi = ({ selectedOptions, initial, setCars }) => {
   useEffect(() => {
     if (storeInitialValue === true) {
       ApplyFilterApiCall();
-      setText(" ")
     }
   }, [storeInitialValue]);
 
-
-  return <><div onClick={handleApply} className="md:flex hidden">{text}</div></>;
+  return (
+    <>
+      <div onClick={handleApply} >
+        {text}
+      </div>
+      <ToastContainer/>
+    </>
+  );
 };
 
 export default CarApi;
