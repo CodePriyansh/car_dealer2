@@ -5,11 +5,13 @@ import React from 'react'
 import styles from './styles.module.css'
 import SignupForm from './SignupForm'
 import signup from '../../assets/signup_login.png'
+import { Suspense } from 'react';
 
 export default function Signup() {
 
  
   return (
+    <Suspense>
     <div className={styles.wrapper}>
       <div id="recaptcha-container"></div>
 
@@ -29,5 +31,6 @@ export default function Signup() {
         </div>
        
     </div>
+    </Suspense>
   )
 }

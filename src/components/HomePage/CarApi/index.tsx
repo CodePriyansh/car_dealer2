@@ -57,7 +57,7 @@ const CarApi = ({ selectedOptions, initial, setCars }) => {
       const response = await instance.post("/api/cars/all", payload, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2N2M1ZmMzYWNjYzRhMGQyNTJmMDUxZiIsInBob25lTnVtYmVyIjoiMTIzNDU2Nzg5MCIsImZpcmViYXNlVXNlcklkIjoiVTNxeGxYdFFHaGduSHJTSWtzRmdJSnU5WXJ6MiIsImlhdCI6MTcyMDAxODE2MSwiZXhwIjoxNzIwMTA0NTYxfQ.kVFeHWLNv1WScEkmqunsJCqKEjiFzmcjs68c2APDnMU`,
+          Authorization: `Bearer ${token}`,
         },
       });
       setCars(response?.data?.data);

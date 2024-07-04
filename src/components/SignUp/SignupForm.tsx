@@ -1,5 +1,4 @@
 "use client";
-
 import { Formik, Form, Field, ErrorMessage, FormikErrors } from "formik";
 import * as yup from "yup";
 import axios from "axios";
@@ -626,5 +625,6 @@ export default function SignupForm() {
         {message && <p className="mt-4 text-center text-red-500">{message}</p>}
       </div>
     </div>
+
   );
 }

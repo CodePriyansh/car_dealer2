@@ -3,7 +3,9 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import instance from "@/network/axios";
 
-const CarDetails = ({ params }) => {
+
+
+const CarDetails = ({ params }: { params: { id: string } }) => {
   const [car, setCar] = useState(null);
   const { id } = params;
 
