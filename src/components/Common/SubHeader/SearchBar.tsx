@@ -5,7 +5,7 @@ import styles from "./styles.module.css";
 import instance from "@/network/axios";
 import Cookies from "universal-cookie";
 
-function SearchBar({setCars}) {
+function SearchBar({ setCars }) {
   const [searchTerm, setSearchTerm] = useState("");
   const cookies = new Cookies();
   let token = cookies.get("authToken");
@@ -41,18 +41,32 @@ function SearchBar({setCars}) {
     }
   };
   return (
-    <div className={styles.field_style}>
-      <Image
-        src={Images.search}
-        alt="img"
-        className="sm:w-[18px] sm:h-[18px] h-4 w-4"
-      />
-      <input
-        className={styles.search_input}
-        type="text"
-        placeholder="Search....."
-        onChange={handleSearch}
-      />
+    <div className={`${styles.field_style} justify-between`}>
+      <div className="flex items-center">
+        <Image
+          src={Images.search}
+          alt="img"
+          className="sm:w-[18px] sm:h-[18px] h-4 w-4"
+        />
+        <input
+          className={styles.search_input}
+          type="text"
+          placeholder="Search....."
+          onChange={handleSearch}
+          value={searchTerm}
+        />
+      </div>
+      {searchTerm && (
+        <div
+          className="rotate-45 text-2xl cursor-pointer"
+          onClick={() => {
+            apiCallForSearch("");
+            setSearchTerm("");
+          }}
+        >
+          +
+        </div>
+      )}
     </div>
   );
 }
