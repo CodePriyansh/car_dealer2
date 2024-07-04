@@ -5,9 +5,9 @@ export function middleware(request: NextRequest) {
 
   let cookie = request.cookies.get('token')
   console.log(cookie,"qwertyuiopoigfdfghjkl;ufdfy") 
-  // if(!cookie){
-  //   return NextResponse.redirect(new URL('/login', request.url))
-  // }
+  if(!cookie){
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
  
   const response = NextResponse.next()
   return response

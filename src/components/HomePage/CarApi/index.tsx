@@ -36,7 +36,7 @@ const CarApi = ({ selectedOptions, initial, setCars }) => {
       if (selectedOptions?.color?.length) {
         updatedPayload.color = selectedOptions.color;
       }
-      if (selectedOptions?.company) {
+      if (selectedOptions?.company?.length) {
         updatedPayload.company = selectedOptions.company;
       }
       if (selectedOptions?.modelName) {
