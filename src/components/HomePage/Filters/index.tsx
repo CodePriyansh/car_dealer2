@@ -17,7 +17,6 @@ function Filters({ setCars }) {
     0, 2500000,
   ]);
   const cookies = new Cookies();
-  const [showView, setShowView] = useState(false)
 
   const fields = [
     {
