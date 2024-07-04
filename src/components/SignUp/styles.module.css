@@ -50,3 +50,6 @@
 .error_msg{
     @apply text-red-500 text-sm font-rajdhani font-semibold py-1;
 }
+.img_preview{
+    @apply relative w-full h-full sm:px-7 px-2
+}

@@ -1,11 +1,11 @@
 "use client";
 import CarCards from "./CarCards";
-function HomePageCards({cars}) {
+function HomePageCards({cars, carNotFoundtext}) {
 
   return (
     <>
       {cars.length < 1  ? (
-        <div className="text-center mt-[50%] sm:mt-[9%] lg:mt-[10%] text-[24px] text-greyy"> There is no car added!</div>
+        <div className="text-center mt-[50%] sm:mt-[9%] lg:mt-[10%] text-[24px] text-greyy"> {carNotFoundtext}</div>
       ) : (
         <>
         <p className="text-para font-bold block mt-2 sm:text-[24px] font-rajdhani container_space large_layout">{cars.length} Cars</p>

@@ -6,7 +6,7 @@ import instance from "@/network/axios";
 import Cookies from "universal-cookie";
 import { toast } from "react-toastify";
 
-function SearchBar({ setCars }) {
+function SearchBar({ setCars, setCarNotFoundtext }) {
   const [searchTerm, setSearchTerm] = useState("");
   const cookies = new Cookies();
   let token = cookies.get("authToken");
@@ -37,9 +37,11 @@ function SearchBar({ setCars }) {
         }
       );
       setCars(response?.data?.data);
+
     } catch (error) {
         if(error.response.status == 404){
             setCars([]);
+            setCarNotFoundtext(`Cars not found for ${searchTerm}`);
       console.error("Error applying filters:", error);
     }}
   };

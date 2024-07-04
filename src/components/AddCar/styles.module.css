@@ -9,7 +9,7 @@
 }
 
 .heading {
-  @apply text-primary sm:text-[36px] text-[24px] font-bold text-center w-full font-rajdhani md:mb-8 mb-4;
+  @apply text-primary sm:text-[36px] text-[24px] font-bold text-center w-full font-rajdhani md:mb-8 sm:mb-4 mb-4;
 }
 .basic_detail_heading {
   @apply flex w-full items-center mt-8 ;

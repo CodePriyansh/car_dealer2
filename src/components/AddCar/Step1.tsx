@@ -1,5 +1,4 @@
-import React, { useRef, useState } from "react";
-import signupStyles from "../SignUp/styles.module.css";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Images } from "@/assets/Images";
 import Button from "../Common/Button";
@@ -7,8 +6,8 @@ import CommonReactSelect from "../Common/Select";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import styles from "./styles.module.css";
-import { ToastContainer } from "react-toastify";
-
+import { toast, ToastContainer } from "react-toastify";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 interface Step1Props {
   setShowActiveStep: React.Dispatch<React.SetStateAction<number>>;
   setStepsData: (data: any) => void;
@@ -196,7 +195,7 @@ const fields = [
 
 const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
   const profileImageInputRef = useRef<HTMLInputElement | null>(null);
-
+  const [scratchAndDentImagePreview, setScratchAndDentImagePreview] = useState<string | null>(null);
   const initialValues = {
     dentDetails: "",
     description: "",
@@ -234,6 +233,36 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
     });
   };
 
+  const handleRemoveImage = (setFieldValue: (field: string, value: any) => void) => {
+    setFieldValue("scratchAndDentImage", null);
+    setScratchAndDentImagePreview(null);
+    if (profileImageInputRef.current) {
+      profileImageInputRef.current.value = "";
+    }
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>, setFieldValue: (field: string, value: any) => void) => {
+    const file = event.currentTarget.files?.[0];
+    if (file) {
+      if (file.type.includes("image")) {
+        setFieldValue("scratchAndDentImage", file);
+        // Create preview URL
+        const previewUrl = URL.createObjectURL(file);
+        setScratchAndDentImagePreview(previewUrl);
+      } else {
+        toast.error("Only image files are allowed.");
+      }
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      // Clean up object URL to prevent memory leaks
+      if (scratchAndDentImagePreview) {
+        URL.revokeObjectURL(scratchAndDentImagePreview);
+      }
+    };
+  }, [scratchAndDentImagePreview]);
   return (
     <div>
       {/* <ToastContainer /> */}
@@ -337,57 +366,69 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
                 </div>
 
                 {/* Scratch & Dent Image (Optional) */}
-                <div className="sm:w-1/2 sm:h-1/3 w-full">
-                  <div className={styles.basic_detail_heading}>
-                    <p className={styles.sub_heading}>Scratch & Dent Image</p>
-                    <p className={styles.special_heading}>(If any) Optional</p>
-                  </div>
+                {/* Scratch & Dent Image (Optional) */}
+<div className="sm:w-1/2 sm:h-1/3 w-full">
+  <div className={styles.basic_detail_heading}>
+    <p className={styles.sub_heading}>Scratch & Dent Image</p>
+    <p className={styles.special_heading}>(If any) Optional</p>
+  </div>
 
-                  <div
-                    className={styles.dotted_box}
-                    onClick={() => profileImageInputRef.current?.click()}
-                  >
-                    <Image
-                      src={Images.uploadImg}
-                      alt="img"
-                      className="w-8 h-8"
-                    />
-                    <Button otherStyles="mt-[50px]">
-                      <Image
-                        src={Images.plus}
-                        alt="plus"
-                        width={20}
-                        height={20}
-                      />
-                      Add Image
-                    </Button>
-                    <input
-                      type="file"
-                      ref={profileImageInputRef}
-                      style={{ display: "none" }}
-                      onChange={(
-                        event: React.ChangeEvent<HTMLInputElement>
-                      ) => {
-                        const files = event.currentTarget.files;
-                        if (files && files.length > 0) {
-                          setFieldValue("scratchAndDentImage", files[0]);
-                        }
-                      }}
-                      name="profileImage"
-                    />
-                    {/* Conditional rendering within Formik's child function */}
-                    {values.profileImage && (
-                      <p className={styles.selected_file}>
-                        {values.profileImage.name}
-                      </p>
-                    )}
-                    <ErrorMessage
-                      name="profileImage"
-                      component="p"
-                      className="error_msg"
-                    />
-                  </div>
-                </div>
+  <div
+    className={styles.dotted_box}
+    onClick={() => profileImageInputRef.current?.click()}
+  >
+    {scratchAndDentImagePreview ? (
+      <div className="relative w-full h-full">
+        <Image
+          src={scratchAndDentImagePreview}
+          alt="Scratch & Dent Image"
+          className="w-full h-full object-cover rounded"
+          width={200}
+          height={200}
+        />
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleRemoveImage(setFieldValue);
+          }}
+          className="absolute top-2 right-2 bg-white rounded-full p-1"
+        >
+          <AiOutlineCloseCircle size={20} />
+        </button>
+      </div>
+    ) : (
+      <>
+        <Image
+          src={Images.uploadImg}
+          alt="img"
+          className="w-8 h-8"
+        />
+        <Button otherStyles="mt-[50px]">
+          <Image
+            src={Images.plus}
+            alt="plus"
+            width={20}
+            height={20}
+          />
+          Add Image
+        </Button>
+      </>
+    )}
+    <input
+      type="file"
+      ref={profileImageInputRef}
+      style={{ display: "none" }}
+      onChange={(event) => handleImageChange(event, setFieldValue)}
+      name="scratchAndDentImage"
+    />
+    <ErrorMessage
+      name="scratchAndDentImage"
+      component="p"
+      className="error_msg"
+    />
+  </div>
+</div>
               </div>
               <div className="basis-1/2">
                 <div className={styles.basic_detail_heading}>
@@ -436,6 +477,7 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
           </Form>
         )}
       </Formik>
+      <ToastContainer/>
     </div>
   );
 };

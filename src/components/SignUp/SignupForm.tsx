@@ -47,10 +47,11 @@ export default function SignupForm() {
   const [formData, setFormData] = useState<FormData | null>(null);
   const [id, setId] = useState("");
   const searchParams = useSearchParams();
-
-  console.log(searchParams);
-  console.log(searchParams.get("mobileNumber"));
-  console.log(searchParams.get("id"));
+  const [imagePreviews, setImagePreviews] = useState({
+    coverImage: null,
+    profileImage: null,
+    shopImage: null,
+  });
   useEffect(() => {
     const mobileNumber = searchParams.get("mobileNumber") || "";
     const id = searchParams.get("id") || "";
@@ -77,42 +78,24 @@ export default function SignupForm() {
   const handleImageChange = (event, setFieldValue, fieldName) => {
     const file = event.currentTarget.files[0];
     if (file) {
-      // Check if the selected file is an image
       if (file.type.includes("image")) {
         setFieldValue(fieldName, file);
+        // Create preview URL
+        const previewUrl = URL.createObjectURL(file);
+        setImagePreviews((prev) => ({ ...prev, [fieldName]: previewUrl }));
       } else {
         toast.error("Only image files are allowed.");
       }
     }
   };
 
-  const handleRemoveImage = (
-    setFieldValue: {
-      (
-        field: string,
-        value: any,
-        shouldValidate?: boolean | undefined
-      ): Promise<void | FormikErrors<{
-        name: string;
-        phoneNumber: string;
-        telephoneNumber: string;
-        email: string;
-        city: string;
-        state: string;
-        shopAddress: string;
-        coverImage: null;
-        profileImage: null;
-        shopImage: null;
-      }>>;
-      (arg0: any, arg1: null): void;
-    },
-    fieldName: string,
-    inputRef: MutableRefObject<HTMLInputElement | null>
-  ) => {
+  const handleRemoveImage = (setFieldValue, fieldName, inputRef) => {
     setFieldValue(fieldName, null);
     if (inputRef.current) {
       inputRef.current.value = "";
     }
+    // Remove preview
+    setImagePreviews((prev) => ({ ...prev, [fieldName]: null }));
   };
 
   const onSubmit = async (
@@ -142,7 +125,10 @@ export default function SignupForm() {
     console.log([...formData.entries()], "signup form data");
     setFormData(formData);
 
-    if (searchParams.get("mobileNumber") && searchParams.get("mobileNumber") == values.phoneNumber ) {
+    if (
+      searchParams.get("mobileNumber") &&
+      searchParams.get("mobileNumber") == values.phoneNumber
+    ) {
       try {
         const url = "/api/dealers/signup";
         const payload = formData;
@@ -163,7 +149,7 @@ export default function SignupForm() {
         toast.error(error.message);
       }
     } else {
-      console.log(values,"wefnwfewwe")
+      console.log(values, "wefnwfewwe");
       sendOtp(`+91${values.phoneNumber}`)
         .then(() => {
           console.log("OTP sent successfully");
@@ -383,14 +369,14 @@ export default function SignupForm() {
                           className={styles.dotted_box}
                           onClick={() => coverImageInputRef.current?.click()}
                         >
-                          {values.coverImage ? (
-                            <>
+                          {imagePreviews.coverImage ? (
+                            <div className={styles.img_preview}>
                               <Image
-                                src={URL.createObjectURL(values.coverImage)}
+                                src={imagePreviews.coverImage}
                                 alt="Cover Image"
-                                className="sm:w-auto w-[80%] rounded sm:h-auto h-[100%]"
-                                width={20}
-                                height={20}
+                                className="w-full h-full object-cover rounded"
+                                width={200}
+                                height={200}
                               />
                               <button
                                 type="button"
@@ -401,11 +387,11 @@ export default function SignupForm() {
                                     coverImageInputRef
                                   )
                                 }
-                                className={styles.remove_button}
+                                className="absolute top-2 right-2 bg-white rounded-full p-1"
                               >
-                                <AiOutlineCloseCircle />
+                                <AiOutlineCloseCircle size={20} />
                               </button>
-                            </>
+                            </div>
                           ) : (
                             <>
                               <Image
@@ -424,27 +410,19 @@ export default function SignupForm() {
                               </Button>
                             </>
                           )}
-
                           <input
                             type="file"
                             ref={coverImageInputRef}
-                            // onChange={(
-                            //   event: React.ChangeEvent<HTMLInputElement>
-                            // ) => {
-                            //   const files = event.currentTarget.files;
-                            //   if (files && files.length > 0) {
-                            //     setFieldValue("coverImage", files[0]);
-                            //   }
-                            // }}
-                            onChange={(event) => handleImageChange(event, setFieldValue, "coverImage")}
+                            onChange={(event) =>
+                              handleImageChange(
+                                event,
+                                setFieldValue,
+                                "coverImage"
+                              )
+                            }
                             style={{ display: "none" }}
                             name="coverImage"
                           />
-                          {/* {values.coverImage && (
-                            <p className={styles.selected_file}>
-                              {values.coverImage.name}
-                            </p>
-                          )} */}
                         </div>
                         <ErrorMessage
                           name="coverImage"
@@ -463,33 +441,30 @@ export default function SignupForm() {
                             Add Profile Image
                           </label>
                           <div className={styles.dotted_box}>
-                            {values.profileImage ? (
-                              <>
-                                <>
-                                  <Image
-                                    src={URL.createObjectURL(
-                                      values.profileImage
-                                    )}
-                                    alt="Profile Image"
-                                    className="sm:w-auto w-[80%] rounded sm:h-auto h-[100%]"
-                                    width={20}
-                                    height={20}
-                                  />
-                                  <button
-                                    type="button"
-                                    onClick={() =>
-                                      handleRemoveImage(
-                                        setFieldValue,
-                                        "profileImage",
-                                        profileImageInputRef
-                                      )
-                                    }
-                                    className={styles.remove_button}
-                                  >
-                                    <AiOutlineCloseCircle />
-                                  </button>
-                                </>
-                              </>
+                            {imagePreviews.profileImage ? (
+                              <div className={styles.img_preview}>
+                                <Image
+                                  src={imagePreviews.profileImage}
+                                  alt="Profile Image"
+                                  className="w-full h-full object-cover rounded"
+                                  width={200}
+                                  height={200}
+                                />
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleRemoveImage(
+                                      setFieldValue,
+                                      "profileImage",
+                                      profileImageInputRef
+                                    );
+                                  }}
+                                  className="absolute top-2 right-2 bg-white rounded-full p-1"
+                                >
+                                  <AiOutlineCloseCircle size={20} />
+                                </button>
+                              </div>
                             ) : (
                               <>
                                 <Image
@@ -508,16 +483,19 @@ export default function SignupForm() {
                                 </Button>
                               </>
                             )}
-
                             <input
                               type="file"
                               ref={profileImageInputRef}
                               style={{ display: "none" }}
-                              onChange={(event) => handleImageChange(event, setFieldValue, "profileImage")}
-
+                              onChange={(event) =>
+                                handleImageChange(
+                                  event,
+                                  setFieldValue,
+                                  "profileImage"
+                                )
+                              }
                               name="profileImage"
                             />
-
                           </div>
                           <ErrorMessage
                             name="profileImage"
@@ -527,39 +505,38 @@ export default function SignupForm() {
                         </div>
 
                         {/* Add shop image */}
-                        <div className="sm:w-1/2 w-full">
+                        <div
+                          className="sm:w-1/2 w-full"
+                          onClick={() => shopImageInputRef.current?.click()}
+                        >
                           <label className={styles.label_Style}>
                             Add Shop Image
                           </label>
-                          <div
-                            className={styles.dotted_box}
-                            onClick={() => shopImageInputRef.current?.click()}
-                          >
-                            {values.shopImage ? (
-                              <>
-                                  <Image
-                                    src={URL.createObjectURL(
-                                      values.shopImage
-                                    )}
-                                    alt="Shop Image"
-                                    className="sm:w-auto w-[80%] rounded sm:h-auto h-[100%]"
-                                    width={20}
-                                    height={20}
-                                  />
-                                  <button
-                                    type="button"
-                                    onClick={() =>
-                                      handleRemoveImage(
-                                        setFieldValue,
-                                        "shopImage",
-                                        profileImageInputRef
-                                      )
-                                    }
-                                    className={styles.remove_button}
-                                  >
-                                    <AiOutlineCloseCircle />
-                                  </button>
-                              </>
+                          <div className={styles.dotted_box}>
+                            {imagePreviews.shopImage ? (
+                              <div className={styles.img_preview}>
+                                <Image
+                                  src={imagePreviews.shopImage}
+                                  alt="Shop Image"
+                                  className="w-full h-full object-cover rounded"
+                                  width={200}
+                                  height={200}
+                                />
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleRemoveImage(
+                                      setFieldValue,
+                                      "shopImage",
+                                      shopImageInputRef
+                                    );
+                                  }}
+                                  className="absolute top-2 right-2 bg-white rounded-full p-1"
+                                >
+                                  <AiOutlineCloseCircle size={20} />
+                                </button>
+                              </div>
                             ) : (
                               <>
                                 <Image
@@ -581,12 +558,17 @@ export default function SignupForm() {
                             <input
                               type="file"
                               ref={shopImageInputRef}
-                              onChange={(event) => handleImageChange(event, setFieldValue, "shopImage")}
+                              onChange={(event) =>
+                                handleImageChange(
+                                  event,
+                                  setFieldValue,
+                                  "shopImage"
+                                )
+                              }
                               accept="image/*"
                               style={{ display: "none" }}
                               name="shopImage"
                             />
-
                           </div>
                           <ErrorMessage
                             name="shopImage"
@@ -598,7 +580,7 @@ export default function SignupForm() {
 
                       <button
                         type="submit"
-                        className="w-full mx-auto"
+                        className="w-full mx-auto my-2"
                         disabled={isSubmitting}
                       >
                         <Button otherStyles="sm:w-[430px] w-full mx-auto uppercase">
@@ -625,6 +607,5 @@ export default function SignupForm() {
         {message && <p className="mt-4 text-center text-red-500">{message}</p>}
       </div>
     </div>
-
   );
 }

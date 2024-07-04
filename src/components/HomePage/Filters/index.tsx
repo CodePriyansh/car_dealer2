@@ -11,7 +11,7 @@ import Cookies from "universal-cookie";
 import CarApi from "../CarApi/index";
 import SubHeader from "@/components/Common/SubHeader";
 
-function Filters({ setCars }) {
+function Filters({ setCars, setCarNotFoundtext }) {
   const router = useRouter();
   const [updatedPriceRange, setUpdatedPriceRange] = React.useState([
     0, 2500000,
@@ -152,6 +152,7 @@ function Filters({ setCars }) {
         setClickMobileClear={setClickMobileClear}
         setClickWebClear={setClickWebClear}
         clickWebClear={clickWebClear}
+        setCarNotFoundtext={setCarNotFoundtext}
       />
 
       <div className={`${styles.container} container_space large_layout`}>

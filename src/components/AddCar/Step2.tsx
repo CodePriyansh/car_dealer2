@@ -78,12 +78,16 @@ const carImages = [
 ];
 
 const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
-  const [interiorImagesPreview, setInteriorImagesPreview] = useState<Array<string>>([]);
-  
+  const [interiorImagesPreview, setInteriorImagesPreview] = useState<
+    Array<string>
+  >([]);
+
   useEffect(() => {
     return () => {
       // Clean up object URLs to prevent memory leaks
-      interiorImagesPreview.forEach((previewUrl) => URL.revokeObjectURL(previewUrl));
+      interiorImagesPreview.forEach((previewUrl) =>
+        URL.revokeObjectURL(previewUrl)
+      );
     };
   }, [interiorImagesPreview]);
 
@@ -150,14 +154,14 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
       console.log(values, "values");
       const formData = new FormData();
       Object.keys(values).forEach((key) => {
-      if (key === "interior_images") {
-        values[key].forEach((file, index) => {
-          formData.append(`interior_images`, file);
-        });
-      } else {
-        formData.append(key, values[key]);
-      }
-    });
+        if (key === "interior_images") {
+          values[key].forEach((file, index) => {
+            formData.append(`interior_images`, file);
+          });
+        } else {
+          formData.append(key, values[key]);
+        }
+      });
       Object.keys(stepsData).forEach((key) => {
         formData.append(key, stepsData[key]);
       });
@@ -197,7 +201,6 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
   const handleFileChange = (setFieldValue, image, event) => {
     const files = event.currentTarget.files;
     if (files && files.length > 0) {
-
       if (image.name === "video") {
         const supportedVideoTypes = [
           "video/mp4",
@@ -214,9 +217,34 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
           "video/x-msvideo",
           "video/x-ms-wmv",
         ];
-  
+
         if (!supportedVideoTypes.includes(files[0].type)) {
-          toast.error("Unsupported video format. Please upload a supported format.");
+          toast.error(
+            "Unsupported video format. Please upload a supported format."
+          );
+          return;
+        }
+      } else {
+        // Image format validation for all non-video files
+        const supportedImageTypes = [
+          "image/jpeg",
+          "image/jpg",
+          "image/png",
+          "image/gif",
+          "image/webp",
+          "image/svg+xml",
+          "image/webp",
+          "image/avif",
+          "image/heic",
+          "image/heif",
+          "image/tiff",
+          "image/bmp",
+        ];
+
+        if (!supportedImageTypes.includes(files[0].type)) {
+          toast.error(
+            "Unsupported file format. Please upload an image (JPEG, PNG, GIF, WebP, or SVG)."
+          );
           return;
         }
       }
@@ -258,7 +286,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
       ...prevState,
       [imageName]: null,
     }));
-    
+
     // Reset the file input value
     if (fileInputRefs.current[index]?.current) {
       fileInputRefs.current[index].current.value = "";
@@ -267,8 +295,10 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
 
   const handleDeleteInteriorImage = (index, setFieldValue) => {
     setInteriorImagesPreview((prev) => prev.filter((_, i) => i !== index));
-    setFieldValue("interior_images", (prev) => prev.filter((_, i) => i !== index));
-    
+    setFieldValue("interior_images", (prev) =>
+      prev.filter((_, i) => i !== index)
+    );
+
     // Reset the file input value
     if (interiorImagesRef.current) {
       interiorImagesRef.current.value = "";
@@ -293,7 +323,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
               {carImages.map((image, index) => (
                 <div key={index} className={styles.dotted_box_step2}>
                   {imagePreviews[image.name] ? (
-                    <div className="relative w-full h-full p-4 border rounded ">
+                    <div className="relative w-full h-full px-2 border rounded sm:max-h-[200px] max-h-[120px]">
                       <Image
                         src={imagePreviews[image.name]}
                         alt={image.alt}
@@ -303,7 +333,9 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                       />
                       <button
                         type="button"
-                        onClick={() => handleRemoveImage(setFieldValue, image.name, index)}
+                        onClick={() =>
+                          handleRemoveImage(setFieldValue, image.name, index)
+                        }
                         className="absolute top-0 right-0 p-1 bg-primary text-white rounded-full"
                       >
                         &times;
@@ -311,55 +343,54 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
                     </div>
                   ) : (
                     <>
-                    <div
-                      className="sm:w-20 sm:h-20 h-auto"
-                      onClick={() =>
-                        fileInputRefs.current[index].current?.click()
-                      }
-                    >
-                      <Image
-                        src={image.src}
-                        alt={image.alt}
-                        className="md:w-18 md:h-18 px-4 pt-2 md:!p-0 w-18 h-16"
-                      />
-                    </div>
-                  <div onClick={() =>
-                      fileInputRefs.current[index].current?.click()
-                    }>
-                  <Button
-                    otherStyles={styles.btn_step2}
-                    
-                  >
-                    <Image
-                      src={Images.plus}
-                      alt="plus"
-                      width={20}
-                      height={20}
-                      className={styles.step2_btn_img}
-                    />
-                    {image.label}
-                  </Button>
-                  <input
-                    type="file"
-                    className="hidden"
-                    name={image.name}
-                    ref={fileInputRefs.current[index]}
-                    onChange={(event) =>
-                      handleFileChange(setFieldValue, image, event)
-                    }
-                  />
-                  {fileNames[image.name] && (
-                    <p className="text-sm m-2">{fileNames[image.name]}</p>
+                      <div
+                        className="sm:w-20 sm:h-20 h-auto"
+                        onClick={() =>
+                          fileInputRefs.current[index].current?.click()
+                        }
+                      >
+                        <Image
+                          src={image.src}
+                          alt={image.alt}
+                          className="md:w-18 md:h-18 px-4 pt-2 md:!p-0 w-18 h-16"
+                        />
+                      </div>
+                      <div
+                        onClick={() =>
+                          fileInputRefs.current[index].current?.click()
+                        }
+                      >
+                        <Button otherStyles={styles.btn_step2}>
+                          <Image
+                            src={Images.plus}
+                            alt="plus"
+                            width={20}
+                            height={20}
+                            className={styles.step2_btn_img}
+                          />
+                          {image.label}
+                        </Button>
+                        <input
+                          type="file"
+                          className="hidden"
+                          name={image.name}
+                          accept="image/*"
+                          ref={fileInputRefs.current[index]}
+                          onChange={(event) =>
+                            handleFileChange(setFieldValue, image, event)
+                          }
+                        />
+                        {fileNames[image.name] && (
+                          <p className="text-sm m-2">{fileNames[image.name]}</p>
+                        )}
+                        <ErrorMessage
+                          name={image.name}
+                          component="div"
+                          className="error_msg"
+                        />
+                      </div>
+                    </>
                   )}
-                  <ErrorMessage
-                    name={image.name}
-                    component="div"
-                    className="error_msg"
-                  />
-                  </div>
-                  </>
-                  )}
-
                 </div>
               ))}
             </div>
@@ -454,7 +485,13 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
               >
                 <Image src={Images.uploadImg} alt="img" className="w-8 h-8" />
                 <Button otherStyles={styles.btn_step2}>
-                  <Image src={Images.plus} alt="plus" width={20} height={20} className={styles.step2_btn_img}/>
+                  <Image
+                    src={Images.plus}
+                    alt="plus"
+                    width={20}
+                    height={20}
+                    className={styles.step2_btn_img}
+                  />
                   Add Video
                 </Button>
                 <input
@@ -490,7 +527,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
           </Form>
         )}
       </Formik>
-      {/* <ToastContainer /> */}
+      <ToastContainer />
     </div>
   );
 };

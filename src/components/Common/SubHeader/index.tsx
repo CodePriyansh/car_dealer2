@@ -9,7 +9,7 @@ import FilterDrawer from "@/components/HomePage/FilterDrawer";
 import CarApi from "@/components/HomePage/CarApi";
 import SearchBar from "./SearchBar";
 
-export default function SubHeader({ clickWebClear,setClickWebClear,setCars, setSelectedOptions,setClickMobileClear }) {
+export default function SubHeader({ clickWebClear,setClickWebClear,setCars, setSelectedOptions,setClickMobileClear, setCarNotFoundtext }) {
   const router = useRouter();
   const [activeMidFilter, setActiveMidFilter] = useState("car");
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -20,7 +20,7 @@ export default function SubHeader({ clickWebClear,setClickWebClear,setCars, setS
        
       {/* left  */}
       <div className={styles.left}>
-        <SearchBar setCars={setCars}/>
+        <SearchBar setCars={setCars} setCarNotFoundtext={setCarNotFoundtext}/>
         <div
           className={styles.responsive_filter_icon}
           onClick={() =>{ setOpenDrawer(true)

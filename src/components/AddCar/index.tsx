@@ -35,6 +35,22 @@ const AddCarForm = () => {
       <div className={styles.form_wrapper}>
         <p className={styles.heading}>Add Car</p>
 
+         {/* need to optimize code bcoz back iis used multiple times */}
+        <div
+          className="hidden sm:flex md:left-16 left-0 sm:top-1 gap-2 items-center cursor-pointer"
+          onClick={() => router.back()}
+        >
+          <Image
+            src={Images.backArrow}
+            alt="back-arrow"
+            width={32}
+            height={32}
+            className="md:w-8 md:h-8 w-6 h-6"
+          />
+          <p className="text-secondary text-base font-rajdhani uppercase font-medium">
+            Back
+          </p>
+        </div>
         {/* steper / */}
         <div className="flex justify-center items-center w-fit mx-auto sm:my-4 my-10 relative">
           <div className={styles.line1} />
@@ -67,7 +83,7 @@ const AddCarForm = () => {
           <p className={`${styles.common_step} ${styles.step2}`}>Step2</p>
           <div
             className={styles.circle2}
-            // onClick={() => setShowActiveStep(1)}
+            onClick={() => setShowActiveStep(2)}
           />
           <p className={`${styles.common_text} ${styles.photo_vedio}`}>
             Photos/Video
