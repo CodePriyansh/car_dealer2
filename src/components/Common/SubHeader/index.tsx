@@ -17,9 +17,7 @@ export default function SubHeader({ clickWebClear,setClickWebClear,setCars, setS
 
   return (
     <div className={`${styles.wrapper} container_space large_layout`}>
-       {clickWebClear && 
-          <CarApi selectedOptions={null} initial={true} setCars={setCars} />
-        }
+       
       {/* left  */}
       <div className={styles.left}>
         <SearchBar setCars={setCars}/>
@@ -89,6 +87,9 @@ export default function SubHeader({ clickWebClear,setClickWebClear,setCars, setS
             className="w-[18px] h-[18px]"
           />
           clear filter
+          {clickWebClear && 
+          <CarApi selectedOptions={null} initial={true} setCars={setCars} />
+        }
           <CarApi selectedOptions={null} initial={true} setCars={setCars} />
         </Button>
         <Button
