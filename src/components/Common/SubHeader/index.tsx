@@ -7,6 +7,7 @@ import { Images } from "@/assets/Images";
 import { useRouter } from "next/navigation";
 import FilterDrawer from "@/components/HomePage/FilterDrawer";
 import CarApi from "@/components/HomePage/CarApi";
+import SearchBar from "./SearchBar";
 
 export default function SubHeader({ clickWebClear,setClickWebClear,setCars, setSelectedOptions,setClickMobileClear }) {
   const router = useRouter();
@@ -21,18 +22,7 @@ export default function SubHeader({ clickWebClear,setClickWebClear,setCars, setS
         }
       {/* left  */}
       <div className={styles.left}>
-        <div className={styles.field_style}>
-          <Image
-            src={Images.search}
-            alt="img"
-            className="sm:w-[18px] sm:h-[18px] h-4 w-4"
-          />
-          <input
-            className={styles.search_input}
-            type="text"
-            placeholder="Search....."
-          />
-        </div>
+        <SearchBar setCars={setCars}/>
         <div
           className={styles.responsive_filter_icon}
           onClick={() =>{ setOpenDrawer(true)
