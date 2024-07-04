@@ -55,6 +55,7 @@ function Filters({ setCars }) {
         { value: "2019 - 2021", label: "2019 - 2021" },
         { value: "2016 - 2018", label: "2016 - 2018" },
         { value: "2013 - 2015", label: "2013 - 2015" },
+        { value: "Before - 2013", label: "Before - 2013" },
       ],
     },
   ];

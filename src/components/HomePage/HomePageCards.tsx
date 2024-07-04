@@ -4,7 +4,7 @@ function HomePageCards({cars}) {
 
   return (
     <>
-      {cars.length > 1  || cars! ? (
+      {cars.length < 1  ? (
         <div className="text-center mt-[50%] sm:mt-[9%] lg:mt-[10%] text-[24px] text-greyy"> There is no car added!</div>
       ) : (
         <>

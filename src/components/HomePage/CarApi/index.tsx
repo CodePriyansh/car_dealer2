@@ -11,6 +11,7 @@ const CarApi = ({ selectedOptions, initial, setCars }) => {
   let token = cookies.get("authToken");
 
   useEffect(() => {
+    console.log(selectedOptions)
     setStoreInitialValue(initial);
     if (initial) {
       setText(" ");

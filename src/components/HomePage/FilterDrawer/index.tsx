@@ -46,7 +46,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer,setCars }) {
     },
     {
       filterName: "modelYear",
-      filters: ["2022 - 2024", "2019 - 2021", "2016 - 2018", "2013 - 2015"],
+      filters: ["2022 - 2024", "2019 - 2021", "2016 - 2018", "2013 - 2015", "Before - 2013"],
     },
     {
       filterName: "color",
