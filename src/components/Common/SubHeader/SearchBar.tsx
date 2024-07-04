@@ -39,7 +39,6 @@ function SearchBar({ setCars }) {
       setCars(response?.data?.data);
     } catch (error) {
         if(error.response.status == 404){
-            toast.error("No cars found matching the selected criteria.")
             setCars([]);
       console.error("Error applying filters:", error);
     }}
