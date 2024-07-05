@@ -1,8 +1,8 @@
 .container{
-    @apply w-full md:px-[60px] sm:px-[30px] px-4  bg-f7f7f7;
+    @apply w-full md:bg-f7f7f7;
 }
 .wrapper{
-@apply w-full hidden lg:flex border border-line rounded-[10px] p-6 ;
+@apply w-full hidden lg:flex border border-line rounded-[10px] p-4 relative;
 }
 .filters_wrapper{
     @apply flex w-[40%] border-r border-line flex-col pr-6;
@@ -27,11 +27,11 @@
     @apply grid grid-cols-3 w-full my-5 gap-x-4 gap-y-8;
 }
 .selectors{
-    @apply grid grid-cols-3 w-full my-5 gap-6;
+    @apply grid grid-cols-3 w-full mt-4 gap-6;
 
 }
 .field_wrapper {
-    @apply flex flex-col w-full sm:max-h-[110px] sm:h-[110px] h-[90px] max-h-[90px] gap-6;
+    @apply flex flex-col w-full sm:max-h-[80px] sm:h-[110px] h-[90px] max-h-[90px] gap-6;
   }
   
   .field_style {
@@ -40,3 +40,22 @@
   .checklist_item{
     @apply font-rajdhani font-semibold text-base leading-5 text-subHeading capitalize;
   }
+  .responsive_filters{
+    @apply flex md:hidden w-full gap-2 overflow-x-scroll;
+  }
+  .responsive_filters::-webkit-scrollbar{
+    display: none;
+  }
+  .responsive_filter_box{
+    @apply flex px-4 py-1 border border-line rounded-[14px] my-[6px];
+  }
+  .responsive_filter_item{
+    @apply flex font-rajdhani text-xs text-para capitalize whitespace-nowrap;
+  }
+  .clear_fil_btn{
+    @apply gap-2 px-2 py-1 mt-1 h-6 capitalize items-center bg-transparent text-primary border-primary border w-fit md:hidden;
+}
+
+.fill_btn{
+  @apply items-center  min-w-6 min-h-6 py-2 px-2 sm:hidden;
+}

@@ -8,17 +8,51 @@ import Step2 from "./Step2";
 import { Images } from "@/assets/Images";
 import Image from "next/image";
 import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from "next/navigation";
 
 const AddCarForm = () => {
   const [showActiveStep, setShowActiveStep] = useState<number>(1);
   const [stepsData, setStepsData] = useState<any>(null);
+  const router = useRouter()
   return (
-    <div className={styles.wrapper}>
+    
+    <div className={`container_space large_layout ${styles.wrapper}`}>
+      <div
+          className="sm:hidden md:left-16 left-0 flex gap-2 items-center cursor-pointer"
+          onClick={() => router.back()}
+        >
+          <Image
+            src={Images.backArrow}
+            alt="back-arrow"
+            width={32}
+            height={32}
+            className="md:w-8 md:h-8 w-6 h-6"
+          />
+          <p className="text-secondary text-base font-rajdhani uppercase font-medium">
+            Back
+          </p>
+        </div>
       <div className={styles.form_wrapper}>
         <p className={styles.heading}>Add Car</p>
 
+         {/* need to optimize code bcoz back iis used multiple times */}
+        <div
+          className="hidden sm:flex md:left-16 left-0 sm:top-1 gap-2 items-center cursor-pointer"
+          onClick={() => router.back()}
+        >
+          <Image
+            src={Images.backArrow}
+            alt="back-arrow"
+            width={32}
+            height={32}
+            className="md:w-8 md:h-8 w-6 h-6"
+          />
+          <p className="text-secondary text-base font-rajdhani uppercase font-medium">
+            Back
+          </p>
+        </div>
         {/* steper / */}
-        <div className="flex justify-center items-center w-fit mx-auto my-12 relative">
+        <div className="flex justify-center items-center w-fit mx-auto sm:my-4 my-10 relative">
           <div className={styles.line1} />
 
           <p className={`${styles.common_step} ${styles.step1}`}>Step1</p>
@@ -28,7 +62,7 @@ const AddCarForm = () => {
                 ? "bg-white "
                 : "bg-primary justify-center flex "
             }`}
-            onClick={() => setShowActiveStep(1)}
+            // onClick={() => setShowActiveStep(1)}
           >
             {stepsData === null ? (
               ""

@@ -23,7 +23,7 @@ const LoginForm = () => {
   const [otpSend, setOtpSend] = useState(false);
   const [backBtnStatus, setBackBtnStatus] = useState(true);
   const [mobileNumber, setMobileNumber] = useState('');
-
+  const [heading, setHeading] = useState('Login Account');
   const handleSubmit = (values, { setSubmitting }) => {
     console.log(values, "submitted values");
     sendOtp(`+91${values.mobileNumber}`)
@@ -34,7 +34,8 @@ const LoginForm = () => {
         setOtpSend(true);
         setSubmitting(false);
         setBackBtnStatus(true);
-        // toast.success("OTP sent successfully!");
+        setHeading('OTP Verification');
+        toast.success("OTP sent successfully!");
       })
       .catch((err) => {
         console.log(err);
@@ -44,14 +45,15 @@ const LoginForm = () => {
   };
 
   return (
-    <div>
+    <div className="w-full relative z-20">
       <ToastContainer />
 
       {otpSend && backBtnStatus && (
         <div
-          className="absolute left-16 flex gap-2 items-center cursor-pointer"
+          className="md:absolute md:left-16 left-0 md:top-[-100px]  flex gap-2 items-center cursor-pointer"
           onClick={() => {
             setBackBtnStatus(false);
+            setHeading("Login Account")
           }}
         >
           <Image
@@ -59,6 +61,7 @@ const LoginForm = () => {
             alt="back-arrow"
             width={32}
             height={32}
+            className="md:w-8 md:h-8 w-6 h-6"
           />
           <p className="text-secondary text-base font-rajdhani uppercase font-medium">
             Back
@@ -74,9 +77,9 @@ const LoginForm = () => {
         className="w-8 h-8 sm:w-12 sm:h-12 mx-auto"
       />
       <p className={styles.subheading}>My Car</p>
-      <p className={styles.heading}>Login Account</p>
+      <p className={styles.heading}>{heading}</p>
       {otpSend && backBtnStatus ? (
-        <OtpVerification mobileNumber={mobileNumber} formData={undefined}/>
+        <OtpVerification mobileNumber={mobileNumber} formData={undefined}   setHeading={setHeading}/>
       ) : (
         <Formik
           initialValues={{ mobileNumber: "" }}
@@ -84,9 +87,9 @@ const LoginForm = () => {
           onSubmit={handleSubmit}
         >
           {({ isSubmitting }) => (
-            <Form>
-              <div className="flex flex-col">
-                <label className={styles.label_Style}>Mobile Number</label>
+            <Form className="my-6" >
+              <div className="flex flex-col w-full justify-center items-center">
+                <label className={`${styles.label_Style}  sm:!w-[430px] !w-full `}>Mobile Number</label>
                 <Field
                   name="mobileNumber"
                   type="text"
@@ -94,12 +97,12 @@ const LoginForm = () => {
                   placeholder="Enter your mobile number"
                 />
                 <ErrorMessage name="mobileNumber">
-                  {(msg) => <div className={styles.error_msg}>{msg}</div>}
+                  {(msg) => <div className={`${styles.error_msg}  sm:!w-[430px] !w-full`}>{msg}</div>}
                 </ErrorMessage>
               </div>
               <button
                 type="submit"
-                className="w-full mx-auto mt-14"
+                className="w-full mx-auto md:mt-10 mt-6"
                 disabled={isSubmitting}
               >
                 <Button otherStyles="sm:w-[430px] w-full mx-auto uppercase">

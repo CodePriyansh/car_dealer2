@@ -1,5 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 import { verifyOtp, sendOtp } from "@/services/firebase/firebaseAuthService"; // Import sendOtp and verifyOtp functions
 import styles from "../SignUp/styles.module.css";
 import { useRouter } from "next/navigation";
@@ -9,7 +11,7 @@ import path from "path";
 import { setLocalStorage } from "@/constants/constants";
 import Cookies from "universal-cookie";
 
-const OtpVerification = ({ mobileNumber, formData }) => {
+const OtpVerification = ({ mobileNumber, formData, setHeading }) => {
   const cookies = new Cookies();
   const [otp, setOtp] = useState(["", "", "", "", "", ``]);
   const [seconds, setSeconds] = useState(56);
@@ -41,6 +43,7 @@ const OtpVerification = ({ mobileNumber, formData }) => {
 
       if (newOtp.every((digit) => digit !== "")) {
         setIsOtpEntered(true);
+        setHeading("Confirm Otp")
       }
     }
   };
@@ -83,6 +86,9 @@ const OtpVerification = ({ mobileNumber, formData }) => {
       console.log("Login API called with mobile number:", mobileNumber);
       try {
         const url = formData ? "/api/dealers/signup" : "/api/dealers/login";
+        if(formData){
+           formData.set("firebaseUserId",user.uid)
+        }
         const payload = formData ? formData : { phoneNumber: mobileNumber };
         console.log(payload, "Pay");
 
@@ -90,14 +96,13 @@ const OtpVerification = ({ mobileNumber, formData }) => {
         console.log(response, "response");
         if (response.status >= 200) {
           cookies.set("token", response.data.data.token, { path: "/" });
-          setLocalStorage("user", JSON.stringify(response.data))
-          // Redirect to the next page
+          setLocalStorage("user", JSON.stringify(response.data.data))
           toast.success(response?.data.message);
           router.push("/");
         }
       } catch (error) {
         if (error.response && error.response.status === 404) {
-          // User not found, redirect to signup
+          toast.info("User not found, redirecting to signup", 2000);
           const params = new URLSearchParams({
             mobileNumber,
             id: user.uid,
@@ -105,7 +110,8 @@ const OtpVerification = ({ mobileNumber, formData }) => {
           router.push(`/signup?${params.toString()}`);
         } else {
           console.error("Failed to call API", error);
-          toast.error("Failed to call API. Please try again.");
+          toast.error(error?.response?.data?.message);
+          router.push("/signup")
         }
       }
     } catch (error) {
@@ -116,7 +122,7 @@ const OtpVerification = ({ mobileNumber, formData }) => {
 
   return (
     <div className="flex flex-col">
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <form onSubmit={handleSubmit} className="flex flex-col items-center">
         <div className="flex gap-4 mb-4">
           {otp.map((digit, index) => (
@@ -128,7 +134,7 @@ const OtpVerification = ({ mobileNumber, formData }) => {
               onChange={(e) => handleChange(e, index)}
               onKeyDown={(e) => handleBackspace(e, index)}
               ref={(el) => (inputRefs.current[index] = el)}
-              className="w-12 h-12 text-xl text-center font-semibold border outline-none border-primary rounded"
+              className="w-9 h-9 sm:w-12 sm:h-12 text-xl text-center font-semibold border outline-none border-primary rounded"
             />
           ))}
         </div>

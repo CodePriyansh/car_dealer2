@@ -1,19 +1,49 @@
-.carsGrid {
-    @apply gap-6;
+  .card_wrapper{
+    @apply w-full flex rounded-[10px] flex-col max-w-full overflow-hidden   ;
+    box-shadow: 0px 0px 14px 0px rgba(0, 89, 163, 0.06);
+    background: rgba(247, 249, 253, 1);
+    border: 1px solid rgba(239, 110, 11, 0.3);
+    position: relative;
+  }
+  .card_img_wrapper{
+    @apply flex xl:h-[280px] lg:h-[250px] md:h-[240px] sm:h-[230px] h-[200px] w-full cursor-pointer;
+  }
+  .car_header{
+    @apply flex w-full justify-between items-center px-4 sm:py-3 py-2;
+  }
+  .header_left{
+    @apply font-rajdhani font-bold sm:text-[20px] text-[17px] capitalize;
+  }
+  .header_right{
+    @apply flex gap-2
+  }
+  .card_price_row{
+    @apply flex w-full items-center justify-between px-4;
+  }
+  .price_left{
+    @apply font-rajdhani text-primary 2xl:text-[28px] text-[18px] font-bold leading-8
+
+  }
+  .price_right{
+    @apply font-rajdhani 2xl:text-20 text-18 font-medium text-lightpara ;
+  }
+  .features_row{
+    @apply flex w-full gap-2 mx-3 sm:my-2 my-2 overflow-x-scroll max-w-full;
+  }
+  .feature_item{
+    @apply flex bg-[#f0f2f5] rounded-md 2xl:text-20 md:text-[16px] text-[12px] font-rajdhani font-medium leading-6 px-2 whitespace-nowrap
+  }
+  .features_row::-webkit-scrollbar{
+    display: none;
+  }
+  .status_tag {
+    @apply absolute top-2 right-2;
   }
   
-  .carCard img {
-    @apply transition-transform duration-300;
+  .status_avail {
+    @apply bg-availGreen text-white px-2 py-1 rounded-xl flex gap-1 font-rajdhani;
   }
-  
-  .carCard img:hover {
-    @apply transform scale-105;
-  }
-  
-  .carCard {
-    @apply transition-shadow duration-300;
-  }
-  
-  .carCard:hover {
-    @apply shadow-lg;
+
+  .status_sold {
+    @apply bg-soldRed text-white px-2 py-1 rounded-xl flex gap-1 font-rajdhani;
   }

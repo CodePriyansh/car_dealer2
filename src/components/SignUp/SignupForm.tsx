@@ -1,9 +1,14 @@
 "use client";
-
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage, FormikErrors } from "formik";
 import * as yup from "yup";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import {
+  MutableRefObject,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import styles from "./styles.module.css";
 import Image from "next/image";
 import { Images } from "@/assets/Images";
@@ -15,11 +20,12 @@ import { sendOtp } from "@/services/firebase/firebaseAuthService";
 import instance from "@/network/axios";
 import { setLocalStorage } from "@/constants/constants";
 import Cookies from "universal-cookie";
-
+import login from "../../assets/responsive-login.png";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
   phoneNumber: yup.string().required("Phone Number is required"),
-  telephoneNumber: yup.string().required("Telephone Number is required"),
+  telephoneNumber: yup.string().optional(),
   email: yup.string().email("Invalid email").required("Email is required"),
   city: yup.string().required("City is required"),
   state: yup.string().required("State is required"),
@@ -31,6 +37,7 @@ const schema = yup.object().shape({
 
 export default function SignupForm() {
   const cookies = new Cookies();
+  const [heading, setHeading] = useState("Signup Account");
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -40,10 +47,11 @@ export default function SignupForm() {
   const [formData, setFormData] = useState<FormData | null>(null);
   const [id, setId] = useState("");
   const searchParams = useSearchParams();
-
-  console.log(searchParams);
-  console.log(searchParams.get("mobileNumber"));
-  console.log(searchParams.get("id"));
+  const [imagePreviews, setImagePreviews] = useState({
+    coverImage: null,
+    profileImage: null,
+    shopImage: null,
+  });
   useEffect(() => {
     const mobileNumber = searchParams.get("mobileNumber") || "";
     const id = searchParams.get("id") || "";
@@ -67,7 +75,36 @@ export default function SignupForm() {
     router.push("/login");
   };
 
-  const onSubmit = async (values, { setSubmitting }) => {
+  const handleImageChange = (event, setFieldValue, fieldName) => {
+    const file = event.currentTarget.files[0];
+    if (file) {
+      if (file.type.includes("image")) {
+        setFieldValue(fieldName, file);
+        // Create preview URL
+        const previewUrl = URL.createObjectURL(file);
+        setImagePreviews((prev) => ({ ...prev, [fieldName]: previewUrl }));
+      } else {
+        toast.error("Only image files are allowed.");
+      }
+    }
+  };
+
+  const handleRemoveImage = (setFieldValue, fieldName, inputRef) => {
+    setFieldValue(fieldName, null);
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+    // Remove preview
+    setImagePreviews((prev) => ({ ...prev, [fieldName]: null }));
+  };
+
+  const onSubmit = async (
+    values: {
+      [x: string]: string | Blob;
+      mobileNumber: SetStateAction<string>;
+    },
+    { setSubmitting }: any
+  ) => {
     console.log(values, "--------------------");
     setBackBtnStatus(true);
     console.log(values, "values");
@@ -88,7 +125,10 @@ export default function SignupForm() {
     console.log([...formData.entries()], "signup form data");
     setFormData(formData);
 
-    if (searchParams.get("mobileNumber")) {
+    if (
+      searchParams.get("mobileNumber") &&
+      searchParams.get("mobileNumber") == values.phoneNumber
+    ) {
       try {
         const url = "/api/dealers/signup";
         const payload = formData;
@@ -99,9 +139,8 @@ export default function SignupForm() {
         });
 
         if (response.status === 200) {
-
           cookies.set("token", response.data.data.token, { path: "/" });
-          setLocalStorage("user", JSON.stringify(response.data))
+          setLocalStorage("user", JSON.stringify(response.data.data));
           toast.success(response.data.message);
           router.push("/");
         }
@@ -110,13 +149,16 @@ export default function SignupForm() {
         toast.error(error.message);
       }
     } else {
-      sendOtp(`+91${values.mobileNumber}`)
+      console.log(values, "wefnwfewwe");
+      sendOtp(`+91${values.phoneNumber}`)
         .then(() => {
           console.log("OTP sent successfully");
-          setMobileNumber(values.mobileNumber);
+          setMobileNumber(values.phoneNumber);
           setOtpSend(true);
           setSubmitting(false);
           setBackBtnStatus(true);
+          setHeading("OTP Verification");
+
           toast.success("OTP sent successfully!");
         })
         .catch((err) => {
@@ -128,24 +170,6 @@ export default function SignupForm() {
           toast.error("Failed to send OTP. Please try again.");
         });
     }
-
-    // try {
-    //   const response = await axios.post("YOUR_API_ENDPOINT", formData, {
-    //     headers: {
-    //       "Content-Type": "multipart/form-data",
-    //     },
-    //   });
-    //     toast.success("dealer added successfully")
-    // } catch (error) {
-    //   setMessage("Failed to register dealer.");
-    //   setOtpSend(false);
-    // } finally {
-    //   setLoading(false);
-    //   setSubmitting(false);
-    //   setOtpSend(false);
-    // }
-    // ye line comment kar dena jab api call sai chale tab
-    // setOtpSend(true);
   };
 
   const coverImageInputRef = useRef<HTMLInputElement | null>(null);
@@ -155,22 +179,23 @@ export default function SignupForm() {
   console.log(coverImageInputRef, shopImageInputRef);
 
   return (
-    <div className={`flex flex-col justify-center items-center`}>
+    <div className={`flex flex-col justify-center items-center w-full`}>
       {/* Form details */}
-      <ToastContainer />
+      {/* <ToastContainer /> */}
 
       <div className={`${styles.form_wrapper}`}>
         <div
           className={` ${styles.scrollbar} ${
-            otpSend && backBtnStatus && "flex flex-col justify-start"
+            otpSend && backBtnStatus && "flex flex-col !justify-start mt-8"
           }`}
         >
-          <div>
+          <div className="w-full">
             {otpSend && backBtnStatus && (
               <div
-                className="absolute left-16 flex gap-2 items-center cursor-pointer"
+                className="md:absolute md:left-16 left-0 flex gap-2 items-center cursor-pointer"
                 onClick={() => {
                   setBackBtnStatus(false);
+                  setHeading("Signup Account");
                 }}
               >
                 <Image
@@ -178,6 +203,7 @@ export default function SignupForm() {
                   alt="back-arrow"
                   width={32}
                   height={32}
+                  className="md:w-8 md:h-8 w-6 h-6"
                 />
                 <p className="text-secondary text-base font-rajdhani uppercase font-medium">
                   Back
@@ -193,11 +219,27 @@ export default function SignupForm() {
               className="w-8 h-8 sm:w-12 sm:h-12 mx-auto"
             />
             <p className={styles.subheading}>My Car</p>
-            <p className={styles.heading}>Signup Account</p>
+            <p className={styles.heading}>{heading}</p>
           </div>
 
           {otpSend && backBtnStatus ? (
-            <OtpVerification mobileNumber={mobileNumber} formData={formData} />
+            <>
+              <OtpVerification
+                mobileNumber={mobileNumber}
+                formData={formData}
+                setBackBtnStatus={setBackBtnStatus}
+                setHeading={setHeading}
+              />
+              <div
+                className="w-full h-[50vh] flex lg:hidden absolute bottom-0 z-10"
+                style={{
+                  backgroundImage: `url(${login.src})`,
+                  backgroundSize: "contain",
+                  backgroundPosition: "bottom",
+                  backgroundRepeat: "no-repeat",
+                }}
+              ></div>
+            </>
           ) : (
             <Formik
               initialValues={initialValues}
@@ -205,10 +247,10 @@ export default function SignupForm() {
               onSubmit={onSubmit}
             >
               {({ setFieldValue, isSubmitting, values }) => (
-                <Form>
+                <Form className="m-1">
                   <div>
-                    <div className="w-full flex sm:flex-row flex-col gap-8">
-                      <div className="flex full flex-col gap-6">
+                    <div className="w-full md:w-fit md:mx-auto flex md:flex-row flex-col gap-6">
+                      <div className="flex full flex-col md:gap-6 gap-6 md:w-[280px] w-full ">
                         <div className={styles.field_wrapper}>
                           <label className={styles.label_Style}>Name</label>
                           <Field
@@ -254,7 +296,7 @@ export default function SignupForm() {
                         </div>
                       </div>
 
-                      <div className="flex sm:w-1/2 w-full flex-col gap-6">
+                      <div className="flex w-full md:w-[280px] flex-col md:gap-6 gap-3">
                         <div className={styles.field_wrapper}>
                           <label className={styles.label_Style}>
                             Mobile Number
@@ -301,7 +343,7 @@ export default function SignupForm() {
                       </div>
                     </div>
 
-                    <div className="flex gap-6 my-6 flex-col">
+                    <div className="flex md:gap-6 gap-3 my-6 flex-col md:mx-auto !max-w-[584px] md:min-w-[560px]">
                       {/* shop Address */}
                       <div className={styles.field_wrapper}>
                         <label className={styles.label_Style}>
@@ -310,7 +352,7 @@ export default function SignupForm() {
                         <Field
                           name="shopAddress"
                           placeholder="Enter Shop Address"
-                          className={`${styles.field_style} !max-w-[584px] !w-full`}
+                          className={`${styles.field_style}  !w-full `}
                         />
                         <ErrorMessage
                           name="shopAddress"
@@ -327,39 +369,60 @@ export default function SignupForm() {
                           className={styles.dotted_box}
                           onClick={() => coverImageInputRef.current?.click()}
                         >
-                          <Image
-                            src={Images.uploadImg}
-                            alt="img"
-                            className="w-8 h-8"
-                          />
-                          <Button otherStyles="mt-[50px]">
-                            <Image
-                              src={Images.plus}
-                              alt="plus"
-                              width={20}
-                              height={20}
-                            />
-                            Add Cover Image
-                          </Button>
+                          {imagePreviews.coverImage ? (
+                            <div className={styles.img_preview}>
+                              <Image
+                                src={imagePreviews.coverImage}
+                                alt="Cover Image"
+                                className="w-full h-full object-cover rounded"
+                                width={200}
+                                height={200}
+                              />
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleRemoveImage(
+                                    setFieldValue,
+                                    "coverImage",
+                                    coverImageInputRef
+                                  )
+                                }
+                                className="absolute top-2 right-2 bg-white rounded-full p-1"
+                              >
+                                <AiOutlineCloseCircle size={20} />
+                              </button>
+                            </div>
+                          ) : (
+                            <>
+                              <Image
+                                src={Images.uploadImg}
+                                alt="img"
+                                className="w-8 h-8"
+                              />
+                              <Button otherStyles="mt-[50px]">
+                                <Image
+                                  src={Images.plus}
+                                  alt="plus"
+                                  width={20}
+                                  height={20}
+                                />
+                                Add Cover Image
+                              </Button>
+                            </>
+                          )}
                           <input
                             type="file"
                             ref={coverImageInputRef}
-                            onChange={(
-                              event: React.ChangeEvent<HTMLInputElement>
-                            ) => {
-                              const files = event.currentTarget.files;
-                              if (files && files.length > 0) {
-                                setFieldValue("coverImage", files[0]);
-                              }
-                            }}
+                            onChange={(event) =>
+                              handleImageChange(
+                                event,
+                                setFieldValue,
+                                "coverImage"
+                              )
+                            }
                             style={{ display: "none" }}
                             name="coverImage"
                           />
-                          {values.coverImage && (
-                            <p className={styles.selected_file}>
-                              {values.coverImage.name}
-                            </p>
-                          )}
                         </div>
                         <ErrorMessage
                           name="coverImage"
@@ -378,39 +441,61 @@ export default function SignupForm() {
                             Add Profile Image
                           </label>
                           <div className={styles.dotted_box}>
-                            <Image
-                              src={Images.uploadImg}
-                              alt="img"
-                              className="w-8 h-8"
-                            />
-                            <Button otherStyles="mt-[50px]">
-                              <Image
-                                src={Images.plus}
-                                alt="plus"
-                                width={20}
-                                height={20}
-                              />
-                              Add Profile Image
-                            </Button>
+                            {imagePreviews.profileImage ? (
+                              <div className={styles.img_preview}>
+                                <Image
+                                  src={imagePreviews.profileImage}
+                                  alt="Profile Image"
+                                  className="w-full h-full object-cover rounded"
+                                  width={200}
+                                  height={200}
+                                />
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleRemoveImage(
+                                      setFieldValue,
+                                      "profileImage",
+                                      profileImageInputRef
+                                    );
+                                  }}
+                                  className="absolute top-2 right-2 bg-white rounded-full p-1"
+                                >
+                                  <AiOutlineCloseCircle size={20} />
+                                </button>
+                              </div>
+                            ) : (
+                              <>
+                                <Image
+                                  src={Images.uploadImg}
+                                  alt="img"
+                                  className="w-8 h-8"
+                                />
+                                <Button otherStyles="mt-[50px]">
+                                  <Image
+                                    src={Images.plus}
+                                    alt="plus"
+                                    width={20}
+                                    height={20}
+                                  />
+                                  Add Profile Image
+                                </Button>
+                              </>
+                            )}
                             <input
                               type="file"
                               ref={profileImageInputRef}
                               style={{ display: "none" }}
-                              onChange={(
-                                event: React.ChangeEvent<HTMLInputElement>
-                              ) => {
-                                const files = event.currentTarget.files;
-                                if (files && files.length > 0) {
-                                  setFieldValue("profileImage", files[0]);
-                                }
-                              }}
+                              onChange={(event) =>
+                                handleImageChange(
+                                  event,
+                                  setFieldValue,
+                                  "profileImage"
+                                )
+                              }
                               name="profileImage"
                             />
-                            {values.profileImage && (
-                              <p className={styles.selected_file}>
-                                {values.profileImage.name}
-                              </p>
-                            )}
                           </div>
                           <ErrorMessage
                             name="profileImage"
@@ -420,47 +505,70 @@ export default function SignupForm() {
                         </div>
 
                         {/* Add shop image */}
-                        <div className="sm:w-1/2 w-full">
+                        <div
+                          className="sm:w-1/2 w-full"
+                          onClick={() => shopImageInputRef.current?.click()}
+                        >
                           <label className={styles.label_Style}>
                             Add Shop Image
                           </label>
-                          <div
-                            className={styles.dotted_box}
-                            onClick={() => shopImageInputRef.current?.click()}
-                          >
-                            <Image
-                              src={Images.uploadImg}
-                              alt="img"
-                              className="w-8 h-8"
-                            />
-                            <Button otherStyles="mt-[50px]">
-                              <Image
-                                src={Images.plus}
-                                alt="plus"
-                                width={20}
-                                height={20}
-                              />
-                              Add Shop Image
-                            </Button>
+                          <div className={styles.dotted_box}>
+                            {imagePreviews.shopImage ? (
+                              <div className={styles.img_preview}>
+                                <Image
+                                  src={imagePreviews.shopImage}
+                                  alt="Shop Image"
+                                  className="w-full h-full object-cover rounded"
+                                  width={200}
+                                  height={200}
+                                />
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleRemoveImage(
+                                      setFieldValue,
+                                      "shopImage",
+                                      shopImageInputRef
+                                    );
+                                  }}
+                                  className="absolute top-2 right-2 bg-white rounded-full p-1"
+                                >
+                                  <AiOutlineCloseCircle size={20} />
+                                </button>
+                              </div>
+                            ) : (
+                              <>
+                                <Image
+                                  src={Images.uploadImg}
+                                  alt="img"
+                                  className="w-8 h-8"
+                                />
+                                <Button otherStyles="mt-[50px]">
+                                  <Image
+                                    src={Images.plus}
+                                    alt="plus"
+                                    width={20}
+                                    height={20}
+                                  />
+                                  Add Shop Image
+                                </Button>
+                              </>
+                            )}
                             <input
                               type="file"
                               ref={shopImageInputRef}
-                              onChange={(
-                                event: React.ChangeEvent<HTMLInputElement>
-                              ) => {
-                                const files = event.currentTarget.files;
-                                if (files && files.length > 0) {
-                                  setFieldValue("shopImage", files[0]);
-                                }
-                              }}
+                              onChange={(event) =>
+                                handleImageChange(
+                                  event,
+                                  setFieldValue,
+                                  "shopImage"
+                                )
+                              }
+                              accept="image/*"
                               style={{ display: "none" }}
                               name="shopImage"
                             />
-                            {values.shopImage && (
-                              <p className={styles.selected_file}>
-                                {values.shopImage.name}
-                              </p>
-                            )}
                           </div>
                           <ErrorMessage
                             name="shopImage"
@@ -472,11 +580,11 @@ export default function SignupForm() {
 
                       <button
                         type="submit"
-                        className="w-full mx-auto"
+                        className="w-full mx-auto my-2"
                         disabled={isSubmitting}
                       >
                         <Button otherStyles="sm:w-[430px] w-full mx-auto uppercase">
-                          Get OTP
+                          {mobileNumber ? "Sign Up" : "Get OTP"}
                         </Button>
                       </button>
                       {/* Bottom info */}
@@ -498,6 +606,7 @@ export default function SignupForm() {
         </div>
         {message && <p className="mt-4 text-center text-red-500">{message}</p>}
       </div>
+      <ToastContainer/>
     </div>
   );
 }

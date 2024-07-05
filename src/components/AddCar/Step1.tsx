@@ -1,5 +1,4 @@
-import React, { useRef, useState } from "react";
-import signupStyles from "../SignUp/styles.module.css";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Images } from "@/assets/Images";
 import Button from "../Common/Button";
@@ -7,8 +6,8 @@ import CommonReactSelect from "../Common/Select";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import styles from "./styles.module.css";
-import { ToastContainer } from "react-toastify";
-
+import { toast, ToastContainer } from "react-toastify";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 interface Step1Props {
   setShowActiveStep: React.Dispatch<React.SetStateAction<number>>;
   setStepsData: (data: any) => void;
@@ -22,7 +21,14 @@ const fields = [
     options: [
       { value: "Toyota", label: "Toyota" },
       { value: "Honda", label: "Honda" },
+      { value: "Tata Motors", label: "Tata" },
+      { value: "Mahindra", label: "Mahindra" },
+      { value: "Maruti Suzuki", label: "Maruti Suzuki" },
+      { value: "Hyundai", label: "Hyundai" },
+      { value: "Skoda", label: "Skoda" },
+      { value: "Kia", label: "Kia" },
       { value: "Ford", label: "Ford" },
+      { value: "Volkswagen", label: "Volkswagen" }
     ],
   },
   {
@@ -30,8 +36,53 @@ const fields = [
     type: "select",
     placeholder: "Select Model",
     options: [
-      { value: "Model 1", label: "Model 1" },
-      { value: "Model 2", label: "Model 2" },
+      {
+        name: "modelName",
+        type: "select",
+        placeholder: "Select Model",
+        options: [
+          // Toyota Models
+          { value: "Fortuner", label: "Fortuner" },
+          { value: "Innova Crysta", label: "Innova Crysta" },
+          { value: "Glanza", label: "Glanza" },
+          // Honda Models
+          { value: "City", label: "City" },
+          { value: "Amaze", label: "Amaze" },
+          { value: "Jazz", label: "Jazz" },
+          // Tata Motors Models
+          { value: "Nexon", label: "Nexon" },
+          { value: "Harrier", label: "Harrier" },
+          { value: "Altroz", label: "Altroz" },
+          // Mahindra Models
+          { value: "Scorpio", label: "Scorpio" },
+          { value: "Thar", label: "Thar" },
+          { value: "XUV700", label: "XUV700" },
+          // Maruti Suzuki Models
+          { value: "Swift", label: "Swift" },
+          { value: "Baleno", label: "Baleno" },
+          { value: "Ertiga", label: "Ertiga" },
+          // Hyundai Models
+          { value: "Creta", label: "Creta" },
+          { value: "Venue", label: "Venue" },
+          { value: "i20", label: "i20" },
+          // Skoda Models
+          { value: "Rapid", label: "Rapid" },
+          { value: "Kushaq", label: "Kushaq" },
+          { value: "Octavia", label: "Octavia" },
+          // Kia Models
+          { value: "Seltos", label: "Seltos" },
+          { value: "Sonet", label: "Sonet" },
+          { value: "Carnival", label: "Carnival" },
+          // Ford Models
+          { value: "EcoSport", label: "EcoSport" },
+          { value: "Endeavour", label: "Endeavour" },
+          { value: "Figo", label: "Figo" },
+          // Volkswagen Models
+          { value: "Polo", label: "Polo" },
+          { value: "Vento", label: "Vento" },
+          { value: "Tiguan", label: "Tiguan" }
+        ],
+      },
     ],
   },
   { name: "variant", type: "text", placeholder: "Enter Variant" },
@@ -42,12 +93,17 @@ const fields = [
     options: [
       { value: "SUV", label: "SUV" },
       { value: "Sedan", label: "Sedan" },
-      { value: "Truck", label: "Truck" },
+      { value: "Pickup", label: "Pickup" },
+      { value: "Minivan", label: "Minivan" },
+      { value: "Coupes", label: "Coupes" },
+      { value: "Hatchbacks", label: "Hatchbacks" },
+      { value: "Wagon", label: "Wagon" },
+      { value: "Van", label: "Van" },
     ],
   },
   {
     name: "yearOfManufacture",
-    type: "date",
+    type: "month",
     placeholder: "Select Year of Manufacture",
   },
   {
@@ -63,7 +119,7 @@ const fields = [
     placeholder: "Select Color",
     options: [
       { value: "Red", label: "Red" },
-      { value: "Blue", label: "Blue" },
+      { value: "Blue", label: "Blue" } ,
       { value: "Black", label: "Black" },
     ],
   },
@@ -74,6 +130,7 @@ const fields = [
     options: [
       { value: "Manual", label: "Manual" },
       { value: "Automatic", label: "Automatic" },
+      { value: "Paddle Shift", label: "Paddle Shift" },
     ],
   },
   {
@@ -118,7 +175,8 @@ const fields = [
     placeholder: "Select Owner Type",
     options: [
       { value: "First Owner", label: "First Owner" },
-      { value: "Second Owner", label: "Second owner" },
+      { value: "Second Owner", label: "Second Owner" },
+      { value: "Third Owner", label: "Third Owner" },
     ],
   },
   {
@@ -130,28 +188,34 @@ const fields = [
       { value: "No", label: "No" },
     ],
   },
-  { name: "insuranceValidity", type: "date", placeholder: "Enter Insurance Validity Date" },
+  // { name: "insuranceValidity", type: "date", placeholder: "Enter Insurance Validity Date" },
 
 ];
 
-const validationSchema = Yup.object().shape(
-  fields.reduce((acc, field) => {
-    acc[field.name] = Yup.string().required(`${field.placeholder} is required`);
-    return acc;
-  }, {})
-);
+
 const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
   const profileImageInputRef = useRef<HTMLInputElement | null>(null);
-
+  const [scratchAndDentImagePreview, setScratchAndDentImagePreview] = useState<string | null>(null);
   const initialValues = {
     dentDetails: "",
     description: "",
     scratchAndDentImage: null,
     ...fields.reduce((acc, field) => {
-      acc[field.name] = "test";
+      acc[field.name] = "";
       return acc;
     }, {}),
   };
+
+  const validationSchema = Yup.object().shape({
+    ...fields.reduce((acc, field) => {
+      acc[field.name] = Yup.string().required(`${field.placeholder} is required`);
+      return acc;
+    }, {}),
+    insuranceValidity: Yup.string().when("insurance", {
+      is: (insurance: string) => insurance === "Yes",
+      then: () => Yup.string().required("Enter Insurance Validity Date is required"),
+    }),
+  });
   const handleSubmit = (values: any, { setSubmitting }) => {
     console.log("Form data", values);
     setSubmitting(false);
@@ -169,9 +233,39 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
     });
   };
 
+  const handleRemoveImage = (setFieldValue: (field: string, value: any) => void) => {
+    setFieldValue("scratchAndDentImage", null);
+    setScratchAndDentImagePreview(null);
+    if (profileImageInputRef.current) {
+      profileImageInputRef.current.value = "";
+    }
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>, setFieldValue: (field: string, value: any) => void) => {
+    const file = event.currentTarget.files?.[0];
+    if (file) {
+      if (file.type.includes("image")) {
+        setFieldValue("scratchAndDentImage", file);
+        // Create preview URL
+        const previewUrl = URL.createObjectURL(file);
+        setScratchAndDentImagePreview(previewUrl);
+      } else {
+        toast.error("Only image files are allowed.");
+      }
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      // Clean up object URL to prevent memory leaks
+      if (scratchAndDentImagePreview) {
+        URL.revokeObjectURL(scratchAndDentImagePreview);
+      }
+    };
+  }, [scratchAndDentImagePreview]);
   return (
     <div>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
 
       <Formik
         initialValues={initialValues}
@@ -179,13 +273,13 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
         onSubmit={handleSubmit}
       >
         {({ values, isSubmitting, setFieldValue }) => (
-          <Form className="w-full">
+          <Form className="w-full sm:px-6">
             {/* Basic Details */}
             <div className={styles.basic_detail_heading}>
               <p className={styles.sub_heading}>Basic Details</p>
-              <p className={styles.line}></p>
+              <p className={`${styles.line} h-[1px] w-full`}></p>
             </div>
-            <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 w-full gap-6 my-4">
+            <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 w-full sm:gap-6 sm:my-4 gap-2 my-2">
               {fields.map((field, index) => (
                 <div className={styles.field_wrapper} key={index}>
                   <label className={styles.label_Style}>
@@ -198,9 +292,11 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
                       selectedOption={selectedOptions[field.name]}
                       setSelectedOption={(option) => {
                         handleChange(field.name, option);
+                        console.log(field.name, option)
                         setFieldValue(field.name, option ? option.value : "");
                       }}
                       className={styles.field_style}
+                      isCreatable={['company', 'modelName', 'color'].includes(field.name)}
                     />
                   ) : (
                     <Field
@@ -213,10 +309,28 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
                   <ErrorMessage
                     name={field.name}
                     component="div"
-                    className="text-red-500 text-sm"
+                    className="error_msg"
                   />
                 </div>
               ))}
+              {values.insurance === "Yes" && (
+                <div className={styles.field_wrapper}>
+                  <label className={styles.label_Style}>
+                    Enter Insurance Validity Date
+                  </label>
+                  <Field
+                    type="date"
+                    name="insuranceValidity"
+                    placeholder="Enter Insurance Validity Date"
+                    className={styles.field_style}
+                  />
+                  <ErrorMessage
+                    name="insuranceValidity"
+                    component="div"
+                    className="error_msg"
+                  />
+                </div>
+              )}
             </div>
 
             {/* Description */}
@@ -246,63 +360,75 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
                     <ErrorMessage
                       name="scratchDetails"
                       component="div"
-                      className="text-red-500 text-sm"
+                      className="error_msg"
                     />
                   </div>
                 </div>
 
                 {/* Scratch & Dent Image (Optional) */}
-                <div className="sm:w-1/2 sm:h-1/3 w-full">
-                  <div className={styles.basic_detail_heading}>
-                    <p className={styles.sub_heading}>Scratch & Dent Image</p>
-                    <p className={styles.special_heading}>(If any) Optional</p>
-                  </div>
+                {/* Scratch & Dent Image (Optional) */}
+<div className="sm:w-1/2 sm:h-1/3 w-full">
+  <div className={styles.basic_detail_heading}>
+    <p className={styles.sub_heading}>Scratch & Dent Image</p>
+    <p className={styles.special_heading}>(If any) Optional</p>
+  </div>
 
-                  <div
-                    className={signupStyles.dotted_box}
-                    onClick={() => profileImageInputRef.current?.click()}
-                  >
-                    <Image
-                      src={Images.uploadImg}
-                      alt="img"
-                      className="w-8 h-8"
-                    />
-                    <Button otherStyles="mt-[50px]">
-                      <Image
-                        src={Images.plus}
-                        alt="plus"
-                        width={20}
-                        height={20}
-                      />
-                      Add Profile Image
-                    </Button>
-                    <input
-                      type="file"
-                      ref={profileImageInputRef}
-                      style={{ display: "none" }}
-                      onChange={(
-                        event: React.ChangeEvent<HTMLInputElement>
-                      ) => {
-                        const files = event.currentTarget.files;
-                        if (files && files.length > 0) {
-                          setFieldValue("scratchAndDentImage", files[0]);
-                        }
-                      }}
-                      name="profileImage"
-                    />
-                    {/* Conditional rendering within Formik's child function */}
-                    {values.profileImage && (
-                      <p className={styles.selected_file}>
-                        {values.profileImage.name}
-                      </p>
-                    )}
-                    <ErrorMessage
-                      name="profileImage"
-                      component="p"
-                      className="text-red-500 text-sm"
-                    />
-                  </div>
-                </div>
+  <div
+    className={styles.dotted_box}
+    onClick={() => profileImageInputRef.current?.click()}
+  >
+    {scratchAndDentImagePreview ? (
+      <div className="relative w-full h-full">
+        <Image
+          src={scratchAndDentImagePreview}
+          alt="Scratch & Dent Image"
+          className="w-full h-full object-cover rounded"
+          width={200}
+          height={200}
+        />
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleRemoveImage(setFieldValue);
+          }}
+          className="absolute top-2 right-2 bg-white rounded-full p-1"
+        >
+          <AiOutlineCloseCircle size={20} />
+        </button>
+      </div>
+    ) : (
+      <>
+        <Image
+          src={Images.uploadImg}
+          alt="img"
+          className="w-8 h-8"
+        />
+        <Button otherStyles="mt-[50px]">
+          <Image
+            src={Images.plus}
+            alt="plus"
+            width={20}
+            height={20}
+          />
+          Add Image
+        </Button>
+      </>
+    )}
+    <input
+      type="file"
+      ref={profileImageInputRef}
+      style={{ display: "none" }}
+      onChange={(event) => handleImageChange(event, setFieldValue)}
+      name="scratchAndDentImage"
+    />
+    <ErrorMessage
+      name="scratchAndDentImage"
+      component="p"
+      className="error_msg"
+    />
+  </div>
+</div>
               </div>
               <div className="basis-1/2">
                 <div className={styles.basic_detail_heading}>
@@ -330,11 +456,13 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
                     <ErrorMessage
                       name="description"
                       component="div"
-                      className="text-red-500 text-sm"
+                      className="error_msg"
                     />
                   </div>
                 </div>
               </div>
+            </div>
+            <div>
             </div>
             {/* Submit Button */}
             <button
@@ -349,6 +477,7 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
           </Form>
         )}
       </Formik>
+      <ToastContainer/>
     </div>
   );
 };

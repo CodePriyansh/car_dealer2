@@ -26,10 +26,23 @@ const config: Config = {
         subHeading:'rgba(0, 0, 0, 0.5)',
         'border-primary':'#0000001A',
         'f7f7f7':'#F7F7F7',
+        'lightpara':'rgba(0, 0, 0, 0.6)',
+        availGreen: "#0D9212",
+        soldRed: "#FA2D2D"
       },
       fontSize: {
         48:"48",
         18:'18',
+        20:"20",
+        24:'24',
+        14:'14',
+        12:'12',
+      },
+      screens: {
+        md1: "930px",
+        "3xl": "1660px",
+        "4xl": "1850px",
+        "last-screen": "1920px",
       },
     },
   },

@@ -3,7 +3,7 @@
 @tailwind utilities;
 /* globals.css */
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
-
+@import '~react-toastify/dist/ReactToastify.min.css';
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -41,6 +41,15 @@ p {
     text-wrap: balance;
   }
 }
+.large_layout {
+  @apply last-screen:w-[1920px] last-screen:max-w-[1920px]  mx-auto;
+}
+.container_space{
+  @apply  3xl:px-[125px] 2xl:px-[110px] xl:px-[90px] lg:px-[75px]  md:px-[60px] sm:px-[30px] px-4;
+}
+body {
+  @apply sm:bg-f7f7f7
+}
 
 /* For Chrome, Safari, Edge, Opera */
 input[type="number"]::-webkit-inner-spin-button,
@@ -68,8 +77,28 @@ input[type="checkbox"] {
   accent-color: #EF6E0B !important;
 }
 input:checked ~ .checkmark {
-  background-color: white;
+  background-color: transparent;
 }
 input[type="radio"]:checked {
   accent-color: #EF6E0B !important;
+}
+
+
+.custome-scrollbar::-webkit-scrollbar {
+  height: 8px;
+  border-radius: 6px;
+}
+
+/* Track */
+.custome-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+
+/* Handle */
+.custome-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background: #a09f9f; 
+}
+.error_msg{
+  @apply text-red-500 text-sm pt-1;
 }

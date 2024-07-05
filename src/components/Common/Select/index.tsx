@@ -3,6 +3,7 @@
 import React from 'react';
 import  { StylesConfig } from 'react-select'; // Import StylesConfig from react-select
 import CreatableSelect, { StylesConfig, ActionMeta, OnChangeValue } from 'react-select/creatable';
+import Select from 'react-select'
 const customStylesForSelect: StylesConfig<any, boolean> = {
     control: (baseStyles: any) => ({
       ...baseStyles,
@@ -79,6 +80,7 @@ interface ReactSelectProps {
   options: OptionType[];
   placeholder: string;
   className?: string;
+  isCreatable?: boolean;
 }
 
 const CommonReactSelect: React.FC<ReactSelectProps> = ({
@@ -87,6 +89,7 @@ const CommonReactSelect: React.FC<ReactSelectProps> = ({
   options,
   placeholder,
   className,
+  isCreatable = false,
 }) => {
 
   // Handle change when an option is selected or typed
@@ -105,18 +108,29 @@ const CommonReactSelect: React.FC<ReactSelectProps> = ({
 
   return (
     <div>
-      <CreatableSelect
-        value={selectedOption}
-        onChange={handleChange}
-        options={options}
-        placeholder={placeholder}
-        className={className}
-        styles={customStylesForSelect}
-        onCreateOption={(inputValue) => {
-          const newOption = createOption(inputValue);
-          setSelectedOption(newOption);
-        }}
-      />
+      {isCreatable ? (
+        <CreatableSelect
+          value={selectedOption}
+          onChange={handleChange}
+          options={options}
+          placeholder={placeholder}
+          className={className}
+          styles={customStylesForSelect}
+          onCreateOption={(inputValue) => {
+            const newOption = createOption(inputValue);
+            setSelectedOption(newOption);
+          }}
+        />
+      ) : (
+        <Select
+          value={selectedOption}
+          onChange={handleChange}
+          options={options}
+          placeholder={placeholder}
+          className={className}
+          styles={customStylesForSelect}
+        />
+      )}
     </div>
   );
 };

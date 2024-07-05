@@ -1,6 +1,6 @@
 import CarDetails from "@/components/HomePage/CarDetails";
 
-const CarDetailsPage = ({ params }) => {
+const CarDetailsPage = ({ params }: { params: { id: string } }) => {
   return <CarDetails params={params} />;
 };
 
