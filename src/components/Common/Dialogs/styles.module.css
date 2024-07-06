@@ -1,0 +1,54 @@
+/* styles.css */
+.button {
+    @apply px-4 py-2 rounded font-bold;
+  }
+  
+  .buttonNo {
+    @apply bg-white text-gray-700 border border-gray-300;
+  }
+  
+  .buttonYes {
+    @apply bg-red-500 text-white;
+  }
+  
+  .buttonRenew {
+    @apply bg-primary text-white rounded-2xl;
+  }
+  
+  .dialogContainer {
+    @apply md1:p-6 p-3 max-w-screen-2xl max-h-full w-full bg-white rounded-xl shadow-lg font-rajdhani flex justify-center text-center flex-col;
+  }
+  
+  .dialogHeader {
+    @apply flex justify-center items-center sm:py-3 sm:mb-4 py-2 mb-2;
+  }
+  
+  .dialogTitle {
+    @apply  font-bold;
+  }
+  
+  .dialogContent {
+    @apply pb-4 flex justify-center flex-col text-center items-center;
+  }
+
+  .dialogImage {
+    @apply  max-w-[280px] max-h-[250px];
+  }
+  
+  
+  .dialogMessage {
+    @apply text-lightpara text-[14px] sm:text-[16px] 2xl:text-[20px];
+  }
+  
+  .dialogSubTitle {
+    @apply text-secondary font-semibold mt-2 text-[16px] md1:text-[18px] 2xl:text-[20px]
+  }
+  
+  .dialogActions {
+    @apply flex justify-center space-x-2;
+  }
+  
+  .closeButton {
+    @apply text-para absolute top-4 right-4;
+  }
+  

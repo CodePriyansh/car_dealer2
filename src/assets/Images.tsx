@@ -34,6 +34,7 @@ import logout from "./logout.svg";
 import privacyPolicy from "./privacy-policy.svg";
 import setting from "./setting.svg";
 import viewProfile from "./view-profile.svg"
+import planExpiredDialogImg from "./plan_expired_dialog_img.svg"
 export const Images = {
   signup,
   logo,
@@ -69,5 +70,6 @@ export const Images = {
   logout,
   privacyPolicy,
   setting,
-  viewProfile
+  viewProfile,
+  planExpiredDialogImg
 };

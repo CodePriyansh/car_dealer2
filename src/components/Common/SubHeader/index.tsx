@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import FilterDrawer from "@/components/HomePage/FilterDrawer";
 import CarApi from "@/components/HomePage/CarApi";
 import SearchBar from "./SearchBar";
-import PlanExpiredDialog from "../Popup";
+import DynamicDialog from "../Dialogs";
 
 export default function SubHeader({
   clickWebClear,
@@ -18,7 +18,8 @@ export default function SubHeader({
   setClickMobileClear,
   setCarNotFoundtext,
 }) {
-  const [open, setOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogType, setDialogType] = useState('');
   const router = useRouter();
   const [activeMidFilter, setActiveMidFilter] = useState("car");
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -26,7 +27,8 @@ export default function SubHeader({
   const handleActiveMidFilter = (filter) => {
     if (filter == "bike") {
       setCarNotFoundtext("Comming Soon...")
-      setOpen(true);
+      setDialogType("FEATURE_COMING_SOON");
+      setDialogOpen(true);
     }
     setActiveMidFilter(filter);
   };
@@ -85,7 +87,7 @@ export default function SubHeader({
         </div>
       </div>
 
-      <PlanExpiredDialog open={open} onClose={() => setOpen(false)} />
+      <DynamicDialog open={dialogOpen} type={dialogType} onClose={() => setDialogOpen(false)} />
       {/* right  */}
       <div className={styles.right}>
         <Button
