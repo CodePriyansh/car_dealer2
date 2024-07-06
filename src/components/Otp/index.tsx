@@ -69,7 +69,7 @@ const OtpVerification = ({ mobileNumber, formData, setHeading }) => {
         setOtp(["", "", "", "", "", ""]);
         setIsOtpEntered(false);
         inputRefs.current[0].focus();
-        toast.success("OTP resent successfully!");
+        // toast.success("OTP resent successfully!");
       })
       .catch((err) => {
         console.log(err);
