@@ -25,7 +25,6 @@ export default function SubHeader({
 
   const handleActiveMidFilter = (filter) => {
     if (filter == "bike") {
-      setCars([])
       setCarNotFoundtext("Comming Soon...")
       setOpen(true);
     }

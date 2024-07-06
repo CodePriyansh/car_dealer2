@@ -53,7 +53,7 @@ function PlanExpiredDialog({ open, onClose }) {
             fontSize: 18
           }} 
          onClick={onClose}>
-          RENEW YOUR PLAN
+          back
         </Button>
       </DialogActions>
     </Dialog>
