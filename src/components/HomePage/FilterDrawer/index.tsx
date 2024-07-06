@@ -58,7 +58,8 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer,setCars }) {
     },
     {
       filterName: "carType",
-      filters: ["SUV", "Sedan", "Hatchback"],
+      filters: ["Compact SUV", "Coupe", "Crossover Suv", "Hatchback", "Pick-up", "Sedan", "SUV", "Van"]
+      ,
     },
   ];
 

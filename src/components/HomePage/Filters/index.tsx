@@ -61,15 +61,14 @@ function Filters({ setCars, setCarNotFoundtext }) {
   ];
 
   const carType = [
-    "Sedan",
-    "Van",
+    "Compact SUV",
+    "Coupe",
+    "Crossover Suv",
+    "Hatchback",
     "Pickup",
+    "Sedan",
     "SUV",
-    "Minivan",
-    "Coupes",
-    "Hatchbacks",
-    "Wagon",
-    "Truck",
+    "Van",
   ];
 
   const colors = [
@@ -293,7 +292,7 @@ function Filters({ setCars, setCarNotFoundtext }) {
             </Button>
           </div>
           <div className="mt-[1px] ml-2">
-            <Button
+            {/* <Button
               otherStyles={styles.fill_btn}
               onclick={() => router.push("/addcar")}
             >
@@ -302,7 +301,7 @@ function Filters({ setCars, setCarNotFoundtext }) {
                 alt="img"
                 className="w-[18px] h-[18px]"
               />
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>

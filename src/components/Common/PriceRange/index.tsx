@@ -34,7 +34,7 @@ const PriceRangeSlider = ({setUpdatedPriceRange,updatedPriceRange}) => {
           '& .MuiSlider-thumb': {
             backgroundColor: '#ff6600', // Thumb color
             '&::before': {
-              content: '"n"',
+              content: '""',
               display: 'block',
               width: '13px',
               height: '13px',

@@ -15,6 +15,7 @@ const OtpVerification = ({ mobileNumber, formData, setHeading }) => {
   const cookies = new Cookies();
   const [otp, setOtp] = useState(["", "", "", "", "", ``]);
   const [seconds, setSeconds] = useState(56);
+  const [text, setText] = useState("Done")
   const [isOtpEntered, setIsOtpEntered] = useState(false);
   const inputRefs = useRef([]);
   const router = useRouter();
@@ -78,11 +79,12 @@ const OtpVerification = ({ mobileNumber, formData, setHeading }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setText("Otp Verifying....")
     const otpValue = otp.join("");
     try {
       const user = await verifyOtp(otpValue);
       console.log(user, "user");
-      toast.success("OTP verified successfully!");
+      // toast.success("OTP verified successfully!");
       console.log("Login API called with mobile number:", mobileNumber);
       try {
         const url = formData ? "/api/dealers/signup" : "/api/dealers/login";
@@ -97,7 +99,7 @@ const OtpVerification = ({ mobileNumber, formData, setHeading }) => {
         if (response.status >= 200) {
           cookies.set("token", response.data.data.token, { path: "/" });
           setLocalStorage("user", JSON.stringify(response.data.data))
-          toast.success(response?.data.message);
+          // toast.success(response?.data.message);
           router.push("/");
         }
       } catch (error) {
@@ -128,7 +130,9 @@ const OtpVerification = ({ mobileNumber, formData, setHeading }) => {
           {otp.map((digit, index) => (
             <input
               key={index}
-              type="text"
+              type="number"
+              inputMode="numeric"
+              pattern="[0-9]*"
               maxLength={1}
               value={digit}
               onChange={(e) => handleChange(e, index)}
@@ -154,8 +158,8 @@ const OtpVerification = ({ mobileNumber, formData, setHeading }) => {
         )}
         {isOtpEntered && (
           <button type="submit">
-            <Button otherStyles="sm:w-[350px] w-full mx-auto uppercase">
-              Done
+            <Button otherStyles="sm:w-[350px] w-full mx-auto uppercase" >
+              {text}
             </Button>
           </button>
         )}

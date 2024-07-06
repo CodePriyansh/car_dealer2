@@ -1,0 +1,7 @@
+.overview_headings{
+    @apply font-bold text-[#737373] text-[14px] mb-4
+}
+
+.overview_values{
+    @apply font-bold text-greyy text-[14px]
+}

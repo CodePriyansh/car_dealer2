@@ -141,7 +141,7 @@ export default function SignupForm() {
         if (response.status === 200) {
           cookies.set("token", response.data.data.token, { path: "/" });
           setLocalStorage("user", JSON.stringify(response.data.data));
-          toast.success(response.data.message);
+          // toast.success(response.data.message);
           router.push("/");
         }
       } catch (error) {
@@ -159,7 +159,7 @@ export default function SignupForm() {
           setBackBtnStatus(true);
           setHeading("OTP Verification");
 
-          toast.success("OTP sent successfully!");
+          // toast.success("OTP sent successfully!");
         })
         .catch((err) => {
           console.log(err);
@@ -273,6 +273,9 @@ export default function SignupForm() {
                             name="telephoneNumber"
                             placeholder="Enter Telephone Number"
                             className={styles.field_style}
+                            type="number"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
                           />
                           <ErrorMessage
                             name="telephoneNumber"
@@ -305,6 +308,9 @@ export default function SignupForm() {
                             name="phoneNumber"
                             placeholder="Enter Mobile Number"
                             className={styles.field_style}
+                            type="number"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
                           />
                           <ErrorMessage
                             name="phoneNumber"
@@ -584,7 +590,7 @@ export default function SignupForm() {
                         disabled={isSubmitting}
                       >
                         <Button otherStyles="sm:w-[430px] w-full mx-auto uppercase">
-                          {mobileNumber ? "Sign Up" : "Get OTP"}
+                        {mobileNumber ? "Sign Up" : "Get OTP"}
                         </Button>
                       </button>
                       {/* Bottom info */}

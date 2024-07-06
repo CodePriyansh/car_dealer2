@@ -22,19 +22,19 @@ const LoginForm = () => {
   const router = useRouter();
   const [otpSend, setOtpSend] = useState(false);
   const [backBtnStatus, setBackBtnStatus] = useState(true);
-  const [mobileNumber, setMobileNumber] = useState('');
-  const [heading, setHeading] = useState('Login Account');
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [heading, setHeading] = useState("Login Account");
   const handleSubmit = (values, { setSubmitting }) => {
     console.log(values, "submitted values");
     sendOtp(`+91${values.mobileNumber}`)
       .then(() => {
         console.log("OTP sent successfully");
         setMobileNumber(values.mobileNumber);
-        
+
         setOtpSend(true);
         setSubmitting(false);
         setBackBtnStatus(true);
-        setHeading('OTP Verification');
+        setHeading("OTP Verification");
         toast.success("OTP sent successfully!");
       })
       .catch((err) => {
@@ -53,7 +53,7 @@ const LoginForm = () => {
           className="md:absolute md:left-16 left-0 md:top-[-100px]  flex gap-2 items-center cursor-pointer"
           onClick={() => {
             setBackBtnStatus(false);
-            setHeading("Login Account")
+            setHeading("Login Account");
           }}
         >
           <Image
@@ -79,7 +79,11 @@ const LoginForm = () => {
       <p className={styles.subheading}>My Car</p>
       <p className={styles.heading}>{heading}</p>
       {otpSend && backBtnStatus ? (
-        <OtpVerification mobileNumber={mobileNumber} formData={undefined}   setHeading={setHeading}/>
+        <OtpVerification
+          mobileNumber={mobileNumber}
+          formData={undefined}
+          setHeading={setHeading}
+        />
       ) : (
         <Formik
           initialValues={{ mobileNumber: "" }}
@@ -87,17 +91,29 @@ const LoginForm = () => {
           onSubmit={handleSubmit}
         >
           {({ isSubmitting }) => (
-            <Form className="my-6" >
+            <Form className="my-6">
               <div className="flex flex-col w-full justify-center items-center">
-                <label className={`${styles.label_Style}  sm:!w-[430px] !w-full `}>Mobile Number</label>
+                <label
+                  className={`${styles.label_Style}  sm:!w-[430px] !w-full `}
+                >
+                  Mobile Number
+                </label>
                 <Field
                   name="mobileNumber"
-                  type="text"
+                  type="number"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   className={`${styles.field_style} sm:!w-[430px] !w-full`}
                   placeholder="Enter your mobile number"
                 />
                 <ErrorMessage name="mobileNumber">
-                  {(msg) => <div className={`${styles.error_msg}  sm:!w-[430px] !w-full`}>{msg}</div>}
+                  {(msg) => (
+                    <div
+                      className={`${styles.error_msg}  sm:!w-[430px] !w-full`}
+                    >
+                      {msg}
+                    </div>
+                  )}
                 </ErrorMessage>
               </div>
               <button
@@ -122,7 +138,6 @@ const LoginForm = () => {
           )}
         </Formik>
       )}
-
     </div>
   );
 };

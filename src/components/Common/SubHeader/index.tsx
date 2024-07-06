@@ -8,23 +8,40 @@ import { useRouter } from "next/navigation";
 import FilterDrawer from "@/components/HomePage/FilterDrawer";
 import CarApi from "@/components/HomePage/CarApi";
 import SearchBar from "./SearchBar";
+import PlanExpiredDialog from "../Popup";
 
-export default function SubHeader({ clickWebClear,setClickWebClear,setCars, setSelectedOptions,setClickMobileClear, setCarNotFoundtext }) {
+export default function SubHeader({
+  clickWebClear,
+  setClickWebClear,
+  setCars,
+  setSelectedOptions,
+  setClickMobileClear,
+  setCarNotFoundtext,
+}) {
+  const [open, setOpen] = useState(false);
   const router = useRouter();
   const [activeMidFilter, setActiveMidFilter] = useState("car");
   const [openDrawer, setOpenDrawer] = useState(false);
 
+  const handleActiveMidFilter = (filter) => {
+    if (filter == "bike") {
+      setCars([])
+      setCarNotFoundtext("Comming Soon...")
+      setOpen(true);
+    }
+    setActiveMidFilter(filter);
+  };
 
   return (
     <div className={`${styles.wrapper} container_space large_layout`}>
-       
       {/* left  */}
       <div className={styles.left}>
-        <SearchBar setCars={setCars} setCarNotFoundtext={setCarNotFoundtext}/>
+        <SearchBar setCars={setCars} setCarNotFoundtext={setCarNotFoundtext} />
         <div
           className={styles.responsive_filter_icon}
-          onClick={() =>{ setOpenDrawer(true)
-            setClickMobileClear(false)
+          onClick={() => {
+            setOpenDrawer(true);
+            setClickMobileClear(false);
           }}
         >
           <Image
@@ -36,7 +53,11 @@ export default function SubHeader({ clickWebClear,setClickWebClear,setCars, setS
       </div>
 
       {openDrawer && (
-        <FilterDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} setCars={setCars}/>
+        <FilterDrawer
+          openDrawer={openDrawer}
+          setOpenDrawer={setOpenDrawer}
+          setCars={setCars}
+        />
       )}
 
       {/* mid  */}
@@ -48,7 +69,7 @@ export default function SubHeader({ clickWebClear,setClickWebClear,setCars, setS
                 ? "bg-primary text-white"
                 : "bg-transparent !text-subHeading"
             }`}
-            onclick={() => setActiveMidFilter("car")}
+            onclick={() => handleActiveMidFilter("car")}
           >
             cars
           </Button>
@@ -58,23 +79,24 @@ export default function SubHeader({ clickWebClear,setClickWebClear,setCars, setS
                 ? "text-white bg-primary"
                 : "text-subHeading bg-transparent"
             }`}
-            onClick={() => setActiveMidFilter("bike")}
+            onClick={() => handleActiveMidFilter("bike")}
           >
             bike
           </button>
         </div>
       </div>
 
+      <PlanExpiredDialog open={open} onClose={() => setOpen(false)} />
       {/* right  */}
       <div className={styles.right}>
         <Button
           otherStyles={styles.clear_fil_btn}
           onclick={() => {
-            setClickWebClear(true)
+            setClickWebClear(true);
             setSelectedOptions({
               carType: [],
               color: [],
-              priceRange: [0,0],
+              priceRange: [0, 0],
               modelName: "",
               company: "",
               modelYear: "",
@@ -87,9 +109,9 @@ export default function SubHeader({ clickWebClear,setClickWebClear,setCars, setS
             className="w-[18px] h-[18px]"
           />
           clear filter
-          {clickWebClear && 
-          <CarApi selectedOptions={null} initial={true} setCars={setCars} />
-        }
+          {clickWebClear && (
+            <CarApi selectedOptions={null} initial={true} setCars={setCars} />
+          )}
           <CarApi selectedOptions={null} initial={true} setCars={setCars} />
         </Button>
         <Button

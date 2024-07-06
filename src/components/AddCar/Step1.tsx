@@ -28,7 +28,7 @@ const fields = [
       { value: "Skoda", label: "Skoda" },
       { value: "Kia", label: "Kia" },
       { value: "Ford", label: "Ford" },
-      { value: "Volkswagen", label: "Volkswagen" }
+      { value: "Volkswagen", label: "Volkswagen" },
     ],
   },
   {
@@ -80,7 +80,7 @@ const fields = [
           // Volkswagen Models
           { value: "Polo", label: "Polo" },
           { value: "Vento", label: "Vento" },
-          { value: "Tiguan", label: "Tiguan" }
+          { value: "Tiguan", label: "Tiguan" },
         ],
       },
     ],
@@ -119,7 +119,7 @@ const fields = [
     placeholder: "Select Color",
     options: [
       { value: "Red", label: "Red" },
-      { value: "Blue", label: "Blue" } ,
+      { value: "Blue", label: "Blue" },
       { value: "Black", label: "Black" },
     ],
   },
@@ -149,7 +149,7 @@ const fields = [
     type: "number",
     placeholder: "Enter Cubic Capacity",
   },
-  { name: "average", type: "number", placeholder: "Enter Average" },
+  { name: "mileage", type: "number", placeholder: "Enter Mileage" },
   { name: "kmDriven", type: "number", placeholder: "Enter Kilometers Driven" },
   {
     name: "airConditioner",
@@ -189,13 +189,13 @@ const fields = [
     ],
   },
   // { name: "insuranceValidity", type: "date", placeholder: "Enter Insurance Validity Date" },
-
 ];
-
 
 const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
   const profileImageInputRef = useRef<HTMLInputElement | null>(null);
-  const [scratchAndDentImagePreview, setScratchAndDentImagePreview] = useState<string | null>(null);
+  const [scratchAndDentImagePreview, setScratchAndDentImagePreview] = useState<
+    string | null
+  >(null);
   const initialValues = {
     dentDetails: "",
     description: "",
@@ -208,12 +208,24 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
 
   const validationSchema = Yup.object().shape({
     ...fields.reduce((acc, field) => {
-      acc[field.name] = Yup.string().required(`${field.placeholder} is required`);
+      acc[field.name] = Yup.string().required(
+        `${field.placeholder} is required`
+      );
+      if (field.name === "average") {
+        acc[field.name] = Yup.string()
+          .matches(/^\d{1,2}$/, {
+            message: "Average should be exactly 1 or 2 digits",
+            excludeEmptyString: true,
+          })
+          .required(`${field.placeholder} is required`)
+          .max(2, "Average should be exactly 1 or 2 digits");
+      }
       return acc;
     }, {}),
     insuranceValidity: Yup.string().when("insurance", {
       is: (insurance: string) => insurance === "Yes",
-      then: () => Yup.string().required("Enter Insurance Validity Date is required"),
+      then: () =>
+        Yup.string().required("Enter Insurance Validity Date is required"),
     }),
   });
   const handleSubmit = (values: any, { setSubmitting }) => {
@@ -233,7 +245,9 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
     });
   };
 
-  const handleRemoveImage = (setFieldValue: (field: string, value: any) => void) => {
+  const handleRemoveImage = (
+    setFieldValue: (field: string, value: any) => void
+  ) => {
     setFieldValue("scratchAndDentImage", null);
     setScratchAndDentImagePreview(null);
     if (profileImageInputRef.current) {
@@ -241,7 +255,10 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
     }
   };
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>, setFieldValue: (field: string, value: any) => void) => {
+  const handleImageChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    setFieldValue: (field: string, value: any) => void
+  ) => {
     const file = event.currentTarget.files?.[0];
     if (file) {
       if (file.type.includes("image")) {
@@ -283,7 +300,7 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
               {fields.map((field, index) => (
                 <div className={styles.field_wrapper} key={index}>
                   <label className={styles.label_Style}>
-                    {field.placeholder}
+                    {field.name === "mileage" ? field.placeholder+" (kmpl)" : field.placeholder}
                   </label>
                   {field.type === "select" ? (
                     <CommonReactSelect
@@ -292,11 +309,13 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
                       selectedOption={selectedOptions[field.name]}
                       setSelectedOption={(option) => {
                         handleChange(field.name, option);
-                        console.log(field.name, option)
+                        console.log(field.name, option);
                         setFieldValue(field.name, option ? option.value : "");
                       }}
                       className={styles.field_style}
-                      isCreatable={['company', 'modelName', 'color'].includes(field.name)}
+                      isCreatable={["company", "modelName", "color"].includes(
+                        field.name
+                      )}
                     />
                   ) : (
                     <Field
@@ -304,6 +323,19 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
                       name={field.name}
                       placeholder={field.placeholder}
                       className={styles.field_style}
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        // Handle input length restriction for average field
+                        if (field.name === "mileage") {
+                          const value = event.target.value;
+                          console.log(value)
+                          if (value.length < 99) {
+                            event.target.value = value.slice(0, 2);
+                            setFieldValue("mileage",event.target.value) // Limit to first two digits
+                          }
+                        }else{
+                          setFieldValue(field.name,event.target.value) // Limit to first two digits
+                        }
+                      }}
                     />
                   )}
                   <ErrorMessage
@@ -367,68 +399,70 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
 
                 {/* Scratch & Dent Image (Optional) */}
                 {/* Scratch & Dent Image (Optional) */}
-<div className="sm:w-1/2 sm:h-1/3 w-full">
-  <div className={styles.basic_detail_heading}>
-    <p className={styles.sub_heading}>Scratch & Dent Image</p>
-    <p className={styles.special_heading}>(If any) Optional</p>
-  </div>
+                <div className="sm:w-1/2 sm:h-1/3 w-full">
+                  <div className={styles.basic_detail_heading}>
+                    <p className={styles.sub_heading}>Scratch & Dent Image</p>
+                    <p className={styles.special_heading}>(If any) Optional</p>
+                  </div>
 
-  <div
-    className={styles.dotted_box}
-    onClick={() => profileImageInputRef.current?.click()}
-  >
-    {scratchAndDentImagePreview ? (
-      <div className="relative w-full h-full">
-        <Image
-          src={scratchAndDentImagePreview}
-          alt="Scratch & Dent Image"
-          className="w-full h-full object-cover rounded"
-          width={200}
-          height={200}
-        />
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleRemoveImage(setFieldValue);
-          }}
-          className="absolute top-2 right-2 bg-white rounded-full p-1"
-        >
-          <AiOutlineCloseCircle size={20} />
-        </button>
-      </div>
-    ) : (
-      <>
-        <Image
-          src={Images.uploadImg}
-          alt="img"
-          className="w-8 h-8"
-        />
-        <Button otherStyles="mt-[50px]">
-          <Image
-            src={Images.plus}
-            alt="plus"
-            width={20}
-            height={20}
-          />
-          Add Image
-        </Button>
-      </>
-    )}
-    <input
-      type="file"
-      ref={profileImageInputRef}
-      style={{ display: "none" }}
-      onChange={(event) => handleImageChange(event, setFieldValue)}
-      name="scratchAndDentImage"
-    />
-    <ErrorMessage
-      name="scratchAndDentImage"
-      component="p"
-      className="error_msg"
-    />
-  </div>
-</div>
+                  <div
+                    className={styles.dotted_box}
+                    onClick={() => profileImageInputRef.current?.click()}
+                  >
+                    {scratchAndDentImagePreview ? (
+                      <div className="relative w-full h-full">
+                        <Image
+                          src={scratchAndDentImagePreview}
+                          alt="Scratch & Dent Image"
+                          className="w-full h-full object-cover rounded"
+                          width={200}
+                          height={200}
+                        />
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemoveImage(setFieldValue);
+                          }}
+                          className="absolute top-2 right-2 bg-white rounded-full p-1"
+                        >
+                          <AiOutlineCloseCircle size={20} />
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <Image
+                          src={Images.uploadImg}
+                          alt="img"
+                          className="w-8 h-8"
+                        />
+                        <Button otherStyles="mt-[50px]">
+                          <Image
+                            src={Images.plus}
+                            alt="plus"
+                            width={20}
+                            height={20}
+                          />
+                          Add Image
+                        </Button>
+                      </>
+                    )}
+                    <input
+                      type="file"
+                      ref={profileImageInputRef}
+                      style={{ display: "none" }}
+                      onChange={(event) =>
+                        handleImageChange(event, setFieldValue)
+                      }
+                      name="scratchAndDentImage"
+                    />
+                    <ErrorMessage
+                      name="scratchAndDentImage"
+                      component="p"
+                      className="error_msg"
+                    />
+                  </div>
+                </div>
               </div>
               <div className="basis-1/2">
                 <div className={styles.basic_detail_heading}>
@@ -462,8 +496,7 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
                 </div>
               </div>
             </div>
-            <div>
-            </div>
+            <div></div>
             {/* Submit Button */}
             <button
               type="submit"
@@ -477,7 +510,7 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
           </Form>
         )}
       </Formik>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 };
