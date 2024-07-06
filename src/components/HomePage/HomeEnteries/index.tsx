@@ -25,7 +25,7 @@ const HomeEnteries = () => {
       <Filters setCars={setCars} setCarNotFoundtext={setCarNotFoundtext} />
       {showPlanExpiredBanner && <PlanExpiredBanner />}
       <HomePageCards cars={cars} carNotFoundtext={carNotFoundtext} />
-      <button className="fixed bottom-4 right-4 bg-primary  text-white px-1 py-1 rounded-[20%] shadow-lg hover:bg-primary-dark">
+      <button className="fixed sm:hidden bottom-4 right-4 bg-primary  text-white px-1 py-1 rounded-[20%] shadow-lg hover:bg-primary-dark">
         <Button onclick={() => router.push("/addcar")}>
           <Image
             src={Images.whitePlus}
