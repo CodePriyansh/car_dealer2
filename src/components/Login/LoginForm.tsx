@@ -82,7 +82,7 @@ const LoginForm = () => {
         <OtpVerification mobileNumber={mobileNumber} formData={undefined}   setHeading={setHeading}/>
       ) : (
         <Formik
-          initialValues={{ mobileNumber: "" }}
+          initialValues={{ mobileNumber:mobileNumber }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >

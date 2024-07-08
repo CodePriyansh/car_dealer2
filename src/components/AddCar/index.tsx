@@ -7,38 +7,41 @@ import Step1 from "./Step1";
 import Step2 from "./Step2";
 import { Images } from "@/assets/Images";
 import Image from "next/image";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 
 const AddCarForm = () => {
   const [showActiveStep, setShowActiveStep] = useState<number>(1);
   const [stepsData, setStepsData] = useState<any>(null);
-  const router = useRouter()
+  const router = useRouter();
   return (
-    
     <div className={`container_space large_layout ${styles.wrapper}`}>
       <div
-          className="sm:hidden md:left-16 left-0 flex gap-2 items-center cursor-pointer"
-          onClick={() => router.back()}
-        >
-          <Image
-            src={Images.backArrow}
-            alt="back-arrow"
-            width={32}
-            height={32}
-            className="md:w-8 md:h-8 w-6 h-6"
-          />
-          <p className="text-secondary text-base font-rajdhani uppercase font-medium">
-            Back
-          </p>
-        </div>
+        className="sm:hidden md:left-16 left-0 flex gap-2 items-center cursor-pointer"
+        onClick={() => router.back()}
+      >
+        <Image
+          src={Images.backArrow}
+          alt="back-arrow"
+          width={32}
+          height={32}
+          className="md:w-8 md:h-8 w-6 h-6"
+        />
+        <p className="text-secondary text-base font-rajdhani uppercase font-medium">
+          Back
+        </p>
+      </div>
       <div className={styles.form_wrapper}>
         <p className={styles.heading}>Add Car</p>
 
-         {/* need to optimize code bcoz back iis used multiple times */}
+        {/* need to optimize code bcoz back iis used multiple times */}
         <div
           className="hidden sm:flex md:left-16 left-0 sm:top-1 gap-2 items-center cursor-pointer"
-          onClick={() => router.back()}
+          onClick={() => {
+            if (showActiveStep === 2) {
+              setShowActiveStep(1);
+            } else router.back();
+          }}
         >
           <Image
             src={Images.backArrow}
@@ -62,7 +65,7 @@ const AddCarForm = () => {
                 ? "bg-white "
                 : "bg-primary justify-center flex "
             }`}
-            // onClick={() => setShowActiveStep(1)}
+            onClick={() => setShowActiveStep(1)}
           >
             {stepsData === null ? (
               ""
@@ -76,7 +79,7 @@ const AddCarForm = () => {
 
           <div
             className={`${styles.line2} ${
-              stepsData===null? "bg-line" : "bg-primary"
+              stepsData === null ? "bg-line" : "bg-primary"
             }`}
           />
 
@@ -96,6 +99,7 @@ const AddCarForm = () => {
           <Step1
             setShowActiveStep={setShowActiveStep}
             setStepsData={setStepsData}
+            stepsData={stepsData}
           />
         ) : (
           <Step2 setShowActiveStep={setShowActiveStep} stepsData={stepsData} />

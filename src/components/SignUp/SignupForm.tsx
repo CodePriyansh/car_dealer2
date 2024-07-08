@@ -60,7 +60,7 @@ export default function SignupForm() {
   }, [searchParams]);
   const initialValues = {
     name: "",
-    phoneNumber: searchParams.get("mobileNumber") || "",
+    phoneNumber: searchParams.get("mobileNumber") || mobileNumber,
     telephoneNumber: "",
     email: "",
     city: "",
@@ -105,7 +105,6 @@ export default function SignupForm() {
     },
     { setSubmitting }: any
   ) => {
-    console.log(values, "--------------------");
     setBackBtnStatus(true);
     console.log(values, "values");
     setLoading(true);

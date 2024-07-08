@@ -11,6 +11,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 interface Step1Props {
   setShowActiveStep: React.Dispatch<React.SetStateAction<number>>;
   setStepsData: (data: any) => void;
+  stepsData:any
 }
 
 const fields = [
@@ -193,17 +194,21 @@ const fields = [
 ];
 
 
-const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
+const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData,stepsData }) => {
   const profileImageInputRef = useRef<HTMLInputElement | null>(null);
   const [scratchAndDentImagePreview, setScratchAndDentImagePreview] = useState<string | null>(null);
+  const [selectedOptions, setSelectedOptions] = useState<{
+    [key: string]: any;
+  }>({});
+
   const initialValues = {
-    dentDetails: "",
-    description: "",
-    scratchAndDentImage: null,
     ...fields.reduce((acc, field) => {
-      acc[field.name] = "";
+      acc[field.name] = stepsData?.[field.name] || "";
       return acc;
     }, {}),
+    dentDetails: stepsData?.dentDetails || "",
+    description: stepsData?.description || "",
+    scratchAndDentImage: null,
   };
 
   const validationSchema = Yup.object().shape({
@@ -217,14 +222,11 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
     }),
   });
   const handleSubmit = (values: any, { setSubmitting }) => {
-    console.log("Form data", values);
     setSubmitting(false);
     setShowActiveStep(2);
     setStepsData(values);
   };
-  const [selectedOptions, setSelectedOptions] = useState<{
-    [key: string]: any;
-  }>({});
+ 
 
   const handleChange = (name: string, selectedOption: any) => {
     setSelectedOptions({
@@ -334,7 +336,7 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
             </div>
 
             {/* Description */}
-            <div className="flex sm:flex-row gap flex-col sm:gap-x-10">
+            <div className="flex lg:flex-row gap flex-col sm:gap-x-10">
               <div className="basis-1/3 sm:flex-row">
                 {/* Scratch & Dent Details */}
                 <div className={styles.basic_detail_heading}>
