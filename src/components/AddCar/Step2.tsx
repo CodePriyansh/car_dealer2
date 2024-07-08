@@ -79,19 +79,31 @@ const carImages = [
   },
 ];
 
-const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep, carData, handleEditSubmit }) => {
+const Step2: React.FC<Step2Props> = ({
+  stepsData,
+  setShowActiveStep,
+  carData,
+  handleEditSubmit,
+}) => {
   const [interiorImagesPreview, setInteriorImagesPreview] = useState<
     Array<string>
   >(carData?.interiorImages || []);
 
-  console.log(carData,"wefiiuuuu")
-  useEffect(() => { 
-    console.log(carData,"step 2 selected");
-    if(!carData ){
+  // const [interiorImagesPreview, setInteriorImagesPreview] = useState(
+  //   carData?.interiorImages
+  //     ? carData.interiorImages.map((image) => window.URL.createObjectURL(image))
+  //     : []
+  // );
+
+  console.log("interiorImagesPreview", interiorImagesPreview);
+
+  useEffect(() => {
+    console.log(carData, "step 2 selected");
+    if (!carData) {
       // Clean up object URLs to prevent memory leaks
-      interiorImagesPreview.forEach((previewUrl) =>
-        URL.revokeObjectURL(previewUrl)
-      );
+      // interiorImagesPreview.forEach((previewUrl) =>
+      //   URL.revokeObjectURL(previewUrl)
+      // );
     }
   }, [interiorImagesPreview]);
 
@@ -107,7 +119,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep, carData, ha
 
   const [imagePreviews, setImagePreviews] = useState(
     carImages.reduce((acc, image) => {
-      acc[image.name] = carData?.images[image.name] ||  null;
+      acc[image.name] = carData?.images[image.name] || null;
       return acc;
     }, {})
   );
@@ -146,7 +158,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep, carData, ha
 
   const initialValues = {
     ...carImages.reduce((acc, field) => {
-      acc[field.name] = null;
+      acc[field.name] = carData?.images[field.name];
       return acc;
     }, {}),
     interior_images: carData?.interiorImages || [],
@@ -154,8 +166,8 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep, carData, ha
   };
 
   const handleSubmit = async (values, { setSubmitting }) => {
+    console.log(values, "values");
     try {
-      console.log(values, "values");
       const formData = new FormData();
       Object.keys(values).forEach((key) => {
         if (key === "interior_images") {
@@ -202,6 +214,11 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep, carData, ha
   const interiorImagesRef = useRef<HTMLInputElement | null>(null);
   const videoRef = useRef<HTMLInputElement | null>(null);
 
+  function extractUrl(inputString: string) {
+    const urlPattern = /http:\/\/\S+/;
+    const match = inputString.match(urlPattern);
+    return match ? [match[0]] : [];
+  }
   const handleFileChange = (setFieldValue, image, event) => {
     const files = event.currentTarget.files;
     if (files && files.length > 0) {
@@ -255,15 +272,17 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep, carData, ha
 
       if (image.name === "interior_images") {
         const fileList = Array.from(files);
-        setFieldValue(image.name, fileList);
+        // setFieldValue(image.name, fileList);
         setFileNames((prevState) => ({
           ...prevState,
-          [image.name]: fileList.map((file) => file.name).join(", "),
+          [image.name]: fileList.map((file) => file?.name).join(", "),
         }));
 
         // Generate preview URLs for each selected file
         const filePreviews = fileList.map((file) => URL.createObjectURL(file));
-        setInteriorImagesPreview(filePreviews);
+        console.log(extractUrl(filePreviews[0])[0], "000000000");
+        setInteriorImagesPreview((prev) => [...prev, ...filePreviews]);
+        setFieldValue(image.name, [...interiorImagesPreview, ...filePreviews]);
       } else {
         setFieldValue(image.name, files[0]);
         setFileNames((prevState) => ({
@@ -299,9 +318,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep, carData, ha
 
   const handleDeleteInteriorImage = (index, setFieldValue) => {
     setInteriorImagesPreview((prev) => prev.filter((_, i) => i !== index));
-    setFieldValue("interior_images", (prev) =>
-      prev.filter((_, i) => i !== index)
-    );
+    setFieldValue((prev) => prev.filter((_, i) => i !== index));
 
     // Reset the file input value
     if (interiorImagesRef.current) {
@@ -316,7 +333,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep, carData, ha
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ setFieldValue,values, isSubmitting }) => (
+        {({ setFieldValue, values, isSubmitting }) => (
           <Form className="w-full">
             {/* Basic Details */}
             <div className={styles.basic_detail_heading}>
@@ -324,79 +341,83 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep, carData, ha
               <p className={styles.line}></p>
             </div>
             <div className="grid xl:grid-cols-4 md:grid-cols-3 grid-cols-2 w-full md:gap-6 gap-2 my-4">
-              {carImages.map((image, index) => (
-                <div key={index} className={styles.dotted_box_step2}>
-                  {imagePreviews[image.name] ? (
-                    <div className="relative w-full h-full px-2 border rounded sm:max-h-[200px] max-h-[120px]">
-                      <Image
-                        src={imagePreviews[image.name]}
-                        alt={image.alt}
-                        className="w-full h-full object-cover"
-                        width={30}
-                        height={30}
-                      />
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleRemoveImage(setFieldValue, image.name, index)
-                        }
-                        className="absolute top-0 right-0 p-1 bg-primary text-white rounded-full"
-                      >
-                        &times;
-                      </button>
-                    </div>
-                  ) : (
-                    <>
-                      <div
-                        className="sm:w-20 sm:h-20 h-auto"
-                        onClick={() =>
-                          fileInputRefs.current[index].current?.click()
-                        }
-                      >
+              {carImages.map((image, index) => {
+                return (
+                  <div key={index} className={styles.dotted_box_step2}>
+                    {imagePreviews[image.name] ? (
+                      <div className="relative w-full h-full px-2 border rounded sm:max-h-[200px] max-h-[120px]">
                         <Image
-                          src={image.src}
+                          src={imagePreviews[image.name]}
                           alt={image.alt}
-                          className="md:w-18 md:h-18 px-4 pt-2 md:!p-0 w-18 h-16"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          fill
+                          className="w-full h-full object-cover"
                         />
-                      </div>
-                      <div
-                        onClick={() =>
-                          fileInputRefs.current[index].current?.click()
-                        }
-                      >
-                        <Button otherStyles={styles.btn_step2}>
-                          <Image
-                            src={Images.plus}
-                            alt="plus"
-                            width={20}
-                            height={20}
-                            className={styles.step2_btn_img}
-                          />
-                          {image.label}
-                        </Button>
-                        <input
-                          type="file"
-                          className="hidden"
-                          name={image.name}
-                          accept="image/*"
-                          ref={fileInputRefs.current[index]}
-                          onChange={(event) =>
-                            handleFileChange(setFieldValue, image, event)
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleRemoveImage(setFieldValue, image.name, index)
                           }
-                        />
-                        {fileNames[image.name] && (
-                          <p className="text-sm m-2">{fileNames[image.name]}</p>
-                        )}
-                        <ErrorMessage
-                          name={image.name}
-                          component="div"
-                          className="error_msg"
-                        />
+                          className="absolute top-0 right-0 p-1 bg-primary text-white rounded-full"
+                        >
+                          &times;
+                        </button>
                       </div>
-                    </>
-                  )}
-                </div>
-              ))}
+                    ) : (
+                      <>
+                        <div
+                          className="sm:w-20 sm:h-20 h-auto"
+                          onClick={() =>
+                            fileInputRefs.current[index].current?.click()
+                          }
+                        >
+                          <Image
+                            src={image.src}
+                            alt={image.alt}
+                            className="md:w-18 md:h-18 px-4 pt-2 md:!p-0 w-18 h-16"
+                          />
+                        </div>
+                        <div
+                          onClick={() =>
+                            fileInputRefs.current[index].current?.click()
+                          }
+                        >
+                          <Button otherStyles={styles.btn_step2}>
+                            <Image
+                              src={Images.plus}
+                              alt="plus"
+                              width={20}
+                              height={20}
+                              className={styles.step2_btn_img}
+                            />
+                            {image.label}
+                          </Button>
+                          <input
+                            type="file"
+                            className="hidden"
+                            name={image.name}
+                            accept="image/*"
+                            ref={fileInputRefs.current[index]}
+                            onChange={(event) =>
+                              handleFileChange(setFieldValue, image, event)
+                            }
+                          />
+                          {fileNames[image.name] && (
+                            <p className="text-sm m-2">
+                              {fileNames[image.name]}
+                            </p>
+                          )}
+                          <ErrorMessage
+                            name={image.name}
+                            component="div"
+                            className="error_msg"
+                          />
+                        </div>
+                      </>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             {/* Interior Images */}
@@ -443,30 +464,57 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep, carData, ha
 
                 <div className="flex max-w-full flex-col w-fit overflow-x-scroll ml-4 custome-scrollbar scroll-smooth">
                   <div className="w-full flex gap-2">
-                    {interiorImagesPreview.map((previewUrl, index) => (
-                      <div
-                        key={index}
-                        className="mt-2 max-w-[224px] max-h-[224px] h-[224px] min-w-[224px] flex"
-                      >
+                    {interiorImagesPreview.map((previewUrl, index) => {
+                      console.log("pppp", typeof previewUrl);
+                      return (
                         <div
-                          style={{
-                            backgroundImage: `url(${previewUrl})`,
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
-                          }}
-                          className="w-full h-full relative"
+                          key={index}
+                          className="mt-2 max-w-[224px] max-h-[224px] h-[224px] min-w-[224px] flex"
                         >
-                          <button
-                            className="text-black bg-white rounded-full text-[24px] font-semibold absolute top-0 right-2 rotate-45"
-                            onClick={() =>
-                              handleDeleteInteriorImage(index, setFieldValue)
-                            }
+                          {/* <div
+                            style={{
+                              // backgroundImage: `url(${previewUrl})`,
+                              backgroundSize: "cover",
+                              backgroundPosition: "center",
+                              width: "100%",
+                              height: "100%",
+                              backgroundImage: `url(${previewUrl})`,
+                            }}
+                            className="w-full h-full relative"
                           >
-                            <FaCross></FaCross>
-                          </button>
+                            <button
+                              className="text-black bg-white rounded-full text-[24px] font-semibold absolute top-0 right-2 rotate-45"
+                              onClick={() =>
+                                handleDeleteInteriorImage(index, setFieldValue)
+                              }
+                            >
+                              <FaCross></FaCross>
+                            </button>
+                          </div> */}
+                          <div
+                            style={{
+                              position: "relative",
+                            }}
+                          >
+                            <Image
+                              src={previewUrl}
+                              width={224}
+                              height={150}
+                              alt="ghj"
+                              className="!h-full !max-h-[224px]"
+                            />
+                            <button
+                              className="text-black bg-white rounded-full text-[24px] font-semibold absolute top-0 right-2 rotate-45"
+                              onClick={() =>
+                                handleDeleteInteriorImage(index, setFieldValue)
+                              }
+                            >
+                              <FaCross></FaCross>
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               </div>

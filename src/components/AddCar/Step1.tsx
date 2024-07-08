@@ -192,58 +192,72 @@ const fields = [
   // { name: "insuranceValidity", type: "date", placeholder: "Enter Insurance Validity Date" },
 ];
 
-const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData, carData }) => {
+const Step1: React.FC<Step1Props> = ({
+  setShowActiveStep,
+  setStepsData,
+  carData,
+}) => {
   const profileImageInputRef = useRef<HTMLInputElement | null>(null);
   const [scratchAndDentImagePreview, setScratchAndDentImagePreview] = useState<
     string | null
   >(null);
-  console.log(carData,"oeihehrh")
+  console.log(carData, "oeihehrh");
 
-  const formatYearOfManufacture = (date:any) => {
-    if (!date) return '';
+  const formatYearOfManufacture = (date: any) => {
+    if (!date) return "";
     const d = new Date(date);
-    return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}`;
-  };
-  
-  const formatRegistrationDate = (date:any) => {
-    if (!date) return '';
-    const d = new Date(date);
-    return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
+    return `${d.getFullYear()}-${(d.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}`;
   };
 
-  const booleanToYesNo = (value:any) => {
+  const formatRegistrationDate = (date: any) => {
+    if (!date) return "";
+    const d = new Date(date);
+    return `${d.getFullYear()}-${(d.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}-${d.getDate().toString().padStart(2, "0")}`;
+  };
+
+  const booleanToYesNo = (value: any) => {
     if (value === true) return "Yes";
     if (value === false) return "No";
     return value; // Return the original value if it's not a boolean
   };
   // console.log(carData?.images,"scratchAndDentImagePreview")
-  const initialValues = carData ? {
-    dentDetails: carData.dentDetails || "",
-    description: carData.description || "",
-    scratchAndDentImage: null,
-    ...fields.reduce((acc, field) => {
-      if (field.name === "yearOfManufacture") {
-        acc[field.name] = formatYearOfManufacture(carData[field.name]);
-      } else if (field.name === "registrationDate") {
-        acc[field.name] = formatRegistrationDate(carData[field.name]);
-      } else if (field.name === "powerWindow" || field.name === "insurance" || field.name === "airConditioner") {
-        acc[field.name] = booleanToYesNo(carData[field.name]);
-      } else if (field.name === "insuranceValidity") {
-        acc[field.name] = formatRegistrationDate(carData[field.name]);
-      } else {
-        acc[field.name] = carData[field.name] || "";
+  const initialValues = carData
+    ? {
+        dentDetails: carData.dentDetails || "",
+        description: carData.description || "",
+        scratchAndDentImage: null,
+        ...fields.reduce((acc, field) => {
+          if (field.name === "yearOfManufacture") {
+            acc[field.name] = formatYearOfManufacture(carData[field.name]);
+          } else if (field.name === "registrationDate") {
+            acc[field.name] = formatRegistrationDate(carData[field.name]);
+          } else if (
+            field.name === "powerWindow" ||
+            field.name === "insurance" ||
+            field.name === "airConditioner"
+          ) {
+            acc[field.name] = booleanToYesNo(carData[field.name]);
+          } else if (field.name === "insuranceValidity") {
+            acc[field.name] = formatRegistrationDate(carData[field.name]);
+          } else {
+            acc[field.name] = carData[field.name] || "";
+          }
+          return acc;
+        }, {}),
       }
-      return acc;
-    }, {}),
-  } : {
-    dentDetails: "",
-    description: "",
-    scratchAndDentImage: null,
-    ...fields.reduce((acc, field) => {
-      acc[field.name] = "";
-      return acc;
-    }, {}),
-  };
+    : {
+        dentDetails: "",
+        description: "",
+        scratchAndDentImage: null,
+        ...fields.reduce((acc, field) => {
+          acc[field.name] = "";
+          return acc;
+        }, {}),
+      };
 
   const validationSchema = Yup.object().shape({
     ...fields.reduce((acc, field) => {
@@ -269,9 +283,9 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData, carData 
   });
   const handleSubmit = (values: any, { setSubmitting }) => {
     console.log("Form data", values);
-    setSubmitting(false);
-    setShowActiveStep(2);
     setStepsData(values);
+    setShowActiveStep(2);
+    setSubmitting(false);
   };
   const [selectedOptions, setSelectedOptions] = useState<{
     [key: string]: any;
@@ -311,25 +325,22 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData, carData 
     }
   };
 
-
-
- 
   useEffect(() => {
-    console.log("useEffect")
-    console.log(carData  ? carData : "ifh")
+    console.log("useEffect");
+    console.log(carData ? carData : "ifh");
 
-      if (carData) {
-        console.log("wef")
+    if (carData) {
+      console.log("wef");
       if (carData.scratchAndDentImage) {
         setScratchAndDentImagePreview(carData.scratchAndDentImage);
-        console.log("scratchAndDentImage",scratchAndDentImagePreview);
+        console.log("scratchAndDentImage", scratchAndDentImagePreview);
       }
     }
-      // // Clean up object URL to prevent memory leaks
-      // if (scratchAndDentImagePreview) {
-      //   console.log("ekf")
-      //   URL.revokeObjectURL(scratchAndDentImagePreview);
-      // }
+    // // Clean up object URL to prevent memory leaks
+    // if (scratchAndDentImagePreview) {
+    //   console.log("ekf")
+    //   URL.revokeObjectURL(scratchAndDentImagePreview);
+    // }
   }, [scratchAndDentImagePreview, carData]);
   return (
     <div>
@@ -358,10 +369,14 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData, carData 
                   {field.type === "select" ? (
                     <CommonReactSelect
                       options={field.options}
-                      defaultValue={carData ? () => {
-                        const value = booleanToYesNo(values[field.name]);
-                        return { value: value, label: value };
-                      } : undefined}
+                      defaultValue={
+                        carData
+                          ? () => {
+                              const value = booleanToYesNo(values[field.name]);
+                              return { value: value, label: value };
+                            }
+                          : undefined
+                      }
                       placeholder={field.placeholder}
                       selectedOption={selectedOptions[field.name]}
                       setSelectedOption={(option) => {
@@ -563,7 +578,7 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData, carData 
               disabled={isSubmitting}
             >
               <Button otherStyles={styles.next_btn}>
-                { isSubmitting ? "Submitting..." : "Next"}
+                {isSubmitting ? "Submitting..." : "Next"}
               </Button>
             </button>
           </Form>
