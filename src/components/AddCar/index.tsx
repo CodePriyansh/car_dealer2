@@ -14,6 +14,24 @@ const AddCarForm = () => {
   const [showActiveStep, setShowActiveStep] = useState<number>(1);
   const [stepsData, setStepsData] = useState<any>(null);
   const router = useRouter();
+
+
+
+  const handleSetStepsData = (data: any) => {
+    setStepsData({ ...stepsData, ...data });
+  };
+
+  const handleNextStep = () => {
+    setShowActiveStep(showActiveStep + 1);
+  };
+
+  const handlePrevStep = () => {
+    setShowActiveStep(showActiveStep - 1);
+  };
+
+
+
+
   return (
     <div className={`container_space large_layout ${styles.wrapper}`}>
       <div
@@ -95,14 +113,19 @@ const AddCarForm = () => {
           <div className={design.line3} />
         </div>
 
-        {showActiveStep === 1 ? (
+        {showActiveStep === 1 && (
           <Step1
             setShowActiveStep={setShowActiveStep}
-            setStepsData={setStepsData}
+            setStepsData={handleSetStepsData}
             stepsData={stepsData}
           />
-        ) : (
-          <Step2 setShowActiveStep={setShowActiveStep} stepsData={stepsData} />
+        )}
+        {showActiveStep === 2 && (
+          <Step2
+            setShowActiveStep={setShowActiveStep}
+            // setStepsData={handleSetStepsData}
+            stepsData={stepsData}
+          />
         )}
       </div>
     </div>

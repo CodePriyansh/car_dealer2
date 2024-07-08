@@ -211,6 +211,14 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData,stepsData
     scratchAndDentImage: null,
   };
 
+  useEffect(() => {
+    return () => {
+      if (scratchAndDentImagePreview) {
+        URL.revokeObjectURL(scratchAndDentImagePreview);
+      }
+    };
+  }, [scratchAndDentImagePreview]);
+
   const validationSchema = Yup.object().shape({
     ...fields.reduce((acc, field) => {
       acc[field.name] = Yup.string().required(`${field.placeholder} is required`);
@@ -228,11 +236,12 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData,stepsData
   };
  
 
-  const handleChange = (name: string, selectedOption: any) => {
+  const handleChange = (name: string, selectedOption: any,setFieldValue: (field: string, value: any) => void) => {
     setSelectedOptions({
       ...selectedOptions,
       [name]: selectedOption,
     });
+    setFieldValue(name, selectedOption ? selectedOption.value : ""); 
   };
 
   const handleRemoveImage = (setFieldValue: (field: string, value: any) => void) => {
@@ -292,11 +301,7 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData,stepsData
                       options={field.options}
                       placeholder={field.placeholder}
                       selectedOption={selectedOptions[field.name]}
-                      setSelectedOption={(option) => {
-                        handleChange(field.name, option);
-                        console.log(field.name, option)
-                        setFieldValue(field.name, option ? option.value : "");
-                      }}
+                      setSelectedOption={(option) => handleChange(field.name, option, setFieldValue)}
                       className={styles.field_style}
                       isCreatable={['company', 'modelName', 'color'].includes(field.name)}
                     />
