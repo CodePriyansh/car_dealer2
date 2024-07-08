@@ -4,6 +4,7 @@ const nextConfig = {
     images: {
         domains: ['firebasestorage.googleapis.com'],
       },
+      reactStrictMode: false,
       typescript: {
         // !! WARN !!
         // Dangerously allow production builds to successfully complete even if

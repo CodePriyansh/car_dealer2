@@ -81,6 +81,7 @@ interface ReactSelectProps {
   placeholder: string;
   className?: string;
   isCreatable?: boolean;
+  defaultValue?: any;
 }
 
 const CommonReactSelect: React.FC<ReactSelectProps> = ({
@@ -88,6 +89,7 @@ const CommonReactSelect: React.FC<ReactSelectProps> = ({
   setSelectedOption,
   options,
   placeholder,
+  defaultValue,
   className,
   isCreatable = false,
 }) => {
@@ -111,6 +113,7 @@ const CommonReactSelect: React.FC<ReactSelectProps> = ({
       {isCreatable ? (
         <CreatableSelect
           value={selectedOption}
+          defaultValue={defaultValue}
           onChange={handleChange}
           options={options}
           placeholder={placeholder}
@@ -124,6 +127,7 @@ const CommonReactSelect: React.FC<ReactSelectProps> = ({
       ) : (
         <Select
           value={selectedOption}
+          defaultValue={defaultValue}
           onChange={handleChange}
           options={options}
           placeholder={placeholder}

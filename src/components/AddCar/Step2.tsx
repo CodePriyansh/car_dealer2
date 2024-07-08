@@ -16,6 +16,8 @@ import { FaCross } from "react-icons/fa";
 interface Step2Props {
   stepsData: any;
   setShowActiveStep: React.Dispatch<React.SetStateAction<number>>;
+  carData: any;
+  handleEditSubmit: (values: any) => void; // Add this line
 }
 
 const carImages = [
@@ -77,18 +79,20 @@ const carImages = [
   },
 ];
 
-const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
+const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep, carData, handleEditSubmit }) => {
   const [interiorImagesPreview, setInteriorImagesPreview] = useState<
     Array<string>
-  >([]);
+  >(carData?.interiorImages || []);
 
-  useEffect(() => {
-    return () => {
+  console.log(carData,"wefiiuuuu")
+  useEffect(() => { 
+    console.log(carData,"step 2 selected");
+    if(!carData ){
       // Clean up object URLs to prevent memory leaks
       interiorImagesPreview.forEach((previewUrl) =>
         URL.revokeObjectURL(previewUrl)
       );
-    };
+    }
   }, [interiorImagesPreview]);
 
   const router = useRouter();
@@ -103,7 +107,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
 
   const [imagePreviews, setImagePreviews] = useState(
     carImages.reduce((acc, image) => {
-      acc[image.name] = null;
+      acc[image.name] = carData?.images[image.name] ||  null;
       return acc;
     }, {})
   );
@@ -145,8 +149,8 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
       acc[field.name] = null;
       return acc;
     }, {}),
-    interior_images: [],
-    video: null,
+    interior_images: carData?.interiorImages || [],
+    video: carData?.images.video || null,
   };
 
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -166,24 +170,24 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
         formData.append(key, stepsData[key]);
       });
 
-      try {
-        let token = cookies.get("token");
-        const response = await instance.post("/api/cars/add", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      // try {
+      //   let token = cookies.get("token");
+      //   const response = await instance.post("/api/cars/add", formData, {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //   });
 
-        if (response.status === 200) {
-          setShowActiveStep((prevStep) => prevStep + 1);
-          toast.success(response.data.message);
-          router.push("/");
-        }
-      } catch (error) {
-        console.log(error);
-        toast.error(error.message);
-      }
+      //   if (response.status === 200) {
+      //     setShowActiveStep((prevStep) => prevStep + 1);
+      //     toast.success(response.data.message);
+      //     router.push("/");
+      //   }
+      // } catch (error) {
+      //   console.log(error);
+      //   toast.error(error.message);
+      // }
       // Assuming the next step is to show a success message or move to the next step
     } catch (error) {
       console.error("API Error:", error);
@@ -312,7 +316,7 @@ const Step2: React.FC<Step2Props> = ({ stepsData, setShowActiveStep }) => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ setFieldValue, isSubmitting }) => (
+        {({ setFieldValue,values, isSubmitting }) => (
           <Form className="w-full">
             {/* Basic Details */}
             <div className={styles.basic_detail_heading}>

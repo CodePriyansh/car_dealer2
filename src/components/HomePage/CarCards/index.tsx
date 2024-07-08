@@ -5,11 +5,12 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Images } from "@/assets/Images";
 import moment from 'moment';
+import Link from "next/link";
 export default function CarCards({ car }) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/car/${car._id}`);
+    router.push(`/car_details/${car._id}`);
   };
 
   return (
@@ -24,15 +25,24 @@ export default function CarCards({ car }) {
           {car.sold ? "Sold" : "Avail"}
         </div>
       </div>
+      <Link href={`/car-details/${car._id}`} passHref>
       <div className={styles.card_img_wrapper} onClick={handleClick}>
-        <img src={ car?.images?.front_image ||  Images.demoCarfrom} alt="image" />
+        <img className="w-full h-full" src={ car?.images?.front_image ||  Images.demoCarfrom} alt="image" />
       </div>
+      </Link>
 
       <div className={styles.car_header}>
         <div className={styles.header_left}>{`${car.company} ${car.modelName} ${car.variant}`}</div>
         <div className={styles.header_right}>
-          <Image src={Images.cardEdit} alt="image" width={24} height={24} />
-          <Image src={Images.cardView} alt="image" width={24} height={24} />
+        
+
+          <Link href={`/car-details/${car._id}`} passHref>
+            <Image src={Images.cardView} alt="view" width={24} height={24} />
+          </Link>
+          <Link href={`/edit-car/${car._id}`} passHref>
+            <Image src={Images.cardEdit} alt="edit" width={24} height={24} />
+          </Link>
+
           <Image src={Images.cardDelete} alt="image" width={24} height={24} />
         </div>
       </div>

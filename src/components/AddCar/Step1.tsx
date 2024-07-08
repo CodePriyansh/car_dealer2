@@ -11,6 +11,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 interface Step1Props {
   setShowActiveStep: React.Dispatch<React.SetStateAction<number>>;
   setStepsData: (data: any) => void;
+  carData: any;
 }
 
 const fields = [
@@ -191,12 +192,50 @@ const fields = [
   // { name: "insuranceValidity", type: "date", placeholder: "Enter Insurance Validity Date" },
 ];
 
-const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
+const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData, carData }) => {
   const profileImageInputRef = useRef<HTMLInputElement | null>(null);
   const [scratchAndDentImagePreview, setScratchAndDentImagePreview] = useState<
     string | null
   >(null);
-  const initialValues = {
+  console.log(carData,"oeihehrh")
+
+  const formatYearOfManufacture = (date:any) => {
+    if (!date) return '';
+    const d = new Date(date);
+    return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}`;
+  };
+  
+  const formatRegistrationDate = (date:any) => {
+    if (!date) return '';
+    const d = new Date(date);
+    return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
+  };
+
+  const booleanToYesNo = (value:any) => {
+    if (value === true) return "Yes";
+    if (value === false) return "No";
+    return value; // Return the original value if it's not a boolean
+  };
+  // console.log(carData?.images,"scratchAndDentImagePreview")
+  const initialValues = carData ? {
+    dentDetails: carData.dentDetails || "",
+    description: carData.description || "",
+    scratchAndDentImage: null,
+    ...fields.reduce((acc, field) => {
+      if (field.name === "yearOfManufacture") {
+        acc[field.name] = formatYearOfManufacture(carData[field.name]);
+      } else if (field.name === "registrationDate") {
+        acc[field.name] = formatRegistrationDate(carData[field.name]);
+      } else if (field.name === "powerWindow" || field.name === "insurance" || field.name === "airConditioner") {
+        acc[field.name] = booleanToYesNo(carData[field.name]);
+      } else if (field.name === "insuranceValidity") {
+        acc[field.name] = formatRegistrationDate(carData[field.name]);
+      } else {
+        acc[field.name] = carData[field.name] || "";
+      }
+      return acc;
+    }, {}),
+  } : {
     dentDetails: "",
     description: "",
     scratchAndDentImage: null,
@@ -272,14 +311,26 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
     }
   };
 
+
+
+ 
   useEffect(() => {
-    return () => {
-      // Clean up object URL to prevent memory leaks
-      if (scratchAndDentImagePreview) {
-        URL.revokeObjectURL(scratchAndDentImagePreview);
+    console.log("useEffect")
+    console.log(carData  ? carData : "ifh")
+
+      if (carData) {
+        console.log("wef")
+      if (carData.scratchAndDentImage) {
+        setScratchAndDentImagePreview(carData.scratchAndDentImage);
+        console.log("scratchAndDentImage",scratchAndDentImagePreview);
       }
-    };
-  }, [scratchAndDentImagePreview]);
+    }
+      // // Clean up object URL to prevent memory leaks
+      // if (scratchAndDentImagePreview) {
+      //   console.log("ekf")
+      //   URL.revokeObjectURL(scratchAndDentImagePreview);
+      // }
+  }, [scratchAndDentImagePreview, carData]);
   return (
     <div>
       {/* <ToastContainer /> */}
@@ -300,11 +351,17 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
               {fields.map((field, index) => (
                 <div className={styles.field_wrapper} key={index}>
                   <label className={styles.label_Style}>
-                    {field.name === "mileage" ? field.placeholder+" (kmpl)" : field.placeholder}
+                    {field.name === "mileage"
+                      ? field.placeholder + " (kmpl)"
+                      : field.placeholder}
                   </label>
                   {field.type === "select" ? (
                     <CommonReactSelect
                       options={field.options}
+                      defaultValue={carData ? () => {
+                        const value = booleanToYesNo(values[field.name]);
+                        return { value: value, label: value };
+                      } : undefined}
                       placeholder={field.placeholder}
                       selectedOption={selectedOptions[field.name]}
                       setSelectedOption={(option) => {
@@ -323,17 +380,19 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
                       name={field.name}
                       placeholder={field.placeholder}
                       className={styles.field_style}
-                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      onChange={(
+                        event: React.ChangeEvent<HTMLInputElement>
+                      ) => {
                         // Handle input length restriction for average field
                         if (field.name === "mileage") {
                           const value = event.target.value;
-                          console.log(value)
+                          console.log(value);
                           if (value.length < 99) {
                             event.target.value = value.slice(0, 2);
-                            setFieldValue("mileage",event.target.value) // Limit to first two digits
+                            setFieldValue("mileage", event.target.value); // Limit to first two digits
                           }
-                        }else{
-                          setFieldValue(field.name,event.target.value) // Limit to first two digits
+                        } else {
+                          setFieldValue(field.name, event.target.value); // Limit to first two digits
                         }
                       }}
                     />
@@ -504,7 +563,7 @@ const Step1: React.FC<Step1Props> = ({ setShowActiveStep, setStepsData }) => {
               disabled={isSubmitting}
             >
               <Button otherStyles={styles.next_btn}>
-                {isSubmitting ? "Submitting..." : "Next"}
+                { isSubmitting ? "Submitting..." : "Next"}
               </Button>
             </button>
           </Form>
