@@ -8,6 +8,7 @@ import moment from "moment";
 import Link from "next/link";
 import instance from "@/network/axios";
 import { toast } from "react-toastify";
+import { setLocalStorage } from "@/constants/constants";
 export default function CarCards({ car, onDelete }) {
   const router = useRouter();
 
@@ -57,7 +58,13 @@ export default function CarCards({ car, onDelete }) {
             <Image src={Images.cardView} alt="view" width={24} height={24} />
           </Link>
           <Link href={`/edit-car/${car._id}`} passHref>
-            <Image src={Images.cardEdit} alt="edit" width={24} height={24} />
+            <Image
+              onClick={() => setLocalStorage("step", 1)}
+              src={Images.cardEdit}
+              alt="edit"
+              width={24}
+              height={24}
+            />
           </Link>
 
           <Image

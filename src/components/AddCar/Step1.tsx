@@ -10,6 +10,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 interface Step1Props {
   setShowActiveStep: React.Dispatch<React.SetStateAction<number>>;
+  showActiveStep: number;
   setStepsData: (data: any) => void;
   carData: any;
 }
@@ -195,13 +196,15 @@ const fields = [
 const Step1: React.FC<Step1Props> = ({
   setShowActiveStep,
   setStepsData,
+  showActiveStep,
   carData,
 }) => {
+  localStorage.setItem("step", showActiveStep.toString());
+
   const profileImageInputRef = useRef<HTMLInputElement | null>(null);
   const [scratchAndDentImagePreview, setScratchAndDentImagePreview] = useState<
     string | null
   >(carData?.scratchAndDentDetails?.image || null);
-  console.log(carData, "oeihehrh");
 
   const formatYearOfManufacture = (date: any) => {
     if (!date) return "";
@@ -231,7 +234,7 @@ const Step1: React.FC<Step1Props> = ({
         scratchAndDentImage:
           carData?.scratchAndDentDetails?.scratchAndDentImage || "",
         scratchAndDentDescription:
-          carData.scratchAndDentDetails.description || "",
+          carData?.scratchAndDentDetails?.description || "",
         insuranceValidity: formatRegistrationDate(carData["insuranceValidity"]),
         ...fields.reduce((acc, field) => {
           if (field.name === "yearOfManufacture") {
@@ -324,6 +327,10 @@ const Step1: React.FC<Step1Props> = ({
         toast.error("Only image files are allowed.");
       }
     }
+  };
+  const handleStepsTwo = () => {
+    setShowActiveStep((prev) => prev + 1);
+    localStorage.setItem("step", "2");
   };
 
   useEffect(() => {
@@ -461,7 +468,10 @@ const Step1: React.FC<Step1Props> = ({
                       placeholder="Enter Scratch & Dent Details"
                       className={styles.description_and_dent_style}
                       onChange={(e) =>
-                        setFieldValue("scratchAndDentDescription", e.target.value)
+                        setFieldValue(
+                          "scratchAndDentDescription",
+                          e.target.value
+                        )
                       }
                     />
                     <ErrorMessage
@@ -578,7 +588,7 @@ const Step1: React.FC<Step1Props> = ({
               className="mx-auto w-full"
               disabled={isSubmitting}
             >
-              <Button otherStyles={styles.next_btn}>
+              <Button otherStyles={styles.next_btn} onclick={handleStepsTwo}>
                 {isSubmitting ? "Submitting..." : "Next"}
               </Button>
             </button>

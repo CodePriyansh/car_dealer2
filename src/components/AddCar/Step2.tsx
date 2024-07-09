@@ -17,6 +17,7 @@ interface Step2Props {
   stepsData: any;
   setShowActiveStep: React.Dispatch<React.SetStateAction<number>>;
   carData: any;
+  showActiveStep: number;
   handleEditSubmit: (values: any) => void; // Add this line
 }
 
@@ -83,11 +84,13 @@ const Step2: React.FC<Step2Props> = ({
   stepsData,
   setShowActiveStep,
   carData,
+  showActiveStep,
   handleEditSubmit,
 }) => {
   const [interiorImagesPreview, setInteriorImagesPreview] = useState<
     Array<string>
   >(carData?.interiorImages || []);
+
 
   // const [interiorImagesPreview, setInteriorImagesPreview] = useState(
   //   carData?.interiorImages
@@ -176,10 +179,10 @@ const Step2: React.FC<Step2Props> = ({
     console.log(values, "values");
     try {
       const formData = new FormData();
-      
+
       // Combine values with stepsData
       const allData = { ...values, ...stepsData };
-  
+
       Object.keys(allData).forEach((key) => {
         if (key === "interior_images") {
           if (Array.isArray(allData[key])) {
@@ -187,33 +190,37 @@ const Step2: React.FC<Step2Props> = ({
               // Check if it's a File object or a string (URL)
               if (file instanceof File) {
                 formData.append(`interior_images`, file);
-              } else if (typeof file === 'string') {
+              } else if (typeof file === "string") {
                 formData.append(`interior_images`, file);
               }
             });
           }
         } else if (allData[key] instanceof File) {
           formData.append(key, allData[key]);
-        } else if (typeof allData[key] === 'object' && allData[key] !== null) {
+        } else if (typeof allData[key] === "object" && allData[key] !== null) {
           formData.append(key, JSON.stringify(allData[key]));
         } else {
           formData.append(key, allData[key]);
         }
       });
-  
+
       console.log(formData);
-  
+
       let token = cookies.get("token");
       let response;
-  
+
       if (carData) {
         // Edit existing car
-        response = await instance.put(`/api/cars//update-car/${carData._id}`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        response = await instance.put(
+          `/api/cars//update-car/${carData._id}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
       } else {
         // Add new car
         response = await instance.post("/api/cars/add", formData, {
@@ -223,7 +230,7 @@ const Step2: React.FC<Step2Props> = ({
           },
         });
       }
-  
+
       if (response.status === 200) {
         setShowActiveStep((prevStep) => prevStep + 1);
         toast.success(response.data.message);
@@ -310,19 +317,21 @@ const Step2: React.FC<Step2Props> = ({
         const filePreviews = fileList.map((file) => URL.createObjectURL(file));
         console.log(extractUrl(filePreviews[0])[0], "000000000");
         setInteriorImagesPreview((prev) => [...prev, ...filePreviews]);
-        setFieldValue(image.name, [...interiorImagesPreview, ...fileList.map((file) => file)]);
-      }else if (image.name === "video") {
+        setFieldValue(image.name, [
+          ...interiorImagesPreview,
+          ...fileList.map((file) => file),
+        ]);
+      } else if (image.name === "video") {
         setFieldValue(image.name, files[0]);
         setFileNames((prevState) => ({
           ...prevState,
           [image.name]: files[0].name,
         }));
-  
+
         // Create and set video preview URL
         const previewUrl = URL.createObjectURL(files[0]);
         setVideoPreview(previewUrl);
-      }
-       else {
+      } else {
         setFieldValue(image.name, files[0]);
         setFileNames((prevState) => ({
           ...prevState,
@@ -565,73 +574,77 @@ const Step2: React.FC<Step2Props> = ({
             </div>
 
             {/* Video */}
-<div className="w-full">
-  <div className={styles.basic_detail_heading}>
-    <p className={styles.sub_heading}>Video</p>
-    <p className={styles.line}></p>
-  </div>
-  <div className={`${styles.dotted_box_step2} relative`}>
-    {videoPreview ? (
-      <>
-        <video 
-          src={videoPreview} 
-          controls 
-          className="w-full h-auto max-h-64 object-contain"
-        >
-          Your browser does not support the video tag.
-        </video>
-        <button
-          type="button"
-          onClick={() => {
-            setVideoPreview(null);
-            setFieldValue("video", null);
-            setFileNames((prevState) => ({
-              ...prevState,
-              video: "",
-            }));
-            if (videoRef.current) {
-              videoRef.current.value = "";
-            }
-          }}
-          className="absolute top-2 right-2 p-1 bg-primary text-white rounded-full"
-        >
-          &times;
-        </button>
-      </>
-    ) : (
-      <div onClick={() => videoRef.current?.click()}>
-        <Image src={Images.uploadImg} alt="img" className="w-8 h-8" />
-        <Button otherStyles={styles.btn_step2}>
-          <Image
-            src={Images.plus}
-            alt="plus"
-            width={20}
-            height={20}
-            className={styles.step2_btn_img}
-          />
-          Add Video
-        </Button>
-      </div>
-    )}
-    <input
-      type="file"
-      className="hidden"
-      ref={videoRef}
-      name="video"
-      onChange={(event) =>
-        handleFileChange(setFieldValue, { name: "video" }, event)
-      }
-    />
-    {fileNames["video"] && (
-      <p className="text-sm mt-2">{fileNames["video"]}</p>
-    )}
-    <ErrorMessage
-      name="video"
-      component="div"
-      className="error_msg"
-    />
-  </div>
-</div>
+            <div className="w-full">
+              <div className={styles.basic_detail_heading}>
+                <p className={styles.sub_heading}>Video</p>
+                <p className={styles.line}></p>
+              </div>
+              <div className={`${styles.dotted_box_step2} relative`}>
+                {videoPreview ? (
+                  <>
+                    <video
+                      src={videoPreview}
+                      controls
+                      className="w-full h-auto max-h-64 object-contain"
+                    >
+                      Your browser does not support the video tag.
+                    </video>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setVideoPreview(null);
+                        setFieldValue("video", null);
+                        setFileNames((prevState) => ({
+                          ...prevState,
+                          video: "",
+                        }));
+                        if (videoRef.current) {
+                          videoRef.current.value = "";
+                        }
+                      }}
+                      className="absolute top-2 right-2 p-1 bg-primary text-white rounded-full"
+                    >
+                      &times;
+                    </button>
+                  </>
+                ) : (
+                  <div onClick={() => videoRef.current?.click()}>
+                    <Image
+                      src={Images.uploadImg}
+                      alt="img"
+                      className="w-8 h-8"
+                    />
+                    <Button otherStyles={styles.btn_step2}>
+                      <Image
+                        src={Images.plus}
+                        alt="plus"
+                        width={20}
+                        height={20}
+                        className={styles.step2_btn_img}
+                      />
+                      Add Video
+                    </Button>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  className="hidden"
+                  ref={videoRef}
+                  name="video"
+                  onChange={(event) =>
+                    handleFileChange(setFieldValue, { name: "video" }, event)
+                  }
+                />
+                {fileNames["video"] && (
+                  <p className="text-sm mt-2">{fileNames["video"]}</p>
+                )}
+                <ErrorMessage
+                  name="video"
+                  component="div"
+                  className="error_msg"
+                />
+              </div>
+            </div>
 
             {/* Submit Button */}
             <button
