@@ -124,6 +124,8 @@ const Step2: React.FC<Step2Props> = ({
     }, {})
   );
 
+  const [videoPreview, setVideoPreview] = useState(carData?.images?.video);
+
   const validationSchema = Yup.object().shape({
     ...carImages.reduce((acc, field) => {
       acc[field.name] = Yup.mixed().required(`${field.label} is required`);
@@ -135,9 +137,12 @@ const Step2: React.FC<Step2Props> = ({
     video: Yup.mixed()
       .required("Video is required")
       .test("fileType", "Unsupported File Format", (value) => {
-        return (
-          value &&
-          [
+        if (typeof value === "string") {
+          // If it's a string (URL), assume it's valid
+          return true;
+        } else if (value instanceof File) {
+          // If it's a File object, check its type
+          return [
             "video/mp4",
             "video/avi",
             "video/mkv",
@@ -151,8 +156,10 @@ const Step2: React.FC<Step2Props> = ({
             "video/quicktime",
             "video/x-msvideo",
             "video/x-ms-wmv",
-          ].includes(value.type)
-        );
+          ].includes(value.type);
+        }
+        // If it's neither a string nor a File, it's invalid
+        return false;
       }),
   });
 
@@ -169,45 +176,66 @@ const Step2: React.FC<Step2Props> = ({
     console.log(values, "values");
     try {
       const formData = new FormData();
-      Object.keys(values).forEach((key) => {
+      
+      // Combine values with stepsData
+      const allData = { ...values, ...stepsData };
+  
+      Object.keys(allData).forEach((key) => {
         if (key === "interior_images") {
-          values[key].forEach((file, index) => {
-            formData.append(`interior_images`, file);
-          });
+          if (Array.isArray(allData[key])) {
+            allData[key].forEach((file, index) => {
+              // Check if it's a File object or a string (URL)
+              if (file instanceof File) {
+                formData.append(`interior_images`, file);
+              } else if (typeof file === 'string') {
+                formData.append(`interior_images`, file);
+              }
+            });
+          }
+        } else if (allData[key] instanceof File) {
+          formData.append(key, allData[key]);
+        } else if (typeof allData[key] === 'object' && allData[key] !== null) {
+          formData.append(key, JSON.stringify(allData[key]));
         } else {
-          formData.append(key, values[key]);
+          formData.append(key, allData[key]);
         }
       });
-      Object.keys(stepsData).forEach((key) => {
-        formData.append(key, stepsData[key]);
-      });
-
-      // try {
-      //   let token = cookies.get("token");
-      //   const response = await instance.post("/api/cars/add", formData, {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //       Authorization: `Bearer ${token}`,
-      //     },
-      //   });
-
-      //   if (response.status === 200) {
-      //     setShowActiveStep((prevStep) => prevStep + 1);
-      //     toast.success(response.data.message);
-      //     router.push("/");
-      //   }
-      // } catch (error) {
-      //   console.log(error);
-      //   toast.error(error.message);
-      // }
-      // Assuming the next step is to show a success message or move to the next step
+  
+      console.log(formData);
+  
+      let token = cookies.get("token");
+      let response;
+  
+      if (carData) {
+        // Edit existing car
+        response = await instance.put(`/api/cars//update-car/${carData._id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      } else {
+        // Add new car
+        response = await instance.post("/api/cars/add", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
+  
+      if (response.status === 200) {
+        setShowActiveStep((prevStep) => prevStep + 1);
+        toast.success(response.data.message);
+        router.push("/");
+      }
     } catch (error) {
       console.error("API Error:", error);
+      toast.error(error.message || "An error occurred");
     } finally {
       setSubmitting(false);
     }
   };
-
   const fileInputRefs = useRef(
     carImages.map(() => React.createRef<HTMLInputElement>())
   );
@@ -282,8 +310,19 @@ const Step2: React.FC<Step2Props> = ({
         const filePreviews = fileList.map((file) => URL.createObjectURL(file));
         console.log(extractUrl(filePreviews[0])[0], "000000000");
         setInteriorImagesPreview((prev) => [...prev, ...filePreviews]);
-        setFieldValue(image.name, [...interiorImagesPreview, ...filePreviews]);
-      } else {
+        setFieldValue(image.name, [...interiorImagesPreview, ...fileList.map((file) => file)]);
+      }else if (image.name === "video") {
+        setFieldValue(image.name, files[0]);
+        setFileNames((prevState) => ({
+          ...prevState,
+          [image.name]: files[0].name,
+        }));
+  
+        // Create and set video preview URL
+        const previewUrl = URL.createObjectURL(files[0]);
+        setVideoPreview(previewUrl);
+      }
+       else {
         setFieldValue(image.name, files[0]);
         setFileNames((prevState) => ({
           ...prevState,
@@ -526,45 +565,73 @@ const Step2: React.FC<Step2Props> = ({
             </div>
 
             {/* Video */}
-            <div className="w-full">
-              <div className={styles.basic_detail_heading}>
-                <p className={styles.sub_heading}>Video</p>
-                <p className={styles.line}></p>
-              </div>
-              <div
-                className={`${styles.dotted_box_step2} `}
-                onClick={() => videoRef.current?.click()}
-              >
-                <Image src={Images.uploadImg} alt="img" className="w-8 h-8" />
-                <Button otherStyles={styles.btn_step2}>
-                  <Image
-                    src={Images.plus}
-                    alt="plus"
-                    width={20}
-                    height={20}
-                    className={styles.step2_btn_img}
-                  />
-                  Add Video
-                </Button>
-                <input
-                  type="file"
-                  className="hidden"
-                  ref={videoRef}
-                  name="video"
-                  onChange={(event) =>
-                    handleFileChange(setFieldValue, { name: "video" }, event)
-                  }
-                />
-                {fileNames["video"] && (
-                  <p className="text-sm mt-2">{fileNames["video"]}</p>
-                )}
-                <ErrorMessage
-                  name="video"
-                  component="div"
-                  className="error_msg"
-                />
-              </div>
-            </div>
+<div className="w-full">
+  <div className={styles.basic_detail_heading}>
+    <p className={styles.sub_heading}>Video</p>
+    <p className={styles.line}></p>
+  </div>
+  <div className={`${styles.dotted_box_step2} relative`}>
+    {videoPreview ? (
+      <>
+        <video 
+          src={videoPreview} 
+          controls 
+          className="w-full h-auto max-h-64 object-contain"
+        >
+          Your browser does not support the video tag.
+        </video>
+        <button
+          type="button"
+          onClick={() => {
+            setVideoPreview(null);
+            setFieldValue("video", null);
+            setFileNames((prevState) => ({
+              ...prevState,
+              video: "",
+            }));
+            if (videoRef.current) {
+              videoRef.current.value = "";
+            }
+          }}
+          className="absolute top-2 right-2 p-1 bg-primary text-white rounded-full"
+        >
+          &times;
+        </button>
+      </>
+    ) : (
+      <div onClick={() => videoRef.current?.click()}>
+        <Image src={Images.uploadImg} alt="img" className="w-8 h-8" />
+        <Button otherStyles={styles.btn_step2}>
+          <Image
+            src={Images.plus}
+            alt="plus"
+            width={20}
+            height={20}
+            className={styles.step2_btn_img}
+          />
+          Add Video
+        </Button>
+      </div>
+    )}
+    <input
+      type="file"
+      className="hidden"
+      ref={videoRef}
+      name="video"
+      onChange={(event) =>
+        handleFileChange(setFieldValue, { name: "video" }, event)
+      }
+    />
+    {fileNames["video"] && (
+      <p className="text-sm mt-2">{fileNames["video"]}</p>
+    )}
+    <ErrorMessage
+      name="video"
+      component="div"
+      className="error_msg"
+    />
+  </div>
+</div>
 
             {/* Submit Button */}
             <button

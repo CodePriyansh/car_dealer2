@@ -47,8 +47,10 @@ import ClipSpinner from "../Common/Spinner";
 
     const handleEditSubmit = async (data: FormData) => {
       try {
-        await instance.put(`/api/cars/${carData._id}`, data);
-        router.push("/"); // Redirect to the homepage or another page
+        const response  = await instance.put(`/api/update-car/${carData._id}`, data);
+        console.log(response);
+        console.log(response.data.data)
+        // router.push("/"); // Redirect to the homepage or another page
       } catch (error) {
         console.error("Error updating car data:", error);
       }

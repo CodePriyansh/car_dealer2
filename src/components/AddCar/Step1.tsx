@@ -200,7 +200,7 @@ const Step1: React.FC<Step1Props> = ({
   const profileImageInputRef = useRef<HTMLInputElement | null>(null);
   const [scratchAndDentImagePreview, setScratchAndDentImagePreview] = useState<
     string | null
-  >(null);
+  >(carData?.scratchAndDentDetails?.image || null);
   console.log(carData, "oeihehrh");
 
   const formatYearOfManufacture = (date: any) => {
@@ -227,9 +227,12 @@ const Step1: React.FC<Step1Props> = ({
   // console.log(carData?.images,"scratchAndDentImagePreview")
   const initialValues = carData
     ? {
-        dentDetails: carData.dentDetails || "",
         description: carData.description || "",
-        scratchAndDentImage: null,
+        scratchAndDentImage:
+          carData?.scratchAndDentDetails?.scratchAndDentImage || "",
+        scratchAndDentDescription:
+          carData.scratchAndDentDetails.description || "",
+        insuranceValidity: formatRegistrationDate(carData["insuranceValidity"]),
         ...fields.reduce((acc, field) => {
           if (field.name === "yearOfManufacture") {
             acc[field.name] = formatYearOfManufacture(carData[field.name]);
@@ -241,8 +244,6 @@ const Step1: React.FC<Step1Props> = ({
             field.name === "airConditioner"
           ) {
             acc[field.name] = booleanToYesNo(carData[field.name]);
-          } else if (field.name === "insuranceValidity") {
-            acc[field.name] = formatRegistrationDate(carData[field.name]);
           } else {
             acc[field.name] = carData[field.name] || "";
           }
@@ -250,7 +251,7 @@ const Step1: React.FC<Step1Props> = ({
         }, {}),
       }
     : {
-        dentDetails: "",
+        scratchAndDentDescription: "",
         description: "",
         scratchAndDentImage: null,
         ...fields.reduce((acc, field) => {
@@ -329,13 +330,13 @@ const Step1: React.FC<Step1Props> = ({
     console.log("useEffect");
     console.log(carData ? carData : "ifh");
 
-    if (carData) {
-      console.log("wef");
-      if (carData.scratchAndDentImage) {
-        setScratchAndDentImagePreview(carData.scratchAndDentImage);
-        console.log("scratchAndDentImage", scratchAndDentImagePreview);
-      }
-    }
+    // if (carData) {
+    //   console.log("wef");
+    //   if (carData.scratchAndDentDetails?.image) {
+    //     setScratchAndDentImagePreview(carData?.scratchAndDentDetails?.image);
+    //     console.log("scratchAndDentImage", scratchAndDentImagePreview);
+    //   }
+    // }
     // // Clean up object URL to prevent memory leaks
     // if (scratchAndDentImagePreview) {
     //   console.log("ekf")
@@ -460,7 +461,7 @@ const Step1: React.FC<Step1Props> = ({
                       placeholder="Enter Scratch & Dent Details"
                       className={styles.description_and_dent_style}
                       onChange={(e) =>
-                        setFieldValue("dentDetails", e.target.value)
+                        setFieldValue("scratchAndDentDescription", e.target.value)
                       }
                     />
                     <ErrorMessage
