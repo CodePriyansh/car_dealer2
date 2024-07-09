@@ -17,7 +17,7 @@ export default function CarCards({ car, onDelete }) {
 
   const handleDelete = async (carId) => {
     try {
-      const response = await instance.delete(`/api/cars/${carId}`);
+      const response = await instance.delete(`/api/cars/delete/${carId}`);
       if (response.status === 200) {
         toast.success("Car deleted successfully!");
         if (onDelete) {
@@ -38,8 +38,8 @@ export default function CarCards({ car, onDelete }) {
           {car.sold ? "Sold" : "Avail"}
         </div>
       </div>
-      <Link href={`/car-details/${car._id}`} passHref>
-        <div className={styles.card_img_wrapper} onClick={handleClick}>
+      <Link href={`/car_details/${car._id}`} passHref>
+        <div className={styles.card_img_wrapper}>
           <img
             className="w-full h-full"
             src={car?.images?.front_image || Images.demoCarfrom}

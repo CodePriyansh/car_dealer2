@@ -6,7 +6,7 @@
     position: relative;
   }
   .card_img_wrapper{
-    @apply flex xl:h-[250px] 2xl:h-[280px] lg:h-[200px] md:h-[220px] sm:h-[210px] h-[200px] w-full cursor-pointer;
+    @apply flex xl:h-[230px] 2xl:h-[250px] lg:h-[200px] md:h-[220px] sm:h-[210px] h-[200px] w-full cursor-pointer;
   }
   .car_header{
     @apply flex w-full justify-between items-center px-4 sm:py-3 py-2;

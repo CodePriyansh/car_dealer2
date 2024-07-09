@@ -126,6 +126,7 @@ const CommonReactSelect: React.FC<ReactSelectProps> = ({
         />
       ) : (
         <Select
+        isSearchable={false}
           value={selectedOption}
           defaultValue={defaultValue}
           onChange={handleChange}

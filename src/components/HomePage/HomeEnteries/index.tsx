@@ -20,11 +20,15 @@ const HomeEnteries = () => {
     // console.log(cars,"pppppppppppppppppppppppppppppp")
   }, [cars]);
 
+  const handleDeleteCar = (carId) => {
+    setCars((prevCars) => prevCars.filter((car) => car._id !== carId));
+  };
+
   return (
     <div>
       <Filters setCars={setCars} setCarNotFoundtext={setCarNotFoundtext} />
       {showPlanExpiredBanner && <PlanExpiredBanner />}
-      <HomePageCards cars={cars} carNotFoundtext={carNotFoundtext} />
+      <HomePageCards cars={cars} carNotFoundtext={carNotFoundtext} onDelete={handleDeleteCar}  />
       <button className="fixed sm:hidden bottom-4 right-4 bg-primary  text-white px-1 py-1 rounded-[20%] shadow-lg hover:bg-primary-dark">
         <Button onclick={() => router.push("/addcar")}>
           <Image
