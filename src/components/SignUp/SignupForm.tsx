@@ -139,7 +139,14 @@ export default function SignupForm() {
         });
 
         if (response.status === 200) {
-          cookies.set("token", response.data.data.token, { path: "/" });
+          cookies.set("token", response.data.data.token, {
+            path: "/",
+            maxAge: 30 * 24 * 60 * 60, // 30 days in seconds
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict'
+          });
+          setLocalStorage("token", JSON.stringify(response.data.data.token))
           setLocalStorage("user", JSON.stringify(response.data.data));
           // toast.success(response.data.message);
           router.push("/");

@@ -274,6 +274,14 @@ const Step1: React.FC<Step1Props> = ({
           .required(`${field.placeholder} is required`)
           .max(2, "Average should be exactly 1 or 2 digits");
       }
+       if (field.name === "numberPlate") {
+      acc[field.name] = Yup.string()
+        .matches(/^[A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{4}$/, {
+          message: "Please enter a correct Number Plate (e.g., MP09VP8908)",
+          excludeEmptyString: true,
+        })
+        .required("Number Plate is required");
+    }
       return acc;
     }, {}),
     insuranceValidity: Yup.string().when("insurance", {
@@ -409,6 +417,13 @@ const Step1: React.FC<Step1Props> = ({
                           }
                         } else {
                           setFieldValue(field.name, event.target.value); // Limit to first two digits
+                        }
+                      }}
+
+                      onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
+                        if (field.name === "numberPlate") {
+                          const value = event.target.value.replace(/\s+/g, "").toUpperCase();
+                          setFieldValue(field.name, value);
                         }
                       }}
                     />

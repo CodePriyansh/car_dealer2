@@ -97,8 +97,14 @@ const OtpVerification = ({ mobileNumber, formData, setHeading }) => {
         const response = await instance.post(url, payload);
         console.log(response, "response");
         if (response.status >= 200) {
-          cookies.set("token", response.data.data.token, { path: "/" });
+          cookies.set("token", response.data.data.token, {
+            path: "/",
+            maxAge: 30 * 24 * 60 * 60, // 30 days in seconds
+            // Note: httpOnly and secure cannot be set true for client-side cookies
+            sameSite: 'strict'
+          });
           setLocalStorage("user", JSON.stringify(response.data.data))
+          setLocalStorage("token", JSON.stringify(response.data.data.token))
           // toast.success(response?.data.message);
           router.push("/");
         }
