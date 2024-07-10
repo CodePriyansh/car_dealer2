@@ -33,6 +33,11 @@ export default function SubHeader({
     setActiveMidFilter(filter);
   };
 
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+    setActiveMidFilter("car");
+  };
+
   return (
     <div className={`${styles.wrapper} container_space large_layout`}>
       {/* left  */}
@@ -87,7 +92,7 @@ export default function SubHeader({
         </div>
       </div>
 
-      <DynamicDialog open={dialogOpen} type={dialogType} onClose={() => setDialogOpen(false)} />
+      <DynamicDialog open={dialogOpen}  type={dialogType} onClose={handleDialogClose} onConfirm={handleDialogClose} />
       {/* right  */}
       <div className={styles.right}>
         <Button

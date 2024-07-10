@@ -4,10 +4,12 @@ import { Person, PrivacyTip, Settings, Logout } from "@mui/icons-material";
 import { Images } from "@/assets/Images";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Cookies from "universal-cookie";
 
 const ProfileDropdown = ({ user }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const cookies =  new Cookies();
 const router = useRouter()
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -19,6 +21,7 @@ const router = useRouter()
 
   const handleLogout = () => {
     handleClose();
+    cookies.remove('token', { path: '/' })
     router.push("/login");  // Navigate to the login page
   };
   return (

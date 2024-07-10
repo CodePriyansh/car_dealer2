@@ -23,18 +23,19 @@ function Filters({ setCars, setCarNotFoundtext }) {
       name: "company",
       type: "select",
       placeholder: "Company",
-      options: [
-        { value: "Toyota", label: "Toyota" },
+       options: [
+        { value: "Ford", label: "Ford" },
         { value: "Honda", label: "Honda" },
-        { value: "Tata Motors", label: "Tata" },
+        { value: "Hyundai", label: "Hyundai" },
+        { value: "Kia", label: "Kia" },
         { value: "Mahindra", label: "Mahindra" },
         { value: "Maruti Suzuki", label: "Maruti Suzuki" },
-        { value: "Hyundai", label: "Hyundai" },
         { value: "Skoda", label: "Skoda" },
-        { value: "Kia", label: "Kia" },
-        { value: "Ford", label: "Ford" },
+        { value: "Tata Motors", label: "Tata" },
+        { value: "Toyota", label: "Toyota" },
         { value: "Volkswagen", label: "Volkswagen" },
-      ],
+      ]
+      ,
     },
     {
       name: "modelName",
@@ -63,7 +64,7 @@ function Filters({ setCars, setCarNotFoundtext }) {
   const carType = [
     "Compact SUV",
     "Coupe",
-    "Crossover Suv",
+    "Crossover SUV",
     "Hatchback",
     "Pickup",
     "Sedan",

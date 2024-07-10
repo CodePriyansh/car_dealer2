@@ -31,34 +31,39 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer,setCars }) {
   const contentData = [
     {
       filterName: "company",
+      label: "company",
       filters: [
-        "Maruti Suzuki",
-        "Hyundai",
-        "Tata Motors",
-        "Honda",
-        "Toyota",
-        "Mahindra",
-        "Kia",
         "Ford",
-        "Volkswagen",
+        "Honda",
+        "Hyundai",
+        "Kia",
+        "Mahindra",
         "Skoda",
-      ],
+        "Suzuki",
+        "Tata Motors",
+        "Toyota",
+        "Volkswagen"
+    ],
     },
     {
       filterName: "modelYear",
+      label: "Model Year",
       filters: ["2022 - 2024", "2019 - 2021", "2016 - 2018", "2013 - 2015", "Before - 2013"],
     },
     {
       filterName: "color",
+      label: "color",
       filters: ["Red", "Blue", "Black", "White", "Silver", "Grey", "Green", "Yellow", "Brown", "Orange"],
     },
     {
       filterName: "transmission",
+      label: "transmission",
       filters: ["Manual", "Automatic"],
     },
     {
       filterName: "carType",
-      filters: ["Compact SUV", "Coupe", "Crossover Suv", "Hatchback", "Pick-up", "Sedan", "SUV", "Van"]
+      label: "Car Type",
+      filters: ["Compact SUV", "Coupe", "Crossover SUV", "Hatchback", "Pickup", "Sedan", "SUV", "Van"]
       ,
     },
   ];
@@ -105,7 +110,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer,setCars }) {
               <p className={styles.clear_filter} onClick={handleClearFilters}>clear filters</p>
             </div>
 
-            <div className="mx-6">
+            <div className="mx-6 ">
               <PriceRangeSlider setUpdatedPriceRange={setUpdatedPriceRange} updatedPriceRange={updatedPriceRange} />
             </div>
 
@@ -114,7 +119,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer,setCars }) {
                 return (
                   <div key={index.toString()} className={styles.container}>
                     <div className={styles.filter_heading}>
-                      {item?.filterName}
+                      {item?.label}
                     </div>
                     <div className={styles.filter_ele_wrapper}>
                       {item.filters?.map((ele, ind) => {

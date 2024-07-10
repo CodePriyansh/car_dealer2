@@ -15,7 +15,7 @@
     @apply font-rajdhani font-bold sm:text-[20px] text-[17px] capitalize;
   }
   .header_right{
-    @apply flex gap-2
+    @apply flex sm:gap-5 gap-3 
   }
   .card_price_row{
     @apply flex w-full items-center justify-between px-4;
@@ -23,6 +23,9 @@
   .price_left{
     @apply font-rajdhani text-primary 2xl:text-[28px] text-[18px] font-bold leading-8
 
+  }
+  .cardActions{
+    @apply w-6 h-6 md:w-7 md:h-7 md1:w-7 md1:h-7 lg:w-7 lg:h-7 xl:w-7 xl:h-7
   }
   .price_right{
     @apply font-rajdhani 2xl:text-20 text-18 font-medium text-lightpara ;

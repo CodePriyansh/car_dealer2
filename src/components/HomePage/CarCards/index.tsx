@@ -54,15 +54,16 @@ export default function CarCards({ car, onDelete }) {
         >{`${car.company} ${car.modelName} ${car.variant}`}</div>
         <div className={styles.header_right}>
           <Link href={`/car-details/${car._id}`} passHref>
-            <Image src={Images.cardView} alt="view" width={24} height={24} />
+            <Image src={Images.cardView} alt="view" width={24} height={24} className={styles.cardActions} />
           </Link>
           <Link href={`/edit-car/${car._id}`} passHref>
-            <Image src={Images.cardEdit} alt="edit" width={24} height={24} />
+            <Image src={Images.cardEdit} alt="edit" width={24} height={24} className={styles.cardActions} />
           </Link>
 
           <Image
             src={Images.cardDelete}
             alt="image"
+            className={styles.cardActions}
             width={24}
             height={24}
             onClick={() => handleDelete(car._id)}

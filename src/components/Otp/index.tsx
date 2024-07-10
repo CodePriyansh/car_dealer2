@@ -44,7 +44,7 @@ const OtpVerification = ({ mobileNumber, formData, setHeading }) => {
 
       if (newOtp.every((digit) => digit !== "")) {
         setIsOtpEntered(true);
-        setHeading("Confirm Otp")
+        setHeading("Confirm OTP")
       }
     }
   };

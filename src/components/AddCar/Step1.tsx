@@ -92,13 +92,13 @@ const fields = [
     type: "select",
     placeholder: "Select Type",
     options: [
-      { value: "SUV", label: "SUV" },
-      { value: "Sedan", label: "Sedan" },
+      { value: "Compact SUV", label: "Compact SUV" },
+      { value: "Coupe", label: "Coupe" },
+      { value: "Crossover Suv", label: "Crossover Suv" },
+      { value: "Hatchback", label: "Hatchback" },
       { value: "Pickup", label: "Pickup" },
-      { value: "Minivan", label: "Minivan" },
-      { value: "Coupes", label: "Coupes" },
-      { value: "Hatchbacks", label: "Hatchbacks" },
-      { value: "Wagon", label: "Wagon" },
+      { value: "Sedan", label: "Sedan" },
+      { value: "SUV", label: "SUV" },
       { value: "Van", label: "Van" },
     ],
   },
@@ -227,11 +227,11 @@ const Step1: React.FC<Step1Props> = ({
   // console.log(carData?.images,"scratchAndDentImagePreview")
   const initialValues = carData
     ? {
-        description: carData.description || "",
+        description: carData?.description || "",
         scratchAndDentImage:
           carData?.scratchAndDentDetails?.scratchAndDentImage || "",
         scratchAndDentDescription:
-          carData.scratchAndDentDetails.description || "",
+          carData?.scratchAndDentDetails?.description || "",
         insuranceValidity: formatRegistrationDate(carData["insuranceValidity"]),
         ...fields.reduce((acc, field) => {
           if (field.name === "yearOfManufacture") {
@@ -273,6 +273,17 @@ const Step1: React.FC<Step1Props> = ({
           })
           .required(`${field.placeholder} is required`)
           .max(2, "Average should be exactly 1 or 2 digits");
+      }
+      if(field.name === "registrationDate"){
+        acc[field.name] = Yup.date()
+        .required('Registration Date is required')
+        .test('is-after-manufacture', 'Registration date must be after manufacture date', function(value) {
+          const yearOfManufacture = this.parent.yearOfManufacture;
+          if (!yearOfManufacture || !value) return true;
+          const [year, month] = yearOfManufacture.split('-');
+          const manufactureDate = new Date(parseInt(year), parseInt(month) - 1);
+          return value >= manufactureDate;
+        })
       }
        if (field.name === "numberPlate") {
       acc[field.name] = Yup.string()
@@ -373,7 +384,7 @@ const Step1: React.FC<Step1Props> = ({
                   <label className={styles.label_Style}>
                     {field.name === "mileage"
                       ? field.placeholder + " (kmpl)"
-                      : field.placeholder}
+                      : field.name == "cubicCapacity" ? field.placeholder+ "(CC)" : field.placeholder}
                   </label>
                   {field.type === "select" ? (
                     <CommonReactSelect
@@ -402,7 +413,7 @@ const Step1: React.FC<Step1Props> = ({
                     <Field
                       type={field.type}
                       name={field.name}
-                      placeholder={field.placeholder}
+                      placeholder={field.placeholder == "Enter Cubic Capacity" ? "Enter CC " :  field.placeholder}
                       className={styles.field_style}
                       onChange={(
                         event: React.ChangeEvent<HTMLInputElement>
@@ -586,7 +597,6 @@ const Step1: React.FC<Step1Props> = ({
                 </div>
               </div>
             </div>
-            <div></div>
             {/* Submit Button */}
             <button
               type="submit"

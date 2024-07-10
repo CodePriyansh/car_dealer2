@@ -6,7 +6,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import styles from './styles.module.css';
 import Image from "next/image";
 
-const DynamicDialog = ({ open, type, onClose }) => {
+const DynamicDialog = ({ open, type, onClose, onConfirm }) => {
   const DialogTypes = {
     DELETE_CAR: "DELETE_CAR",
     PLAN_EXPIRED: "PLAN_EXPIRED",
@@ -54,7 +54,7 @@ const DynamicDialog = ({ open, type, onClose }) => {
           buttons: [
             {
               label: "OK",
-              onClick: onClose,
+              onClick: onConfirm,
               className: styles.buttonRenew,
             },
           ],

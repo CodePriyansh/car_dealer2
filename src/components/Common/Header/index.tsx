@@ -6,6 +6,7 @@ import { Images } from "@/assets/Images";
 import Button from "../Button";
 import { getLocalStorage } from "@/constants/constants";
 import ProfileDropdown from "./ProfileDropdown";
+import Link from "next/link";
 
 interface props{
   page:string;
@@ -25,10 +26,12 @@ const Header: React.FC<props> = ({page='other'})=> {
 
       {/* Desktop View */}
       <div className={styles.right_part}>
+      <Link href={"/subscription"}  passHref>
         <Button otherStyles="bg-secondary text-white uppercase sm:px-6 sm:h-fit sm:py-3">
           <Image src={Images.subscription} alt="subscription" width={24} height={24} />
           <p>SUBSCRIPTION</p>
         </Button>
+        </Link>
 
         <Image src={Images.menu} alt="menu" width={25} height={25} className="cursor-pointer" />
         <Image src={Images.notification} alt="notification" width={25} height={25} className="cursor-pointer" />
