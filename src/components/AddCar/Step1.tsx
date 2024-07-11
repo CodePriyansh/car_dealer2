@@ -12,6 +12,7 @@ interface Step1Props {
   setShowActiveStep: React.Dispatch<React.SetStateAction<number>>;
   setStepsData: (data: any) => void;
   carData: any;
+  setStep1DataFilled: any;
 }
 
 const fields = [
@@ -196,6 +197,7 @@ const Step1: React.FC<Step1Props> = ({
   setShowActiveStep,
   setStepsData,
   carData,
+  setStep1DataFilled,
 }) => {
   const profileImageInputRef = useRef<HTMLInputElement | null>(null);
   const [scratchAndDentImagePreview, setScratchAndDentImagePreview] = useState<
@@ -274,25 +276,32 @@ const Step1: React.FC<Step1Props> = ({
           .required(`${field.placeholder} is required`)
           .max(2, "Average should be exactly 1 or 2 digits");
       }
-      if(field.name === "registrationDate"){
+      if (field.name === "registrationDate") {
         acc[field.name] = Yup.date()
-        .required('Registration Date is required')
-        .test('is-after-manufacture', 'Registration date must be after manufacture date', function(value) {
-          const yearOfManufacture = this.parent.yearOfManufacture;
-          if (!yearOfManufacture || !value) return true;
-          const [year, month] = yearOfManufacture.split('-');
-          const manufactureDate = new Date(parseInt(year), parseInt(month) - 1);
-          return value >= manufactureDate;
-        })
+          .required("Registration Date is required")
+          .test(
+            "is-after-manufacture",
+            "Registration date must be after manufacture date",
+            function (value) {
+              const yearOfManufacture = this.parent.yearOfManufacture;
+              if (!yearOfManufacture || !value) return true;
+              const [year, month] = yearOfManufacture.split("-");
+              const manufactureDate = new Date(
+                parseInt(year),
+                parseInt(month) - 1
+              );
+              return value >= manufactureDate;
+            }
+          );
       }
-       if (field.name === "numberPlate") {
-      acc[field.name] = Yup.string()
-        .matches(/^[A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{4}$/, {
-          message: "Please enter a correct Number Plate (e.g., MP09VP8908)",
-          excludeEmptyString: true,
-        })
-        .required("Number Plate is required");
-    }
+      if (field.name === "numberPlate") {
+        acc[field.name] = Yup.string()
+          .matches(/^[A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{4}$/, {
+            message: "Please enter a correct Number Plate (e.g., MP09VP8908)",
+            excludeEmptyString: true,
+          })
+          .required("Number Plate is required");
+      }
       return acc;
     }, {}),
     insuranceValidity: Yup.string().when("insurance", {
@@ -316,6 +325,12 @@ const Step1: React.FC<Step1Props> = ({
       ...selectedOptions,
       [name]: selectedOption,
     });
+  };
+
+  const checkFilledFields = (values: any) => {
+    const filledFields = Object.values(values).filter(value => value !== "").length;
+    console.log(filledFields,"filledFields")
+    setStep1DataFilled(filledFields >= 5);
   };
 
   const handleRemoveImage = (
@@ -371,244 +386,264 @@ const Step1: React.FC<Step1Props> = ({
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ values, isSubmitting, setFieldValue }) => (
-          <Form className="w-full sm:px-6">
-            {/* Basic Details */}
-            <div className={styles.basic_detail_heading}>
-              <p className={styles.sub_heading}>Basic Details</p>
-              <p className={`${styles.line} h-[1px] w-full`}></p>
-            </div>
-            <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 w-full sm:gap-6 sm:my-4 gap-2 my-2">
-              {fields.map((field, index) => (
-                <div className={styles.field_wrapper} key={index}>
-                  <label className={styles.label_Style}>
-                    {field.name === "mileage"
-                      ? field.placeholder + " (kmpl)"
-                      : field.name == "cubicCapacity" ? field.placeholder+ "(CC)" : field.placeholder}
-                  </label>
-                  {field.type === "select" ? (
-                    <CommonReactSelect
-                      options={field.options}
-                      defaultValue={
-                        carData
-                          ? () => {
-                              const value = booleanToYesNo(values[field.name]);
-                              return { value: value, label: value };
-                            }
-                          : undefined
-                      }
-                      placeholder={field.placeholder}
-                      selectedOption={selectedOptions[field.name]}
-                      setSelectedOption={(option) => {
-                        handleChange(field.name, option);
-                        console.log(field.name, option);
-                        setFieldValue(field.name, option ? option.value : "");
-                      }}
-                      className={styles.field_style}
-                      isCreatable={["company", "modelName", "color"].includes(
-                        field.name
-                      )}
-                    />
-                  ) : (
-                    <Field
-                      type={field.type}
-                      name={field.name}
-                      placeholder={field.placeholder == "Enter Cubic Capacity" ? "Enter CC " :  field.placeholder}
-                      className={styles.field_style}
-                      onChange={(
-                        event: React.ChangeEvent<HTMLInputElement>
-                      ) => {
-                        // Handle input length restriction for average field
-                        if (field.name === "mileage") {
-                          const value = event.target.value;
-                          console.log(value);
-                          if (value.length < 99) {
-                            event.target.value = value.slice(0, 2);
-                            setFieldValue("mileage", event.target.value); // Limit to first two digits
-                          }
-                        } else {
-                          setFieldValue(field.name, event.target.value); // Limit to first two digits
-                        }
-                      }}
+        {({ values, isSubmitting, setFieldValue }) => {
 
-                      onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
-                        if (field.name === "numberPlate") {
-                          const value = event.target.value.replace(/\s+/g, "").toUpperCase();
-                          setFieldValue(field.name, value);
-                        }
-                      }}
-                    />
-                  )}
-                  <ErrorMessage
-                    name={field.name}
-                    component="div"
-                    className="error_msg"
-                  />
-                </div>
-              ))}
-              {values.insurance === "Yes" && (
-                <div className={styles.field_wrapper}>
-                  <label className={styles.label_Style}>
-                    Enter Insurance Validity Date
-                  </label>
-                  <Field
-                    type="date"
-                    name="insuranceValidity"
-                    placeholder="Enter Insurance Validity Date"
-                    className={styles.field_style}
-                  />
-                  <ErrorMessage
-                    name="insuranceValidity"
-                    component="div"
-                    className="error_msg"
-                  />
-                </div>
-              )}
-            </div>
-
-            {/* Description */}
-            <div className="flex sm:flex-row gap flex-col sm:gap-x-10">
-              <div className="basis-1/3 sm:flex-row">
-                {/* Scratch & Dent Details */}
-                <div className={styles.basic_detail_heading}>
-                  <p className={styles.sub_heading}>Scratch & Dent Details</p>
-                  <p className={styles.special_heading}>(If any) Optional</p>
-                  <p className={styles.line}></p>
-                </div>
-                <div className="my-4">
-                  <div className={styles.field_wrapper}>
+          return (
+            <Form className="w-full sm:px-6">
+              {/* Basic Details */}
+              <div className={styles.basic_detail_heading}>
+                <p className={styles.sub_heading}>Basic Details</p>
+                <p className={`${styles.line} h-[1px] w-full`}></p>
+              </div>
+              <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 w-full sm:gap-6 sm:my-4 gap-2 my-2">
+                {fields.map((field, index) => (
+                  <div className={styles.field_wrapper} key={index}>
                     <label className={styles.label_Style}>
-                      Scratch & Dent Details
+                      {field.name === "mileage"
+                        ? field.placeholder + " (kmpl)"
+                        : field.name == "cubicCapacity"
+                        ? field.placeholder + "(CC)"
+                        : field.placeholder}
                     </label>
-                    <Field
-                      as="textarea"
-                      name="scratchDetails"
-                      rows={6}
-                      placeholder="Enter Scratch & Dent Details"
-                      className={styles.description_and_dent_style}
-                      onChange={(e) =>
-                        setFieldValue("scratchAndDentDescription", e.target.value)
-                      }
-                    />
-                    <ErrorMessage
-                      name="scratchDetails"
-                      component="div"
-                      className="error_msg"
-                    />
-                  </div>
-                </div>
-
-                {/* Scratch & Dent Image (Optional) */}
-                {/* Scratch & Dent Image (Optional) */}
-                <div className="sm:w-1/2 sm:h-1/3 w-full">
-                  <div className={styles.basic_detail_heading}>
-                    <p className={styles.sub_heading}>Scratch & Dent Image</p>
-                    <p className={styles.special_heading}>(If any) Optional</p>
-                  </div>
-
-                  <div
-                    className={styles.dotted_box}
-                    onClick={() => profileImageInputRef.current?.click()}
-                  >
-                    {scratchAndDentImagePreview ? (
-                      <div className="relative w-full h-full">
-                        <Image
-                          src={scratchAndDentImagePreview}
-                          alt="Scratch & Dent Image"
-                          className="w-full h-full object-cover rounded"
-                          width={200}
-                          height={200}
-                        />
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleRemoveImage(setFieldValue);
-                          }}
-                          className="absolute top-2 right-2 bg-white rounded-full p-1"
-                        >
-                          <AiOutlineCloseCircle size={20} />
-                        </button>
-                      </div>
+                    {field.type === "select" ? (
+                      <CommonReactSelect
+                        options={field.options}
+                        defaultValue={
+                          carData
+                            ? () => {
+                                const value = booleanToYesNo(
+                                  values[field.name]
+                                );
+                                return { value: value, label: value };
+                              }
+                            : undefined
+                        }
+                        placeholder={field.placeholder}
+                        selectedOption={selectedOptions[field.name]}
+                        setSelectedOption={(option) => {
+                          handleChange(field.name, option);
+                          console.log(field.name, option);
+                          setFieldValue(field.name, option ? option.value : "");
+                          checkFilledFields({ ...values, [field.name]: option?.value?.value ? option?.value?.value : "" });
+                        }}
+                        className={styles.field_style}
+                        isCreatable={["company", "modelName", "color"].includes(
+                          field.name
+                        )}
+                      />
                     ) : (
-                      <>
-                        <Image
-                          src={Images.uploadImg}
-                          alt="img"
-                          className="w-8 h-8"
-                        />
-                        <Button otherStyles="mt-[50px]">
-                          <Image
-                            src={Images.plus}
-                            alt="plus"
-                            width={20}
-                            height={20}
-                          />
-                          Add Image
-                        </Button>
-                      </>
+                      <Field
+                        type={field.type}
+                        name={field.name}
+                        placeholder={
+                          field.placeholder == "Enter Cubic Capacity"
+                            ? "Enter CC "
+                            : field.placeholder
+                        }
+                        className={styles.field_style}
+                        onChange={(
+                          event: React.ChangeEvent<HTMLInputElement>
+                        ) => {
+                          // Handle input length restriction for average field
+                          if (field.name === "mileage") {
+                            const value = event.target.value;
+                            console.log(value);
+                            if (value.length < 99) {
+                              event.target.value = value.slice(0, 2);
+                              setFieldValue("mileage", event.target.value); // Limit to first two digits
+                            }
+                          } else {
+                            setFieldValue(field.name, event.target.value); // Limit to first two digits
+                          }
+                          checkFilledFields({ ...values, [field.name]: event.target.value });
+                        }}
+                        onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
+                          if (field.name === "numberPlate") {
+                            const value = event.target.value
+                              .replace(/\s+/g, "")
+                              .toUpperCase();
+                            setFieldValue(field.name, value);
+                            checkFilledFields({ ...values, [field.name]: value });
+                          }
+                        }}
+                      />
                     )}
-                    <input
-                      type="file"
-                      ref={profileImageInputRef}
-                      style={{ display: "none" }}
-                      onChange={(event) =>
-                        handleImageChange(event, setFieldValue)
-                      }
-                      name="scratchAndDentImage"
-                    />
                     <ErrorMessage
-                      name="scratchAndDentImage"
-                      component="p"
-                      className="error_msg"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="basis-1/2">
-                <div className={styles.basic_detail_heading}>
-                  <p className={styles.sub_heading}>Description</p>
-                  <p className={styles.special_heading}>
-                    [you can write in 300 words] Optional
-                  </p>
-                  <p className={styles.line}></p>
-                </div>
-                <div className="my-4">
-                  <div className={styles.field_wrapper}>
-                    <label className={styles.label_Style}>
-                      Other Description related to car
-                    </label>
-                    <Field
-                      as="textarea"
-                      name="description"
-                      rows={6}
-                      placeholder="Enter Description"
-                      className={styles.description_and_dent_style}
-                      onChange={(e) =>
-                        setFieldValue("description", e.target.value)
-                      }
-                    />
-                    <ErrorMessage
-                      name="description"
+                      name={field.name}
                       component="div"
                       className="error_msg"
                     />
                   </div>
+                ))}
+                {values.insurance === "Yes" && (
+                  <div className={styles.field_wrapper}>
+                    <label className={styles.label_Style}>
+                      Enter Insurance Validity Date
+                    </label>
+                    <Field
+                      type="date"
+                      name="insuranceValidity"
+                      placeholder="Enter Insurance Validity Date"
+                      className={styles.field_style}
+                    />
+                    <ErrorMessage
+                      name="insuranceValidity"
+                      component="div"
+                      className="error_msg"
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Description */}
+              <div className="flex sm:flex-row gap flex-col sm:gap-x-10">
+                <div className="basis-1/3 sm:flex-row">
+                  {/* Scratch & Dent Details */}
+                  <div className={styles.basic_detail_heading}>
+                    <p className={styles.sub_heading}>Scratch & Dent Details</p>
+                    <p className={styles.special_heading}>(If any) Optional</p>
+                    <p className={styles.line}></p>
+                  </div>
+                  <div className="my-4">
+                    <div className={styles.field_wrapper}>
+                      <label className={styles.label_Style}>
+                        Scratch & Dent Details
+                      </label>
+                      <Field
+                        as="textarea"
+                        name="scratchDetails"
+                        rows={6}
+                        placeholder="Enter Scratch & Dent Details"
+                        className={styles.description_and_dent_style}
+                        onChange={(e) =>
+                          setFieldValue(
+                            "scratchAndDentDescription",
+                            e.target.value
+                          )
+                        }
+                      />
+                      <ErrorMessage
+                        name="scratchDetails"
+                        component="div"
+                        className="error_msg"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Scratch & Dent Image (Optional) */}
+                  {/* Scratch & Dent Image (Optional) */}
+                  <div className="sm:w-1/2 sm:h-1/3 w-full">
+                    <div className={styles.basic_detail_heading}>
+                      <p className={styles.sub_heading}>Scratch & Dent Image</p>
+                      <p className={styles.special_heading}>
+                        (If any) Optional
+                      </p>
+                    </div>
+
+                    <div
+                      className={styles.dotted_box}
+                      onClick={() => profileImageInputRef.current?.click()}
+                    >
+                      {scratchAndDentImagePreview ? (
+                        <div className="relative w-full h-full">
+                          <Image
+                            src={scratchAndDentImagePreview}
+                            alt="Scratch & Dent Image"
+                            className="w-full h-full object-cover rounded"
+                            width={200}
+                            height={200}
+                          />
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveImage(setFieldValue);
+                            }}
+                            className="absolute top-2 right-2 bg-white rounded-full p-1"
+                          >
+                            <AiOutlineCloseCircle size={20} />
+                          </button>
+                        </div>
+                      ) : (
+                        <>
+                          <Image
+                            src={Images.uploadImg}
+                            alt="img"
+                            className="w-8 h-8"
+                          />
+                          <Button otherStyles="mt-[50px]">
+                            <Image
+                              src={Images.plus}
+                              alt="plus"
+                              width={20}
+                              height={20}
+                            />
+                            Add Image
+                          </Button>
+                        </>
+                      )}
+                      <input
+                        type="file"
+                        ref={profileImageInputRef}
+                        style={{ display: "none" }}
+                        onChange={(event) =>
+                          handleImageChange(event, setFieldValue)
+                        }
+                        name="scratchAndDentImage"
+                      />
+                      <ErrorMessage
+                        name="scratchAndDentImage"
+                        component="p"
+                        className="error_msg"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="basis-1/2">
+                  <div className={styles.basic_detail_heading}>
+                    <p className={styles.sub_heading}>Description</p>
+                    <p className={styles.special_heading}>
+                      [you can write in 300 words] Optional
+                    </p>
+                    <p className={styles.line}></p>
+                  </div>
+                  <div className="my-4">
+                    <div className={styles.field_wrapper}>
+                      <label className={styles.label_Style}>
+                        Other Description related to car
+                      </label>
+                      <Field
+                        as="textarea"
+                        name="description"
+                        rows={6}
+                        placeholder="Enter Description"
+                        className={styles.description_and_dent_style}
+                        onChange={(e) =>
+                          setFieldValue("description", e.target.value)
+                        }
+                      />
+                      <ErrorMessage
+                        name="description"
+                        component="div"
+                        className="error_msg"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            {/* Submit Button */}
-            <button
-              type="submit"
-              className="mx-auto w-full"
-              disabled={isSubmitting}
-            >
-              <Button otherStyles={styles.next_btn}>
-                {isSubmitting ? "Submitting..." : "Next"}
-              </Button>
-            </button>
-          </Form>
-        )}
+              {/* Submit Button */}
+              <button
+                type="submit"
+                className="mx-auto w-full"
+                disabled={isSubmitting}
+              >
+                <Button otherStyles={styles.next_btn}>
+                  {isSubmitting ? "Submitting..." : "Next"}
+                </Button>
+              </button>
+            </Form>
+          );
+        }}
       </Formik>
       <ToastContainer />
     </div>

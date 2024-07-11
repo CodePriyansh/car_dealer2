@@ -17,6 +17,7 @@ const AddCarForm = ({ params }: { params: { id: string } }) => {
   const [carData, setCarData] = useState<any>(null);
   const [Loading, setLoading] = useState<boolean>(true);
   const [stepsData, setStepsData] = useState<any>(null);
+  const [step1DataFilled, setStep1DataFilled] = useState(false);
   const router = useRouter();
   const carId = params?.id;
 
@@ -51,17 +52,15 @@ const AddCarForm = ({ params }: { params: { id: string } }) => {
     }
   }, [showActiveStep]);
 
-  const handleEditSubmit = async (data: FormData) => {
-    try {
-      const response = await instance.put(
-        `/api/update-car/${carData._id}`,
-        data
-      );
-      console.log(response);
-      console.log(response.data.data);
-      // router.push("/"); // Redirect to the homepage or another page
-    } catch (error) {
-      console.error("Error updating car data:", error);
+  const handleBack = () => {
+    if (showActiveStep === 2) {
+      setShowActiveStep(1);
+    } else if (showActiveStep === 1 && step1DataFilled) {
+      if (window.confirm("Are you sure you want to go back? You will lose your entered data.")) {
+        router.back();
+      }
+    } else {
+      router.back();
     }
   };
 
@@ -73,7 +72,7 @@ const AddCarForm = ({ params }: { params: { id: string } }) => {
     <div className={`container_space large_layout ${styles.wrapper}`}>
       <div
         className="sm:hidden md:left-16 left-0 flex gap-2 items-center cursor-pointer"
-        onClick={() => router.back()}
+        onClick={handleBack}
       >
         <Image
           src={Images.backArrow}
@@ -92,7 +91,7 @@ const AddCarForm = ({ params }: { params: { id: string } }) => {
         {/* need to optimize code bcoz back iis used multiple times */}
         <div
           className="hidden sm:flex md:left-16 left-0 sm:top-1 gap-2 items-center cursor-pointer"
-          onClick={() => router.back()}
+          onClick={handleBack}
         >
           <Image
             src={Images.backArrow}
@@ -151,13 +150,13 @@ const AddCarForm = ({ params }: { params: { id: string } }) => {
             setShowActiveStep={setShowActiveStep}
             setStepsData={setStepsData}
             carData={carData}
+            setStep1DataFilled={setStep1DataFilled}
           />
         ) : (
           <Step2
             setShowActiveStep={setShowActiveStep}
             stepsData={stepsData}
             carData={carData}
-            handleEditSubmit={handleEditSubmit}
           />
         )}
       </div>

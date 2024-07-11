@@ -17,7 +17,6 @@ interface Step2Props {
   stepsData: any;
   setShowActiveStep: React.Dispatch<React.SetStateAction<number>>;
   carData: any;
-  handleEditSubmit: (values: any) => void; // Add this line
 }
 
 const carImages = [
@@ -83,7 +82,6 @@ const Step2: React.FC<Step2Props> = ({
   stepsData,
   setShowActiveStep,
   carData,
-  handleEditSubmit,
 }) => {
   const [interiorImagesPreview, setInteriorImagesPreview] = useState<
     Array<string>
