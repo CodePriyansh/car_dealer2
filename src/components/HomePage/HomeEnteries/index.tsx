@@ -2,12 +2,12 @@
 import SubHeader from "@/components/Common/SubHeader";
 import React, { useEffect, useState } from "react";
 import Filters from "../Filters";
-import PlanExpiredBanner from "@/components/Subscription/SubcriptionBanner";
 import HomePageCards from "../HomePageCards";
 import Button from "@/components/Common/Button";
 import Image from "next/image";
 import { Images } from "@/assets/Images";
 import { useRouter } from "next/navigation";
+import PlanExpiredBanner from "@/components/Subscription/SubscriptionBanner";
 
 const HomeEnteries = () => {
   const showPlanExpiredBanner = false;
