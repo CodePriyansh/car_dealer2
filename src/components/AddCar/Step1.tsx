@@ -12,6 +12,7 @@ interface Step1Props {
   setShowActiveStep: React.Dispatch<React.SetStateAction<number>>;
   setStepsData: (data: any) => void;
   carData: any;
+  stepsData:any;
   setStep1DataFilled: any;
 }
 
@@ -197,12 +198,14 @@ const Step1: React.FC<Step1Props> = ({
   setShowActiveStep,
   setStepsData,
   carData,
+  stepsData,
   setStep1DataFilled,
 }) => {
   const profileImageInputRef = useRef<HTMLInputElement | null>(null);
-  const [scratchAndDentImagePreview, setScratchAndDentImagePreview] = useState<
-    string | null
-  >(carData?.scratchAndDentDetails?.image || null);
+  const [scratchAndDentImagePreview, setScratchAndDentImagePreview] = useState<string | null>(
+    stepsData?.scratchAndDentImage ? URL.createObjectURL(stepsData.scratchAndDentImage) : carData?.scratchAndDentDetails?.image || null
+  );
+  
   console.log(carData, "oeihehrh");
 
   const formatYearOfManufacture = (date: any) => {
@@ -227,40 +230,28 @@ const Step1: React.FC<Step1Props> = ({
     return value; // Return the original value if it's not a boolean
   };
   // console.log(carData?.images,"scratchAndDentImagePreview")
-  const initialValues = carData
-    ? {
-        description: carData?.description || "",
-        scratchAndDentImage:
-          carData?.scratchAndDentDetails?.scratchAndDentImage || "",
-        scratchAndDentDescription:
-          carData?.scratchAndDentDetails?.description || "",
-        insuranceValidity: formatRegistrationDate(carData["insuranceValidity"]),
-        ...fields.reduce((acc, field) => {
-          if (field.name === "yearOfManufacture") {
-            acc[field.name] = formatYearOfManufacture(carData[field.name]);
-          } else if (field.name === "registrationDate") {
-            acc[field.name] = formatRegistrationDate(carData[field.name]);
-          } else if (
-            field.name === "powerWindow" ||
-            field.name === "insurance" ||
-            field.name === "airConditioner"
-          ) {
-            acc[field.name] = booleanToYesNo(carData[field.name]);
-          } else {
-            acc[field.name] = carData[field.name] || "";
-          }
-          return acc;
-        }, {}),
+  const initialValues = {
+    description: stepsData?.description || carData?.description || "",
+    scratchAndDentImage: stepsData?.scratchAndDentImage || carData?.scratchAndDentDetails?.scratchAndDentImage || "",
+    scratchAndDentDescription: stepsData?.scratchAndDentDescription || carData?.scratchAndDentDetails?.description || "",
+    insuranceValidity: formatRegistrationDate(stepsData?.insuranceValidity || carData?.insuranceValidity),
+    ...fields.reduce((acc, field) => {
+      if (field.name === "yearOfManufacture") {
+        acc[field.name] = formatYearOfManufacture(stepsData?.[field.name] || carData?.[field.name]);
+      } else if (field.name === "registrationDate") {
+        acc[field.name] = formatRegistrationDate(stepsData?.[field.name] || carData?.[field.name]);
+      } else if (
+        field.name === "powerWindow" ||
+        field.name === "insurance" ||
+        field.name === "airConditioner"
+      ) {
+        acc[field.name] = booleanToYesNo(stepsData?.[field.name] || carData?.[field.name]);
+      } else {
+        acc[field.name] = (stepsData?.[field.name] || carData?.[field.name] || "");
       }
-    : {
-        scratchAndDentDescription: "",
-        description: "",
-        scratchAndDentImage: null,
-        ...fields.reduce((acc, field) => {
-          acc[field.name] = "";
-          return acc;
-        }, {}),
-      };
+      return acc;
+    }, {}),
+  };
 
   const validationSchema = Yup.object().shape({
     ...fields.reduce((acc, field) => {
@@ -328,9 +319,10 @@ const Step1: React.FC<Step1Props> = ({
   };
 
   const checkFilledFields = (values: any) => {
-    const filledFields = Object.values(values).filter(value => value !== "").length;
+    console.log(values,"fil vae");
+    const filledFields = Object.values(values).filter(value =>  value ).length;
     console.log(filledFields,"filledFields")
-    setStep1DataFilled(filledFields >= 5);
+    setStep1DataFilled(filledFields >= 4);
   };
 
   const handleRemoveImage = (
@@ -408,6 +400,14 @@ const Step1: React.FC<Step1Props> = ({
                     {field.type === "select" ? (
                       <CommonReactSelect
                         options={field.options}
+                        // defaultValue={() => {
+                        //   const value = booleanToYesNo(
+                        //     (stepsData && stepsData[field.name]) || 
+                        //     (carData && carData[field.name])
+                        //   );
+                        //   return { value: value, label: value };
+                        // }}
+
                         defaultValue={
                           carData
                             ? () => {
@@ -416,7 +416,12 @@ const Step1: React.FC<Step1Props> = ({
                                 );
                                 return { value: value, label: value };
                               }
-                            : undefined
+                            : stepsData ? () => {
+                              const value = booleanToYesNo(
+                                values[field.name]
+                              );
+                              return { value: value, label: value };
+                            } : undefined
                         }
                         placeholder={field.placeholder}
                         selectedOption={selectedOptions[field.name]}
@@ -424,7 +429,7 @@ const Step1: React.FC<Step1Props> = ({
                           handleChange(field.name, option);
                           console.log(field.name, option);
                           setFieldValue(field.name, option ? option.value : "");
-                          checkFilledFields({ ...values, [field.name]: option?.value?.value ? option?.value?.value : "" });
+                          checkFilledFields({ ...values, [field.name]: option.value.value ? option.value.value : "" });
                         }}
                         className={styles.field_style}
                         isCreatable={["company", "modelName", "color"].includes(
@@ -511,7 +516,7 @@ const Step1: React.FC<Step1Props> = ({
                       </label>
                       <Field
                         as="textarea"
-                        name="scratchDetails"
+                        name="scratchAndDentDescription"
                         rows={6}
                         placeholder="Enter Scratch & Dent Details"
                         className={styles.description_and_dent_style}
@@ -523,7 +528,7 @@ const Step1: React.FC<Step1Props> = ({
                         }
                       />
                       <ErrorMessage
-                        name="scratchDetails"
+                        name="scratchAndDentDescription"
                         component="div"
                         className="error_msg"
                       />

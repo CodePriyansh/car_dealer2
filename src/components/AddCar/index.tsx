@@ -64,6 +64,10 @@ const AddCarForm = ({ params }: { params: { id: string } }) => {
     }
   };
 
+  const handleSetStepsData = (data: any) => {
+    setStepsData({ ...stepsData, ...data });
+  };
+
   if (Loading && carId) {
     return <ClipSpinner loading={Loading} />;
   }
@@ -148,8 +152,9 @@ const AddCarForm = ({ params }: { params: { id: string } }) => {
         {showActiveStep === 1 ? (
           <Step1
             setShowActiveStep={setShowActiveStep}
-            setStepsData={setStepsData}
+            setStepsData={handleSetStepsData}
             carData={carData}
+            stepsData={stepsData}
             setStep1DataFilled={setStep1DataFilled}
           />
         ) : (
