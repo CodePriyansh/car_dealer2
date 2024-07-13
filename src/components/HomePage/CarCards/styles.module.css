@@ -4,9 +4,10 @@
     background: rgba(247, 249, 253, 1);
     border: 1px solid rgba(239, 110, 11, 0.3);
     position: relative;
+    
   }
   .card_img_wrapper{
-    @apply flex xl:h-[230px] 2xl:h-[250px] lg:h-[200px] md:h-[220px] sm:h-[210px] h-[200px] w-full cursor-pointer;
+    @apply flex xl:h-[230px] 2xl:h-[250px] lg:h-[200px] md:h-[220px] sm:h-[210px] h-[200px] w-full cursor-pointer min-w-[310px] max-h-[190px]  sm:min-w-[350px] sm:max-h-[250px] ;
   }
   .car_header{
     @apply flex w-full justify-between items-center px-4 sm:py-3 py-2;
@@ -28,7 +29,7 @@
     @apply w-6 h-6 md:w-7 md:h-7 md1:w-7 md1:h-7 lg:w-7 lg:h-7 xl:w-7 xl:h-7
   }
   .price_right{
-    @apply font-rajdhani 2xl:text-20 text-18 font-medium text-lightpara ;
+    @apply font-rajdhani 2xl:text-20 text-[16px] font-medium text-lightpara ;
   }
   .features_row{
     @apply flex w-full gap-2 mx-3 sm:my-2 my-2 overflow-x-scroll max-w-full;
@@ -44,9 +45,9 @@
   }
   
   .status_avail {
-    @apply bg-availGreen text-white px-2 py-1 rounded-xl flex gap-1 font-rajdhani;
+    @apply bg-availGreen text-white px-2 py-1 rounded-xl flex gap-1 font-rajdhani text-[14px]  sm:text-[16px];
   }
 
   .status_sold {
-    @apply bg-soldRed text-white px-2 py-1 rounded-xl flex gap-1 font-rajdhani;
+    @apply bg-soldRed text-white px-2 py-1 rounded-xl flex gap-1 font-rajdhani text-[14px]  sm:text-[16px];
   }

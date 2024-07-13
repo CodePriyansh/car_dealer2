@@ -87,6 +87,21 @@ input[type="radio"]:checked {
   height: 8px;
   border-radius: 6px;
 }
+.hide-scroll-bar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scroll-bar::-webkit-scrollbar {
+  display: none;
+}
+
+/* .hide-scroll-bar::-webkit-scrollbar-track {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scroll-bar::-webkit-scrollbar-thumb {
+  display: none;
+} */
 
 /* Track */
 .custome-scrollbar::-webkit-scrollbar-track {

@@ -1,7 +1,225 @@
-.overview_headings{
-    @apply font-bold text-[#737373] text-[14px] mb-4
+.overviewHeadings{
+    @apply font-semibold text-[#A59E9E]  text-[14px]  sm:text-[18px] my-2
 }
 
-.overview_values{
-    @apply font-bold text-greyy text-[14px]
+.overviewValues{
+    @apply font-semibold  text-para text-[14px] sm:text-[18px]
 }
+
+.sectionBorder{
+    @apply sm:border sm:border-border_light sm:p-6 sm:rounded-2xl
+}
+
+
+.backButton {
+    @apply sm:hidden md:left-16 left-0 flex gap-2 items-center cursor-pointer font-rajdhani m-2;
+  }
+  
+  .backArrowImage {
+    @apply md:w-8 md:h-8 w-6 h-6;
+  }
+  
+  .backText {
+    @apply text-secondary text-xl font-rajdhani uppercase font-medium m-2 sm:my-4;
+  }
+  
+  .mainContainer {
+    @apply mx-auto text-5xl flex flex-col 3xl:px-[125px] 2xl:px-[110px] xl:px-[90px] lg:px-[75px] md:px-[60px] sm:px-[30px] md:mt-10 mt-2;
+  }
+  
+  .carDetailsContainer {
+    @apply w-full h-full flex flex-col md:flex-row md:gap-8;
+  }
+  
+  .imagesContainer {
+    @apply w-full md:w-3/5 h-full flex flex-col items-center;
+  }
+  
+  .mainImage {
+    @apply w-full sm:rounded-lg h-[250px] sm:h-[350px];
+  }
+  
+  .thumbnailContainer {
+    @apply flex flex-nowrap mx-2 my-3 overflow-x-scroll justify-start hide-scroll-bar;
+  }
+  
+  .thumbnailImage {
+    @apply w-12 h-11 md:w-20 md:h-16 m-1 rounded-lg cursor-pointer;
+  }
+  
+  .selectedThumbnail {
+    @apply border-2 border-primary;
+  }
+  
+  .detailsContainer {
+    @apply w-full md:w-2/5 h-full px-4 sm:px-0 mt-4 sm:mt-0 flex flex-col justify-between;
+  }
+  
+  .sectionBorder {
+    @apply sm:border sm:px-4;
+  }
+  
+  .carTitle {
+    @apply text-black font-rajdhani font-bold text-2xl leading-7;
+  }
+  
+  .carInfo {
+    @apply flex flex-wrap space-x-4 text-[#737373] text-sm md:text-base my-3 sm:my-4;
+  }
+  
+  .separator {
+    @apply my-2;
+  }
+  
+  .carPrice {
+    @apply text-[#ff751a] mt-2 font-bold text-lg md:text-2xl;
+  }
+  
+  .actionButtons {
+    @apply flex justify-center items-center mt-4 gap-2;
+  }
+  
+  .editButton {
+    @apply flex-grow  flex items-center justify-center text-secondary hover:text-white border border-secondary hover:bg-secondary focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm md:text-base px-2 md:px-5 py-2.5;
+  }
+  
+  .deleteButton {
+    @apply flex-grow  flex items-center justify-center text-soldRed hover:text-white border border-soldRed hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm md:text-base px-2 md:px-5 py-2.5;
+  }
+  
+  .soldButton {
+    @apply flex-grow  flex md:hidden bg-soldRed border-soldRed items-center justify-center text-white hover:text-white border hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm md:text-base px-3 md:px-5 py-2.5 ;
+  }
+  
+  .soldButton2 {
+    @apply flex-grow w-full hidden md:flex  bg-soldRed border-soldRed items-center justify-center text-white hover:text-white border hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm md:text-base px-3 md:px-5 py-2 h-10;
+  }
+  .descriptionContainer {
+    @apply mt-5 p-4  md:flex-col md:items-start;
+  }
+  
+  .descriptionTitle {
+    @apply text-black font-bold text-lg md:text-2xl mb-2 font-rajdhani;
+  }
+  
+  .descriptionText {
+    @apply text-[#737373] text-sm md:text-base font-rajdhani;
+  }
+  
+  .overviewContainer {
+    @apply flex flex-col md:flex-row w-full h-full text-para font-rajdhani md:gap-8;
+  }
+  
+  .overviewPanel {
+    @apply md:w-3/5 px-6 h-full;
+  }
+  
+  .overviewTitle {
+    @apply text-2xl font-bold mb-4;
+  }
+  
+  .overviewDetails {
+    @apply mb-2  text-black;
+  }
+  
+  .overviewItem {
+    @apply grid grid-cols-3 md:grid-cols-4 gap-x-2 sm:gap-y-4 gap-y-2;
+  }
+  
+  .overviewField {
+    @apply flex flex-col mb-2 sm:border-b;
+  }
+  
+  .overviewHeadings {
+    @apply font-semibold;
+  }
+  
+  .overviewValues {
+    @apply text-gray-700 mb-4;
+  }
+  
+  .scratchDentPanel {
+    @apply md:w-2/5  m-4 sm:m-0 sm:p-4 p-2 flex flex-col items-start border border-gray-300 rounded-lg;
+  }
+  
+  .scratchDentTitle {
+    @apply text-black mt-3 sm:mt-5 font-bold text-2xl md:text-xl;
+  }
+  
+  .scratchDentContent {
+    @apply mt-5;
+  }
+  
+  
+  .scratchDentText {
+    @apply text-black text-[20px];
+  }
+  
+  .scratchDentImage {
+    @apply rounded-2xl my-2 sm:my-4 sm:max-h-[260px] max-h-[150px];
+  }
+  
+  .hide-scroll-bar {
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  .hide-scroll-bar::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+  .similarCarsContainer {
+    @apply w-full px-4 sm:p-4 h-full overflow-x-scroll;
+  }
+
+  
+  
+  .similarCarsTitle {
+    @apply text-2xl md:text-3xl text-[#2e2e2e] font-bold sm:mt-6 sm:mb-4 my-2 font-rajdhani;
+  }
+  
+  .similarCarsList {
+    @apply flex flex-row gap-2 ;
+  }
+  
+  .similarCarCard {
+    @apply w-full md:w-1/3 ;
+  }
+  
+  .borderDivider {
+    @apply my-5 border-b border-gray-200 md:hidden;
+  }
+  
+
+
+
+  .custom-carousel .carousel .thumb {
+    border: 3px solid transparent;
+    cursor: pointer;
+  }
+  
+  .custom-carousel .carousel .thumb.selected,
+  .custom-carousel .carousel .thumb:hover {
+    border: 3px solid #ff6600;
+  }
+  
+  .custom-carousel .carousel .slider-wrapper {
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+  
+  .custom-carousel .carousel .control-arrow {
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .custom-carousel .carousel .control-prev.control-arrow:before {
+    border-right: 8px solid #fff;
+  }
+  
+  .custom-carousel .carousel .control-next.control-arrow:before {
+    border-left: 8px solid #fff;
+  }

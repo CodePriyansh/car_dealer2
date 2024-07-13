@@ -24,6 +24,11 @@ const router = useRouter()
     cookies.remove('token', { path: '/' })
     router.push("/login");  // Navigate to the login page
   };
+
+  const handleProfile = () => {
+    handleClose();
+    router.push("/dealer-profile");  // Navigate to the profile page
+  }
   return (
     <>
       <div onClick={handleClick} className="cursor-pointer">
@@ -92,7 +97,7 @@ const router = useRouter()
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem  onClick={handleClose} >
+        <MenuItem  onClick={handleProfile} >
           <ListItemIcon>
             <Image
               src={Images.viewProfile}
