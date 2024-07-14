@@ -32,7 +32,7 @@ const AddCarForm = ({ params }: { params: { id: string } }) => {
         setTimeout(() => {
           setLoading(false);
           setStepsData(response.data.data);
-          setCarData(response.data.data[0]);
+          setCarData(response.data.data);
         }, 1000);
       } catch (error) {
         console.error("Error fetching car details:", error);

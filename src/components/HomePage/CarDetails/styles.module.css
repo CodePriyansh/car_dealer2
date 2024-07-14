@@ -28,15 +28,15 @@
   }
   
   .carDetailsContainer {
-    @apply w-full h-full flex flex-col md:flex-row md:gap-8;
+    @apply w-full h-full grid grid-cols-1 md:grid-cols-12  md:gap-8   ;
   }
   
   .imagesContainer {
-    @apply w-full md:w-3/5 h-full flex flex-col items-center;
+    @apply  h-full flex flex-col items-center col-span-7;
   }
   
   .mainImage {
-    @apply w-full sm:rounded-lg h-[250px] sm:h-[350px];
+    @apply w-full sm:rounded-lg h-[250px] sm:h-[300px] xl:h-[350px] 2xl:h-[400px]  4xl:h-[500px];
   }
   
   .thumbnailContainer {
@@ -52,27 +52,27 @@
   }
   
   .detailsContainer {
-    @apply w-full md:w-2/5 h-full px-4 sm:px-0 mt-4 sm:mt-0 flex flex-col justify-between;
+    @apply   h-full px-4 sm:px-0 mt-4 sm:mt-0 col-span-5 flex flex-col   4xl:gap-12;
   }
   
   .sectionBorder {
-    @apply sm:border sm:px-4;
+    @apply sm:border sm:px-6;
   }
   
   .carTitle {
-    @apply text-black font-rajdhani font-bold text-2xl leading-7;
+    @apply text-black font-rajdhani font-bold text-2xl md:text-3xl leading-7;
   }
   
   .carInfo {
-    @apply flex flex-wrap space-x-4 text-[#737373] text-sm md:text-base my-3 sm:my-4;
+    @apply flex flex-wrap space-x-4 text-[#737373] text-sm md:text-base my-3 sm:my-4 font-rajdhani font-semibold;
   }
   
   .separator {
-    @apply my-2;
+    @apply md:my-4 my-2 hidden md:block;
   }
   
   .carPrice {
-    @apply text-[#ff751a] mt-2 font-bold text-lg md:text-2xl;
+    @apply text-[#ff751a] md:my-6 my-2 font-bold text-lg md:text-2xl;
   }
   
   .actionButtons {
@@ -80,26 +80,26 @@
   }
   
   .editButton {
-    @apply flex-grow  flex items-center justify-center text-secondary hover:text-white border border-secondary hover:bg-secondary focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm md:text-base px-2 md:px-5 py-2.5;
+    @apply flex-grow w-full  flex items-center justify-center text-secondary hover:text-white border border-secondary hover:bg-secondary focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm md:text-base px-2 md:px-5 py-2;
   }
   
   .deleteButton {
-    @apply flex-grow  flex items-center justify-center text-soldRed hover:text-white border border-soldRed hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm md:text-base px-2 md:px-5 py-2.5;
+    @apply flex-grow w-full  flex items-center justify-center text-soldRed hover:text-white border border-soldRed hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm md:text-base px-2 md:px-5 py-2;
   }
   
   .soldButton {
-    @apply flex-grow  flex md:hidden bg-soldRed border-soldRed items-center justify-center text-white hover:text-white border hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm md:text-base px-3 md:px-5 py-2.5 ;
+    @apply flex-grow w-full  flex md:hidden bg-soldRed border-soldRed items-center justify-center text-white hover:text-white border hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm md:text-base px-3 md:px-5 py-2.5 ;
   }
   
   .soldButton2 {
-    @apply flex-grow w-full hidden md:flex  bg-soldRed border-soldRed items-center justify-center text-white hover:text-white border hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm md:text-base px-3 md:px-5 py-2 h-10;
+    @apply flex-grow w-full hidden md:flex bg-soldRed border-soldRed items-center justify-center text-white hover:text-white border hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm md:text-base px-3 md:px-5 py-2 h-10;
   }
   .descriptionContainer {
-    @apply mt-5 p-4  md:flex-col md:items-start;
+    @apply mt-5 p-4 md:p-6  md:flex-col md:items-start;
   }
   
   .descriptionTitle {
-    @apply text-black font-bold text-lg md:text-2xl mb-2 font-rajdhani;
+    @apply text-black font-bold text-2xl md:text-3xl mb-2 font-rajdhani;
   }
   
   .descriptionText {
@@ -107,11 +107,15 @@
   }
   
   .overviewContainer {
-    @apply flex flex-col md:flex-row w-full h-full text-para font-rajdhani md:gap-8;
+    @apply grid grid-cols-1 md:grid-cols-12 w-full h-full text-para font-rajdhani md:gap-8;
   }
   
   .overviewPanel {
-    @apply md:w-3/5 px-6 h-full;
+    @apply grid md:w-full px-6 h-full col-span-7;
+  }
+
+  .scratchDentPanel {
+    @apply md:w-full  m-4 sm:m-0 sm:p-4 p-4 items-start border border-[#C4C4C4] rounded-lg;
   }
   
   .overviewTitle {
@@ -138,9 +142,7 @@
     @apply text-gray-700 mb-4;
   }
   
-  .scratchDentPanel {
-    @apply md:w-2/5  m-4 sm:m-0 sm:p-4 p-2 flex flex-col items-start border border-gray-300 rounded-lg;
-  }
+  
   
   .scratchDentTitle {
     @apply text-black mt-3 sm:mt-5 font-bold text-2xl md:text-xl;
@@ -150,9 +152,10 @@
     @apply mt-5;
   }
   
+
   
   .scratchDentText {
-    @apply text-black text-[20px];
+    @apply text-para md:text-[20px] text-[18px];
   }
   
   .scratchDentImage {

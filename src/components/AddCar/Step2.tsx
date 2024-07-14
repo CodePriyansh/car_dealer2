@@ -122,7 +122,7 @@ const Step2: React.FC<Step2Props> = ({
     }, {})
   );
 
-  const [videoPreview, setVideoPreview] = useState(carData?.images?.video);
+  const [videoPreview, setVideoPreview] = useState(carData?.video);
 
   const validationSchema = Yup.object().shape({
     ...carImages.reduce((acc, field) => {
@@ -167,7 +167,7 @@ const Step2: React.FC<Step2Props> = ({
       return acc;
     }, {}),
     interior_images: carData?.interiorImages || [],
-    video: carData?.images.video || null,
+    video: carData?.video || null,
   };
 
   const handleSubmit = async (values, { setSubmitting }) => {

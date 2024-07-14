@@ -35,6 +35,12 @@ import privacyPolicy from "./privacy-policy.svg";
 import setting from "./setting.svg";
 import viewProfile from "./view-profile.svg"
 import planExpiredDialogImg from "./plan_expired_dialog_img.svg"
+import editProfileBG from "./edit_profile_bg.png"
+import editIconTransparent from "./edit_icon_transparent.svg"
+import editProfileBanner from "./editProfileBanner.svg"
+import editProfileBgMobile from "./editProfileBgMobile.png"
+import camera from "./camera.svg"
+import editIconMobile from "./editIconMobile.svg"
 export const Images = {
   signup,
   logo,
@@ -71,5 +77,11 @@ export const Images = {
   privacyPolicy,
   setting,
   viewProfile,
-  planExpiredDialogImg
+  planExpiredDialogImg,
+  editProfileBG,
+  editIconTransparent,
+  editProfileBanner,
+  editProfileBgMobile,
+  camera,
+  editIconMobile
 };

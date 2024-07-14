@@ -4,15 +4,15 @@
   }
   
   .buttonNo {
-    @apply bg-white text-gray-700 border border-gray-300;
+    @apply bg-white text-[#A59E9E] border border-gray-300 rounded-3xl  w-1/3;
   }
   
   .buttonYes {
-    @apply bg-red-500 text-white;
+    @apply bg-red-500 text-white rounded-3xl w-1/3;
   }
   
   .buttonRenew {
-    @apply bg-primary text-white rounded-2xl;
+    @apply bg-primary text-white rounded-2xl ;
   }
   
   .dialogContainer {
@@ -45,7 +45,7 @@
   }
   
   .dialogActions {
-    @apply flex justify-center space-x-2;
+    @apply flex justify-center space-x-2 w-full;
   }
   
   .closeButton {

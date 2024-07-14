@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaCheck, FaTimes } from "react-icons/fa";
 import styles from "./styles.module.css";
 import { useRouter } from "next/navigation";
@@ -8,9 +8,11 @@ import moment from "moment";
 import Link from "next/link";
 import instance from "@/network/axios";
 import { toast } from "react-toastify";
+import DynamicDialog from "@/components/Common/Dialogs";
 export default function CarCards({ car, onDelete }) {
   const router = useRouter();
-
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogType, setDialogType] = useState('');
   const handleClick = () => {
     router.push(`/car_details/${car._id}`);
   };
@@ -22,6 +24,8 @@ export default function CarCards({ car, onDelete }) {
         toast.success("Car deleted successfully!");
         if (onDelete) {
           onDelete(carId);
+  setDialogOpen(false);
+
         }
       }
     } catch (error) {
@@ -29,6 +33,16 @@ export default function CarCards({ car, onDelete }) {
       console.error("Delete car error:", error);
     }
   };
+
+
+  const handleDialogOpen = () => {
+    setDialogType("DELETE_CAR");
+    setDialogOpen(true);
+};
+
+const handleDialogClose = () => {
+  setDialogOpen(false);
+};
 
   return (
     <div className={styles.card_wrapper}>
@@ -53,7 +67,7 @@ export default function CarCards({ car, onDelete }) {
           className={styles.header_left}
         >{`${car.company} ${car.modelName} ${car.variant}`}</div>
         <div className={styles.header_right}>
-          <Link href={`/car-details/${car._id}`} passHref>
+          <Link href={`/car_details/${car._id}`} passHref>
             <Image src={Images.cardView} alt="view" width={24} height={24} className={styles.cardActions} />
           </Link>
           <Link href={`/edit-car/${car._id}`} passHref>
@@ -66,12 +80,12 @@ export default function CarCards({ car, onDelete }) {
             className={styles.cardActions}
             width={24}
             height={24}
-            onClick={() => handleDelete(car._id)}
+            onClick={ handleDialogOpen}
             style={{ cursor: "pointer" }}
           />
         </div>
       </div>
-
+      <DynamicDialog open={dialogOpen}  type={dialogType} onClose={handleDialogClose} onConfirm={handleDialogClose} onDeleteCar={()=> handleDelete(car._id)} />
       <div className={styles.card_price_row}>
         <div className={styles.price_left}>₹{car.price}</div>
         <div className={styles.price_right}>

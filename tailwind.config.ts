@@ -19,6 +19,7 @@ const config: Config = {
       },
       colors:{
         primary:"#EF6E0B",
+        primaryLight:"rgba(239, 110, 11, 0.2)",
         secondary:"#0059A3",
         border_light:"rgba(0, 0, 0, 0.1)",
         greyy:'rgba(0, 0, 0, 0.3)',

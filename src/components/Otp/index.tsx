@@ -103,6 +103,12 @@ const OtpVerification = ({ mobileNumber, formData, setHeading }) => {
             // Note: httpOnly and secure cannot be set true for client-side cookies
             sameSite: 'strict'
           });
+          cookies.set("id", response.data.data._id, {
+            path: "/",
+            maxAge: 30 * 24 * 60 * 60, // 30 days in seconds
+            // Note: httpOnly and secure cannot be set true for client-side cookies
+            sameSite: 'strict'
+          });
           setLocalStorage("user", JSON.stringify(response.data.data))
           setLocalStorage("token", JSON.stringify(response.data.data.token))
           // toast.success(response?.data.message);
