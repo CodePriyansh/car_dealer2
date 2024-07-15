@@ -50,7 +50,7 @@
     @apply sm:py-4 py-2 sm:px-4 px-2 border  rounded-[50px] md:w-[250px] 2xl:w-[280px] w-full placeholder:text-[14px] placeholder:text-greyy outline-none max-h-[50px] sm:h-[45px] h-[45px]  text-para text-18 font-semibold font-rajdhani bg-transparent;
 }
 .label_Style{
-    @apply sm:text-xl text-[16px] text-para uppercase sm:pb-[12px] pb-[8px]  font-semibold ;
+    @apply sm:text-lg text-[16px] text-para uppercase sm:pb-[12px] pb-[8px]  font-semibold ;
 }
 .signup_img{
     @apply w-[80%] ;
@@ -67,7 +67,7 @@
 }
 
 .form_wrapper{
-    @apply flex flex-col justify-start items-start max-w-full bg-white w-full md:pl-14;
+    @apply flex flex-col md:justify-start justify-center md:items-start max-w-full bg-white w-full md:pl-14;
 }
 
 .selected_file{

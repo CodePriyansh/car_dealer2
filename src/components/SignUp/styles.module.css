@@ -30,7 +30,7 @@
 
 }
 .dotted_box{
-    @apply my-[10px] md:max-h-[260px] md:h-[260px] max-h-[200px] h-[200px] rounded border cursor-pointer border-dashed border-greyy w-full flex flex-col justify-center items-center sm:py-14 py-2 relative;
+    @apply my-[10px]  md:h-[260px] md:max-h-[260px]  max-h-[200px] h-[200px] rounded border cursor-pointer border-dashed border-greyy w-full flex flex-col justify-center items-center sm:py-4 py-2 relative;
 }
 
 .form_wrapper{

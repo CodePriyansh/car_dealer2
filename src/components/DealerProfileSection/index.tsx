@@ -23,8 +23,7 @@ const schema = yup.object().shape({
   city: yup.string().required("City is required"),
   state: yup.string().required("State is required"),
   shopAddress: yup.string().required("Shop Address is required"),
-  coverImage: yup.mixed().required("Cover Image is required"),
-  profileImage: yup.mixed().required("Profile Image is required"),
+  // profileImage: yup.mixed().required("Profile Image is required"),
   shopImage: yup.mixed().required("Shop Image is required"),
 });
 
@@ -34,6 +33,9 @@ export default function DealerProfileSection() {
   const [loading, setLoading] = useState(false);
   const [dealer, setDealer] = useState(null);
   const [editMode, setEditMode] = useState(false);
+  const [profileImageFile, setProfileImageFile] = useState(null);
+  const formData = new FormData();
+  const formikRef = useRef(null);
   const [imagePreviews, setImagePreviews] = useState({
     shopImage: dealer?.shopImage || null,
   });
@@ -66,7 +68,7 @@ export default function DealerProfileSection() {
     city: dealer?.city || "",
     state: dealer?.state || "",
     shopAddress: dealer?.shopAddress || "",
-    profileImage: dealer?.profileimage || null,
+    profileImage: dealer?.profileImage || null,
     shopImage: dealer?.shopImage || null,
   };
   console.log(initialValues, "Initial values");
@@ -93,25 +95,22 @@ export default function DealerProfileSection() {
   };
 
   const onSubmit = async (values, { setSubmitting }) => {
+    console.log("wlken");
+    console.log(values);
     setLoading(true);
-    const formData = new FormData();
     for (const key in values) {
       formData.append(key, values[key]);
     }
+    console.log(profileImageFile,"profileImageFile")
+
+      // formData.append("profileImage", profileImageFile);
 
     try {
-      const response = await instance.post("/api/profile/update", formData, {
+      const response = await instance.patch(`/api/dealers/update/${dealer?._id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
       if (response.status === 200) {
-        cookies.set("token", response.data.data.token, {
-          path: "/",
-          maxAge: 30 * 24 * 60 * 60,
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "strict",
-        });
         setLocalStorage("user", JSON.stringify(response.data.data));
         router.push("/profile");
       }
@@ -123,7 +122,26 @@ export default function DealerProfileSection() {
     }
   };
 
+  const handleProfileChange = (event, field) => {
+    const file = event.currentTarget.files[0];
+    console.log(file,"file")
+    if (file) {
+      if (file.type.includes("image")) {
+        setProfileImageFile(file)
+        formData.append("profileImage", file)
+        const previewUrl = URL.createObjectURL(file);
+        setImagePreviews((prev) => ({ ...prev, [field]: previewUrl }));
+        if (formikRef.current) {
+          formikRef.current.setFieldValue("profileImage", file);
+        }
+      } else {
+        toast.error("Only image files are allowed.");
+      }
+    }
+ 
+  };
   const shopImageInputRef = useRef<HTMLInputElement | null>(null);
+  const profileImageInputRef = useRef<HTMLInputElement | null>(null);
 
   return (
     <>
@@ -142,13 +160,39 @@ export default function DealerProfileSection() {
               backgroundRepeat: "no-repeat",
             }}
           >
-            <div className="hidden md:flex bg-primary md:w-[75px] md:h-[70px]  justify-center items-center rounded-full">
-              <Image
-                src={Images.userProfile}
-                alt="pofile"
-                width={24}
-                height={24}
+            <div className="hidden md:flex bg-primary w-20 h-20  justify-center items-center rounded-full">
+            <div
+              className="relative w-full h-full bg-primary rounded-full flex justify-center items-center"
+              onClick={() => profileImageInputRef.current?.click()}
+            >
+              
+                <>
+                  <img
+                    src={imagePreviews?.profileImage || dealer?.profileImage ||  Images.userProfile}
+                    alt="Profile"
+                    className={
+                      dealer?.profileImage
+                        ? "rounded-full w-full h-full"
+                        : "p-2 w-10 h-10"
+                    }
+                  />
+                  <Image
+                    src={Images.camera}
+                    alt="Profile"
+                    width={24}
+                    height={24}
+                    className="absolute p-2 w-10 h-10 top-6 right-[-25%]"
+                  />
+                </>
+              <input
+                type="file"
+                ref={profileImageInputRef}
+                style={{ display: "none" }}
+                onChange={(event) => handleProfileChange(event, "profileImage")}
+                accept="image/*"
+                disabled={!editMode}
               />
+            </div>
             </div>
 
             {/* <Image
@@ -210,10 +254,7 @@ export default function DealerProfileSection() {
               </p>
             </div>
 
-            <div
-              className="flex absolute right-6 top-4 gap-2 items-center cursor-pointer"
-              
-            >
+            <div className="flex absolute right-6 top-4 gap-2 items-center cursor-pointer">
               <Image
                 src={Images.editIconMobile}
                 alt="profle"
@@ -226,21 +267,36 @@ export default function DealerProfileSection() {
           </div>
 
           <div className="relative z-0 mt-[-30px] w-full flex justify-center items-center rounded-full">
-            <div className="relative w-16 h-16 bg-primary rounded-full flex justify-center items-center">
-              <Image
-                src={Images.userProfile}
-                alt="pofile"
-                width={24}
-                height={24}
-                className="p-2 w-10 h-10"
-              />
-
-              <Image
-                src={Images.camera}
-                alt="pofile"
-                width={24}
-                height={24}
-                className="absolute p-2 w-10 h-10 top-6 right-[-25%]"
+            <div
+              className="relative w-16 h-16 bg-primary rounded-full flex justify-center items-center"
+              onClick={() => profileImageInputRef.current?.click()}
+            >
+              
+                <>
+                  <img
+                    src={imagePreviews?.profileImage ||   dealer?.profileImage ||  Images.userProfile}
+                    alt="Profile"
+                    className={
+                      dealer?.profileImage
+                        ? "rounded-full w-full h-full"
+                        : "p-2 w-10 h-10"
+                    }
+                  />
+                  <Image
+                    src={Images.camera}
+                    alt="Profile"
+                    width={24}
+                    height={24}
+                    className="absolute p-2 w-10 h-10 top-6 right-[-25%]"
+                  />
+                </>
+              <input
+                type="file"
+                ref={profileImageInputRef}
+                style={{ display: "none" }}
+                onChange={(event) => handleProfileChange(event, "profileImage")}
+                accept="image/*"
+                disabled={!editMode}
               />
             </div>
           </div>
@@ -294,6 +350,7 @@ export default function DealerProfileSection() {
             enableReinitialize
             validationSchema={schema}
             onSubmit={onSubmit}
+            innerRef={formikRef}
           >
             {({ values, setFieldValue, isSubmitting }) => (
               <Form>
@@ -306,12 +363,38 @@ export default function DealerProfileSection() {
                           name="name"
                           placeholder="Enter Your Name"
                           className={`${styles.field_style} ${
-                            editMode ? "border-primary" : "border-primaryLight !text-[#A59E9E]"
+                            editMode
+                              ? "border-primary"
+                              : "border-primaryLight !text-[#A59E9E]"
                           }`}
                           disabled={!editMode}
                         />
                         <ErrorMessage
                           name="name"
+                          component="p"
+                          className={styles.error_msg}
+                        />
+                      </div>
+
+                      <div className={styles.field_wrapper}>
+                        <label className={styles.label_Style}>
+                          Mobile Number
+                        </label>
+                        <Field
+                          name="phoneNumber"
+                          placeholder="Enter Mobile Number"
+                          className={`${styles.field_style} ${
+                            editMode
+                              ? "border-primary"
+                              : "border-primaryLight !text-[#A59E9E]"
+                          }`}
+                          type="number"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          disabled={!editMode}
+                        />
+                        <ErrorMessage
+                          name="phoneNumber"
                           component="p"
                           className={styles.error_msg}
                         />
@@ -325,7 +408,9 @@ export default function DealerProfileSection() {
                           name="telephoneNumber"
                           placeholder="Enter Telephone Number"
                           className={`${styles.field_style} ${
-                            editMode ? "border-primary" : "border-primaryLight !text-[#A59E9E]"
+                            editMode
+                              ? "border-primary"
+                              : "border-primaryLight !text-[#A59E9E]"
                           }`}
                           type="number"
                           inputMode="numeric"
@@ -339,59 +424,42 @@ export default function DealerProfileSection() {
                         />
                       </div>
 
-                      <div className={styles.field_wrapper}>
-                        <label className={styles.label_Style}>City</label>
-                        <Field
-                          name="city"
-                          placeholder="Enter City"
-                          className={`${styles.field_style} ${
-                            editMode ? "border-primary" : "border-primaryLight !text-[#A59E9E]"
-                          }`}
-                          disabled={!editMode}
-                        />
-                        <ErrorMessage
-                          name="city"
-                          component="p"
-                          className={styles.error_msg}
-                        />
-                      </div>
                     </div>
 
                     <div className="flex flex-col gap-6 w-full md:w-1/2">
-                      <div className={styles.field_wrapper}>
-                        <label className={styles.label_Style}>
-                          Mobile Number
-                        </label>
-                        <Field
-                          name="phoneNumber"
-                          placeholder="Enter Mobile Number"
-                          className={`${styles.field_style} ${
-                            editMode ? "border-primary" : "border-primaryLight !text-[#A59E9E]"
-                          }`}
-                          type="number"
-                          inputMode="numeric"
-                          pattern="[0-9]*"
-                          disabled={!editMode}
-                        />
-                        <ErrorMessage
-                          name="phoneNumber"
-                          component="p"
-                          className={styles.error_msg}
-                        />
-                      </div>
-
                       <div className={styles.field_wrapper}>
                         <label className={styles.label_Style}>Email</label>
                         <Field
                           name="email"
                           placeholder="Enter Email Address"
                           className={`${styles.field_style} ${
-                            editMode ? "border-primary" : "border-primaryLight !text-[#A59E9E]"
+                            editMode
+                              ? "border-primary"
+                              : "border-primaryLight !text-[#A59E9E]"
                           }`}
                           disabled={!editMode}
                         />
                         <ErrorMessage
                           name="email"
+                          component="p"
+                          className={styles.error_msg}
+                        />
+                      </div>
+
+                      <div className={styles.field_wrapper}>
+                        <label className={styles.label_Style}>City</label>
+                        <Field
+                          name="city"
+                          placeholder="Enter City"
+                          className={`${styles.field_style} ${
+                            editMode
+                              ? "border-primary"
+                              : "border-primaryLight !text-[#A59E9E]"
+                          }`}
+                          disabled={!editMode}
+                        />
+                        <ErrorMessage
+                          name="city"
                           component="p"
                           className={styles.error_msg}
                         />
@@ -403,7 +471,9 @@ export default function DealerProfileSection() {
                           name="state"
                           placeholder="Enter State"
                           className={`${styles.field_style} ${
-                            editMode ? "border-primary" : "border-primaryLight !text-[#A59E9E]"
+                            editMode
+                              ? "border-primary"
+                              : "border-primaryLight !text-[#A59E9E]"
                           }`}
                           disabled={!editMode}
                         />
@@ -422,7 +492,9 @@ export default function DealerProfileSection() {
                       name="shopAddress"
                       placeholder="Enter Shop Address"
                       className={`${styles.field_style} ${
-                        editMode ? "border-primary" : "border-primaryLight !text-[#A59E9E]"
+                        editMode
+                          ? "border-primary"
+                          : "border-primaryLight !text-[#A59E9E]"
                       }  !w-full `}
                       disabled={!editMode}
                     />
@@ -449,6 +521,8 @@ export default function DealerProfileSection() {
                             width={500}
                             height={500}
                           />
+
+                          { editMode &&
                           <button
                             type="button"
                             onClick={(e) => {
@@ -463,6 +537,7 @@ export default function DealerProfileSection() {
                           >
                             <AiOutlineCloseCircle size={20} />
                           </button>
+}
                         </div>
                       ) : (
                         <>
@@ -485,6 +560,7 @@ export default function DealerProfileSection() {
                       <input
                         type="file"
                         ref={shopImageInputRef}
+                        disabled={!editMode}
                         onChange={(event) =>
                           handleImageChange(event, setFieldValue, "shopImage")
                         }

@@ -22,6 +22,7 @@ import { setLocalStorage } from "@/constants/constants";
 import Cookies from "universal-cookie";
 import login from "../../assets/responsive-login.png";
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import ClipSpinner from "../Common/Spinner";
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
   phoneNumber: yup.string().required("Phone Number is required"),
@@ -47,6 +48,7 @@ export default function SignupForm() {
   const [formData, setFormData] = useState<FormData | null>(null);
   const [id, setId] = useState("");
   const searchParams = useSearchParams();
+  const [savedFormData, setSavedFormData] = useState(null);
   const [imagePreviews, setImagePreviews] = useState({
     coverImage: null,
     profileImage: null,
@@ -58,7 +60,7 @@ export default function SignupForm() {
     setMobileNumber(mobileNumber);
     setId(id);
   }, [searchParams]);
-  const initialValues = {
+  const initialValues = savedFormData || {
     name: "",
     phoneNumber: searchParams.get("mobileNumber") || "",
     telephoneNumber: "",
@@ -107,7 +109,6 @@ export default function SignupForm() {
   ) => {
     console.log(values, "--------------------");
     setBackBtnStatus(true);
-    console.log(values, "values");
     setLoading(true);
     const formData = new FormData();
     formData.append("firebaseUserId", id);
@@ -160,6 +161,7 @@ export default function SignupForm() {
       sendOtp(`+91${values.phoneNumber}`)
         .then(() => {
           console.log("OTP sent successfully");
+          setSavedFormData(values);
           setMobileNumber(values.phoneNumber);
           setOtpSend(true);
           setSubmitting(false);
@@ -597,7 +599,7 @@ export default function SignupForm() {
                         disabled={isSubmitting}
                       >
                         <Button otherStyles="sm:w-[430px] w-full mx-auto uppercase">
-                        {mobileNumber ? "Sign Up" : "Get OTP"}
+                        {isSubmitting ? <ClipSpinner loading={isSubmitting}/> : mobileNumber ? "Sign Up" : "Get OTP"}
                         </Button>
                       </button>
                       {/* Bottom info */}
