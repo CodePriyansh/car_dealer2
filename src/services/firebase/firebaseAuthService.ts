@@ -33,3 +33,6 @@ export const verifyOtp = async (otp: string) => {
     throw new Error(error.message);
   }
 };
+
+
+export { auth };

@@ -35,6 +35,7 @@ export default function SubHeader({
 
   const handleDialogClose = () => {
     setDialogOpen(false);
+    setCarNotFoundtext("There Is No Car Added")
     setActiveMidFilter("car");
   };
 

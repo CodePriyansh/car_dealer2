@@ -11,12 +11,12 @@ export function middleware(request: NextRequest) {
  
   const response = NextResponse.next()
 
-  // response.cookies.set('token', token.value, {
-  //   // httpOnly: true,
-  //   secure: process.env.NODE_ENV === 'production',
-  //   sameSite: 'strict',
-  //   maxAge: 30 * 24 * 60 * 60 // 30 days in seconds
-  // })
+  response.cookies.set('token', token.value, {
+    // httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 30 * 24 * 60 * 60 // 30 days in seconds
+  })
   return response
 }
 

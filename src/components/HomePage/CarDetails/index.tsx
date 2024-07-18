@@ -193,7 +193,7 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
                 <span>{car.transmission}</span>
               </div>
               <hr className={styles.separator} />
-              <h1 className={styles.carPrice}>{+car.price > 99000 ? ` Rs. ${car.price} Lakh` : `Rs. ${car.price} Thausand`}</h1>
+              <h1 className={styles.carPrice}>{+car.price > 99000 ? ` Rs. ${car?.price?.toLocaleString('en-IN')} Lakh` : `Rs. ${car?.price?.toLocaleString('en-IN')} Thausand`}</h1>
               <div className={styles.actionButtons}>
                   <button className={styles.editButton} onClick={()=> router.push(`/edit-car/${car._id}`)}>
                     <MdEdit className={styles.icon} />

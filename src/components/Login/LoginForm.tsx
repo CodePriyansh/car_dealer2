@@ -4,11 +4,12 @@ import * as Yup from "yup";
 import { toast, ToastContainer } from "react-toastify";
 import styles from "../SignUp/styles.module.css";
 import Button from "../Common/Button";
-import { sendOtp } from "@/services/firebase/firebaseAuthService";
+import { auth, sendOtp } from "@/services/firebase/firebaseAuthService";
 import OtpVerification from "../Otp";
 import Image from "next/image";
 import { Images } from "@/assets/Images";
 import { useRouter } from "next/navigation";
+import { RecaptchaVerifier } from "firebase/auth";
 
 const validationSchema = Yup.object({
   mobileNumber: Yup.string()
@@ -43,6 +44,17 @@ const LoginForm = () => {
         toast.error("Failed to send OTP. Please try again.");
       });
   };
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && !window.recaptchaVerifier) {
+      window.recaptchaVerifier  = new RecaptchaVerifier(auth, 'recaptcha-container', {
+        size: 'invisible',
+        callback: () => {
+            console.log('recaptcha resolved..')
+        }
+    });
+    }
+  }, []);
 
   return (
     <div className="w-full relative z-20">
@@ -86,12 +98,13 @@ const LoginForm = () => {
         />
       ) : (
         <Formik
-          initialValues={{ mobileNumber: "" }}
+          initialValues={{ mobileNumber: mobileNumber || "" }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
           {({ isSubmitting }) => (
             <Form className="my-6">
+              
               <div className="flex flex-col w-full justify-center items-center">
                 <label
                   className={`${styles.label_Style}  sm:!w-[430px] !w-full `}

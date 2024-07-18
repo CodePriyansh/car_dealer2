@@ -102,9 +102,6 @@ export default function DealerProfileSection() {
       formData.append(key, values[key]);
     }
     console.log(profileImageFile,"profileImageFile")
-
-      // formData.append("profileImage", profileImageFile);
-
     try {
       const response = await instance.patch(`/api/dealers/update/${dealer?._id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -152,7 +149,7 @@ export default function DealerProfileSection() {
       <div className=" md:px-40 2xl:px-60 4xl:px-60 md:py-10 font-rajdhani">
         <div className="bg-[#FFFFFF]">
           <div
-            className="hidden  relative mx-auto md:p-8 h-[200px] md:h-[300px] md:flex flex-col z-0  border-b border-border_light"
+            className="hidden  relative mx-auto md:p-8 2xl:px-10 2xl:py-6 3xl:p-12 3xl:py-8 h-[200px] md:h-[300px] md:flex flex-col z-0  border-b border-border_light"
             style={{
               backgroundImage: `url(${Images.editProfileBG.src})`,
               backgroundSize: "contain",
@@ -205,7 +202,7 @@ export default function DealerProfileSection() {
             <div className=" hidden md:flex text-xl font-bold text-para mt-4">
               Austin Robertson
             </div>
-            <div className=" hidden md:grid mt-6 grid-cols-12 md:grid-cols-8 gap-4 text-center">
+            <div className="hidden md:grid mt-6 grid-cols-12 md:grid-cols-8 gap-4 text-center">
               <div>
                 <p className={styles.dealerStatsValues}>500</p>
                 <p className={styles.dealerStatsTitle}>Total Vehicles</p>
@@ -311,7 +308,7 @@ export default function DealerProfileSection() {
           <div className="text-2xl font-bold text-para mt-4 text-center">
             Austin Robertson
           </div>
-          <div className="mt-6 grid grid-cols-4 px-2 text-center">
+          <div className="mt-6 grid grid-cols-4 px-2 text-center ">
             <div>
               <p className={styles.dealerStatsValues}>500</p>
               <p className={styles.dealerStatsTitle}>Total Vehicles</p>
@@ -355,9 +352,9 @@ export default function DealerProfileSection() {
             {({ values, setFieldValue, isSubmitting }) => (
               <Form>
                 <div className="w-full flex flex-col gap-6">
-                  <div className="flex flex-col md:flex-row md:gap-6">
-                    <div className="flex flex-col gap-6 w-full md:w-1/2">
-                      <div className={styles.field_wrapper}>
+                  <div className="grid grid-cols-2 md:gap-6 gap-4">
+                    {/* <div className="flex flex-col gap-6 w-full md:w-1/2"> */}
+                      <div className={`${styles.field_wrapper} col-span-2 md:col-span-1`}>
                         <label className={styles.label_Style}>Name</label>
                         <Field
                           name="name"
@@ -376,7 +373,8 @@ export default function DealerProfileSection() {
                         />
                       </div>
 
-                      <div className={styles.field_wrapper}>
+                       
+                      <div className={`${styles.field_wrapper} col-span-1`}>
                         <label className={styles.label_Style}>
                           Mobile Number
                         </label>
@@ -400,7 +398,7 @@ export default function DealerProfileSection() {
                         />
                       </div>
 
-                      <div className={styles.field_wrapper}>
+                      <div className={`${styles.field_wrapper} col-span-1`}>
                         <label className={styles.label_Style}>
                           Telephone Number
                         </label>
@@ -424,10 +422,10 @@ export default function DealerProfileSection() {
                         />
                       </div>
 
-                    </div>
+                    {/* </div> */}
 
-                    <div className="flex flex-col gap-6 w-full md:w-1/2">
-                      <div className={styles.field_wrapper}>
+                    {/* <div className="flex flex-col gap-6 w-full md:w-1/2"> */}
+                      <div className={`${styles.field_wrapper} col-span-2 md:col-span-1`}>
                         <label className={styles.label_Style}>Email</label>
                         <Field
                           name="email"
@@ -446,7 +444,7 @@ export default function DealerProfileSection() {
                         />
                       </div>
 
-                      <div className={styles.field_wrapper}>
+                      <div className={`${styles.field_wrapper} col-span-1`}>
                         <label className={styles.label_Style}>City</label>
                         <Field
                           name="city"
@@ -465,7 +463,7 @@ export default function DealerProfileSection() {
                         />
                       </div>
 
-                      <div className={styles.field_wrapper}>
+                      <div className={`${styles.field_wrapper} col-span-1`}>
                         <label className={styles.label_Style}>State</label>
                         <Field
                           name="state"
@@ -483,7 +481,7 @@ export default function DealerProfileSection() {
                           className={styles.error_msg}
                         />
                       </div>
-                    </div>
+                    {/* </div> */}
                   </div>
 
                   <div className={styles.field_wrapper}>

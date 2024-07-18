@@ -1,5 +1,5 @@
 "use client";
-import { Formik, Form, Field, ErrorMessage, FormikErrors } from "formik";
+import { Formik, Form, Field, ErrorMessage, FormikErrors, yupToFormErrors } from "formik";
 import * as yup from "yup";
 import axios from "axios";
 import {
@@ -16,17 +16,24 @@ import Button from "@/components/Common/Button/index";
 import { useRouter, useSearchParams } from "next/navigation";
 import OtpVerification from "../Otp";
 import { ToastContainer, toast } from "react-toastify";
-import { sendOtp } from "@/services/firebase/firebaseAuthService";
+import { auth, sendOtp } from "@/services/firebase/firebaseAuthService";
 import instance from "@/network/axios";
 import { setLocalStorage } from "@/constants/constants";
 import Cookies from "universal-cookie";
 import login from "../../assets/responsive-login.png";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import ClipSpinner from "../Common/Spinner";
+import { RecaptchaVerifier } from "firebase/auth";
+const phoneRegExp = /^[0-9]{10}$/;
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
-  phoneNumber: yup.string().required("Phone Number is required"),
-  telephoneNumber: yup.string().optional(),
+  phoneNumber: yup.string()
+    .matches(phoneRegExp, "Phone number must be exactly 10 digits")
+    .required("Phone Number is required"),
+  telephoneNumber: yup.string()
+    .matches(phoneRegExp, "Telephone number must be exactly 10 digits")
+    .optional()
+    .notOneOf([yup.ref('phoneNumber'), null], "Telephone number should not be the same as phone number"),
   email: yup.string().email("Invalid email").required("Email is required"),
   city: yup.string().required("City is required"),
   state: yup.string().required("State is required"),
@@ -60,6 +67,17 @@ export default function SignupForm() {
     setMobileNumber(mobileNumber);
     setId(id);
   }, [searchParams]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && !window.recaptchaVerifier) {
+      window.recaptchaVerifier  = new RecaptchaVerifier(auth, 'recaptcha-container', {
+        size: 'invisible',
+        callback: () => {
+            console.log('recaptcha resolved..')
+        }
+    });
+    }
+  }, []);
   const initialValues = savedFormData || {
     name: "",
     phoneNumber: searchParams.get("mobileNumber") || "",
@@ -143,8 +161,14 @@ export default function SignupForm() {
           cookies.set("token", response.data.data.token, {
             path: "/",
             maxAge: 30 * 24 * 60 * 60, // 30 days in seconds
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            // httpOnly: true,
+            // secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict'
+          });
+          cookies.set("user", JSON.stringify(response.data.data), {
+            path: "/",
+            maxAge: 30 * 24 * 60 * 60, // 30 days in seconds
+            // Note: httpOnly and secure cannot be set true for client-side cookies
             sameSite: 'strict'
           });
           setLocalStorage("token", JSON.stringify(response.data.data.token))

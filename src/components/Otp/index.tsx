@@ -83,19 +83,14 @@ const OtpVerification = ({ mobileNumber, formData, setHeading }) => {
     const otpValue = otp.join("");
     try {
       const user = await verifyOtp(otpValue);
-      console.log(user, "user");
-      // toast.success("OTP verified successfully!");
-      console.log("Login API called with mobile number:", mobileNumber);
       try {
         const url = formData ? "/api/dealers/signup" : "/api/dealers/login";
         if(formData){
            formData.set("firebaseUserId",user.uid)
         }
         const payload = formData ? formData : { phoneNumber: mobileNumber };
-        console.log(payload, "Pay");
 
         const response = await instance.post(url, payload);
-        console.log(response, "response");
         if (response.status >= 200) {
           cookies.set("token", response.data.data.token, {
             path: "/",
@@ -109,9 +104,13 @@ const OtpVerification = ({ mobileNumber, formData, setHeading }) => {
             // Note: httpOnly and secure cannot be set true for client-side cookies
             sameSite: 'strict'
           });
-          setLocalStorage("user", JSON.stringify(response.data.data))
-          setLocalStorage("token", JSON.stringify(response.data.data.token))
-          // toast.success(response?.data.message);
+          const data = JSON.stringify(response.data.data)
+          cookies.set("user", data, {
+            path: "/",
+            maxAge: 30 * 24 * 60 * 60, // 30 days in seconds
+            // Note: httpOnly and secure cannot be set true for client-side cookies
+            sameSite: 'strict'
+          });
           router.push("/");
         }
       } catch (error) {

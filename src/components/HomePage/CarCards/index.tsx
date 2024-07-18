@@ -87,7 +87,7 @@ const handleDialogClose = () => {
       </div>
       <DynamicDialog open={dialogOpen}  type={dialogType} onClose={handleDialogClose} onConfirm={handleDialogClose} onDeleteCar={()=> handleDelete(car._id)} />
       <div className={styles.card_price_row}>
-        <div className={styles.price_left}>₹{car.price}</div>
+        <div className={styles.price_left}>₹{car?.price?.toLocaleString('en-IN')}</div>
         <div className={styles.price_right}>
           {moment(car?.registrationDate).format("DD/MM/YYYY")}
         </div>

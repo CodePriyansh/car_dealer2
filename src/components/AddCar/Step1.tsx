@@ -120,11 +120,18 @@ const fields = [
     name: "color",
     type: "select",
     placeholder: "Select Color",
-    options: [
+    options : [
       { value: "Red", label: "Red" },
       { value: "Blue", label: "Blue" },
       { value: "Black", label: "Black" },
-    ],
+      { value: "White", label: "White" },
+      { value: "Silver", label: "Silver" },
+      { value: "Gray", label: "Gray" },
+      { value: "Green", label: "Green" },
+      { value: "Yellow", label: "Yellow" },
+      { value: "Orange", label: "Orange" }
+    ]
+    ,
   },
   {
     name: "transmission",
