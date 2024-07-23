@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { toast, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import toast, { Toaster } from 'react-hot-toast';
 
 import { verifyOtp, sendOtp } from "@/services/firebase/firebaseAuthService"; // Import sendOtp and verifyOtp functions
 import styles from "../SignUp/styles.module.css";

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { toast, ToastContainer } from "react-toastify";
+import toast, { Toaster } from 'react-hot-toast';
 import styles from "../SignUp/styles.module.css";
 import Button from "../Common/Button";
 import { auth, sendOtp } from "@/services/firebase/firebaseAuthService";
@@ -58,7 +58,7 @@ const LoginForm = () => {
 
   return (
     <div className="w-full relative z-20">
-      <ToastContainer />
+      <Toaster />
 
       {otpSend && backBtnStatus && (
         <div

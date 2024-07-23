@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import instance from "@/network/axios";
 import Cookies from "universal-cookie";
-import { toast } from "react-toastify";
 
 function SearchBar({ setCars, setCarNotFoundtext }) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -37,13 +36,14 @@ function SearchBar({ setCars, setCarNotFoundtext }) {
         }
       );
       setCars(response?.data?.data);
-
     } catch (error) {
-        if(error.response.status == 404){
-            setCars([]);
-            setCarNotFoundtext(`Cars not found for ${searchTerm}`);
-      console.error("Error applying filters:", error);
-    }}
+      console.log(error, "wkef");
+      if (error.response.status == 404) {
+        setCars([]);
+        setCarNotFoundtext(`Cars not found for ${searchTerm}`);
+        console.error("Error applying filters:", error);
+      }
+    }
   };
   return (
     <div className={`${styles.field_style} justify-between`}>

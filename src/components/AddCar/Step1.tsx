@@ -6,7 +6,7 @@ import CommonReactSelect from "../Common/Select";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import styles from "./styles.module.css";
-import { toast, ToastContainer } from "react-toastify";
+import toast, { Toaster } from 'react-hot-toast';
 import { AiOutlineCloseCircle } from "react-icons/ai";
 interface Step1Props {
   setShowActiveStep: React.Dispatch<React.SetStateAction<number>>;
@@ -657,7 +657,7 @@ const Step1: React.FC<Step1Props> = ({
           );
         }}
       </Formik>
-      <ToastContainer />
+      <Toaster />
     </div>
   );
 };

@@ -15,7 +15,7 @@ import { Images } from "@/assets/Images";
 import Button from "@/components/Common/Button/index";
 import { useRouter, useSearchParams } from "next/navigation";
 import OtpVerification from "../Otp";
-import { ToastContainer, toast } from "react-toastify";
+import toast, { Toaster } from 'react-hot-toast';
 import { auth, sendOtp } from "@/services/firebase/firebaseAuthService";
 import instance from "@/network/axios";
 import { setLocalStorage } from "@/constants/constants";
@@ -645,7 +645,7 @@ export default function SignupForm() {
         </div>
         {message && <p className="mt-4 text-center text-red-500">{message}</p>}
       </div>
-      <ToastContainer/>
+      <Toaster/>
     </div>
   );
 }

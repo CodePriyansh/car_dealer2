@@ -8,7 +8,7 @@ import Image from "next/image";
 import { Images } from "@/assets/Images";
 import Button from "@/components/Common/Button/index";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ToastContainer, toast } from "react-toastify";
+import toast, { Toaster } from 'react-hot-toast';
 import instance from "@/network/axios";
 import { setLocalStorage } from "@/constants/constants";
 import Cookies from "universal-cookie";
@@ -107,9 +107,9 @@ export default function DealerProfileSection() {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      if (response.status === 200) {
+      if (response.status >= 200  && response.status <400) {
         setLocalStorage("user", JSON.stringify(response.data.data));
-        router.push("/profile");
+        toast.success("profile updated")
       }
     } catch (error) {
       toast.error(error.message);
@@ -145,7 +145,7 @@ export default function DealerProfileSection() {
       <div className="hidden md:block">
         <Header />
       </div>
-
+      <Toaster/>
       <div className=" md:px-40 2xl:px-60 4xl:px-60 md:py-10 font-rajdhani">
         <div className="bg-[#FFFFFF]">
           <div

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import instance from "@/network/axios";
 import Cookies from "universal-cookie";
-import { ToastContainer, toast } from "react-toastify";
+import toast, { Toaster } from 'react-hot-toast';
 
 const CarApi = ({ selectedOptions, initial, setCars }) => {
   const [storeInitialValue, setStoreInitialValue] = useState(false);

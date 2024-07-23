@@ -7,7 +7,7 @@ import { Images } from "@/assets/Images";
 import moment from "moment";
 import Link from "next/link";
 import instance from "@/network/axios";
-import { toast } from "react-toastify";
+import toast, { Toaster } from 'react-hot-toast';
 import DynamicDialog from "@/components/Common/Dialogs";
 export default function CarCards({ car, onDelete }) {
   const router = useRouter();

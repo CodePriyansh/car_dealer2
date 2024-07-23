@@ -7,10 +7,10 @@ import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import styles from "./styles.module.css";
 import { useRouter } from "next/navigation";
-import { ToastContainer, toast } from "react-toastify";
+import toast, { Toaster } from 'react-hot-toast';
 import instance from "@/network/axios";
 import Cookies from "universal-cookie";
-// import "react-toastify/dist/ReactToastify.css";
+
 import { FaCross } from "react-icons/fa";
 
 interface Step2Props {
@@ -644,7 +644,7 @@ const Step2: React.FC<Step2Props> = ({
           </Form>
         )}
       </Formik>
-      <ToastContainer />
+      <Toaster />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import toast, { Toaster } from "react-hot-toast";
 import instance from "@/network/axios";
 import { MdEdit, MdOutlineDeleteOutline } from "react-icons/md";
 import CarCards from "../CarCards";
@@ -19,12 +19,12 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
   const [car, setCar] = useState(null);
   const [car2, setCar2] = useState(null);
-  const { id } = params;
+  let { id } = params;
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [similarCars, setSimilarCars] = useState([]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [dialogType, setDialogType] = useState('');
+  const [dialogType, setDialogType] = useState("");
   const handleImageClick = (index) => {
     setCurrentImageIndex(index);
     // Update image name based on index (you'll need to define these names)
@@ -40,7 +40,22 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
       setSimilarCars(response.data.data);
     } catch (error) {
       console.error("Error fetching similar cars:", error);
-      toast.error("Failed to fetch similar cars");
+      // toast.error("Failed to fetch similar cars");
+    }
+  };
+
+  const updateSoldStatus = async (carId: string) => {
+    try {
+      const response = await instance.patch(
+        `/api/cars/update-sold-status/${carId}`,{
+          soldStatus: true
+        }
+      );
+      id = carId;
+      toast.success("Car status updated successfully!");
+    } catch (error) {
+      console.error("Error updating status", error);
+      toast.error("Failed to update");
     }
   };
 
@@ -78,7 +93,7 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
 
   const handleDelete = async () => {
     try {
-      console.log(car._id,"idfghjkly")
+      console.log(car._id, "idfghjkly");
       const response = await instance.delete(`/api/cars/delete/${car._id}`);
       if (response.status === 200) {
         toast.success("Car deleted successfully!");
@@ -91,8 +106,8 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
   };
 
   const handleDialogOpen = () => {
-      setDialogType("DELETE_CAR");
-      setDialogOpen(true);
+    setDialogType("DELETE_CAR");
+    setDialogOpen(true);
   };
 
   const handleDialogClose = () => {
@@ -102,6 +117,8 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
   return (
     <>
       <Header page="addcar" />
+      <Toaster/>
+
       <div className={styles.backButton} onClick={() => router.back()}>
         <Image
           src={Images.backArrow}
@@ -113,7 +130,13 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
         <p className={styles.backText}>Back</p>
       </div>
       <div className={styles.mainContainer}>
-      <DynamicDialog open={dialogOpen}  type={dialogType} onClose={handleDialogClose} onConfirm={handleDialogClose} onDeleteCar={handleDelete} />
+        <DynamicDialog
+          open={dialogOpen}
+          type={dialogType}
+          onClose={handleDialogClose}
+          onConfirm={handleDialogClose}
+          onDeleteCar={handleDelete}
+        />
 
         <div className={styles.carDetailsContainer}>
           {/* Left Section (Images) */}
@@ -193,19 +216,31 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
                 <span>{car.transmission}</span>
               </div>
               <hr className={styles.separator} />
-              <h1 className={styles.carPrice}>{+car.price > 99000 ? ` Rs. ${car?.price?.toLocaleString('en-IN')} Lakh` : `Rs. ${car?.price?.toLocaleString('en-IN')} Thausand`}</h1>
+              <h1 className={styles.carPrice}>
+                {+car.price > 99000
+                  ? ` Rs. ${car?.price?.toLocaleString("en-IN")} Lakh`
+                  : `Rs. ${car?.price?.toLocaleString("en-IN")} Thausand`}
+              </h1>
               <div className={styles.actionButtons}>
-                  <button className={styles.editButton} onClick={()=> router.push(`/edit-car/${car._id}`)}>
-                    <MdEdit className={styles.icon} />
-                    <span>Edit</span>
-                  </button>
-                <button className={styles.deleteButton} onClick={handleDialogOpen}>
+                <button
+                  className={styles.editButton}
+                  onClick={() => router.push(`/edit-car/${car._id}`)}
+                >
+                  <MdEdit className={styles.icon} />
+                  <span>Edit</span>
+                </button>
+                <button
+                  className={styles.deleteButton}
+                  onClick={handleDialogOpen}
+                >
                   <MdOutlineDeleteOutline className={styles.icon} />
                   <span>Delete</span>
                 </button>
-                <button className={styles.soldButton}>
-                  <span>Sold</span>
-                </button>
+                {!car?.sold && (
+                  <button className={`${styles.soldButton}`} onClick={()=> updateSoldStatus(car?._id)}>
+                    <span>Sold</span>
+                  </button>
+                )}
               </div>
             </div>
 
@@ -343,11 +378,13 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
               </div>
             </div>
 
-            <div className="h-[20%] flex justify-center items-center">
-              <button type="button" className={`${styles.soldButton2}`}>
-                Sold
-              </button>
-            </div>
+            {!car?.sold && (
+              <div className="h-[20%] flex justify-center items-center" onClick={()=> updateSoldStatus(car?._id)}>
+                <button type="button" className={`${styles.soldButton2}`}>
+                  Sold
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
@@ -356,13 +393,19 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
           className={`${styles.similarCarsContainer} custome-scrollbar scroll-smooth`}
         >
           <h1 className={styles.similarCarsTitle}>Similarly Added</h1>
+          {!similarCars?.length ?  <div className="text-2xl text-greyy text-center"> NO Similar Car Found. </div> :
           <div className={styles.similarCarsList}>
+          
+             <>
             {similarCars.map((car, index) => (
               <div key={index} className={styles.similarCarCard}>
                 <CarCards car={car} />
               </div>
             ))}
+            </>
           </div>
+          }
+
         </div>
       </div>
     </>
