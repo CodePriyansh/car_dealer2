@@ -5,34 +5,32 @@ import Button from "../Common/Button";
 import CommonReactSelect from "../Common/Select";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import styles from "./styles.module.css";
-import toast, { Toaster } from 'react-hot-toast';
+import styles from "../AddCar/styles.module.css";
+import toast, { Toaster } from "react-hot-toast";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import { AddCarFields } from "@/constants/formFields";
-interface Step1Props {
-  setShowActiveStep: React.Dispatch<React.SetStateAction<number>>;
-  setStepsData: (data: any) => void;
-  carData: any;
-  stepsData:any;
-  setStep1DataFilled: any;
+import { AddBikeFields } from "@/constants/formFields";
+import instance from "@/network/axios";
+import Cookies from "universal-cookie";
+import { FaCross } from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import ClipSpinner from "../Common/Spinner";
+interface AddBikeProps {
+  bikeData: any;
 }
 
-const fields = AddCarFields
+const fields = AddBikeFields;
 
-const Step1: React.FC<Step1Props> = ({
-  setShowActiveStep,
-  setStepsData,
-  carData,
-  stepsData,
-  setStep1DataFilled,
-}) => {
+const AddBikeForm: React.FC<AddBikeProps> = ({ bikeData }) => {
   const profileImageInputRef = useRef<HTMLInputElement | null>(null);
-  const [scratchAndDentImagePreview, setScratchAndDentImagePreview] = useState<string | null>(
-    stepsData?.scratchAndDentImage ? URL.createObjectURL(stepsData.scratchAndDentImage) : carData?.scratchAndDentDetails?.image || null
+  const [scratchAndDentImagePreview, setScratchAndDentImagePreview] = useState<
+    string | null
+  >(bikeData?.scratchAndDentDetails?.image || null);
+  const [bikeImagesPreview, setBikeImagesPreview] = useState<Array<string>>(
+    bikeData?.bikeImages || []
   );
-  
-  console.log(carData, "oeihehrh");
-
+  const [videoPreview, setVideoPreview] = useState(bikeData?.video);
+  console.log(bikeData, "oeihehrh");
+   const cookies = new Cookies()
   const formatYearOfManufacture = (date: any) => {
     if (!date) return "";
     const d = new Date(date);
@@ -40,7 +38,7 @@ const Step1: React.FC<Step1Props> = ({
       .toString()
       .padStart(2, "0")}`;
   };
-
+  const router = useRouter()
   const formatRegistrationDate = (date: any) => {
     if (!date) return "";
     const d = new Date(date);
@@ -54,30 +52,35 @@ const Step1: React.FC<Step1Props> = ({
     if (value === false) return "No";
     return value; // Return the original value if it's not a boolean
   };
-  // console.log(carData?.images,"scratchAndDentImagePreview")
+  // console.log(bikeData?.images,"scratchAndDentImagePreview")
   const initialValues = {
-    description: stepsData?.description || carData?.description || "",
-    scratchAndDentImage: stepsData?.scratchAndDentImage || carData?.scratchAndDentDetails?.scratchAndDentImage || "",
-    scratchAndDentDescription: stepsData?.scratchAndDentDescription || carData?.scratchAndDentDetails?.description || "",
-    insuranceValidity: formatRegistrationDate(stepsData?.insuranceValidity || carData?.insuranceValidity),
+    description: bikeData?.description || "",
+    scratchAndDentImage:
+      bikeData?.scratchAndDentDetails?.scratchAndDentImage || "",
+    scratchAndDentDescription:
+      bikeData?.scratchAndDentDetails?.description || "",
+      bikeImages: bikeData?.bikeImages || [],
+      video: bikeData?.video || null,
+    insuranceValidity: formatRegistrationDate(bikeData?.insuranceValidity),
     ...fields.reduce((acc, field) => {
       if (field.name === "yearOfManufacture") {
-        acc[field.name] = formatYearOfManufacture(stepsData?.[field.name] || carData?.[field.name]);
+        acc[field.name] = formatYearOfManufacture(bikeData?.[field.name]);
       } else if (field.name === "registrationDate") {
-        acc[field.name] = formatRegistrationDate(stepsData?.[field.name] || carData?.[field.name]);
+        acc[field.name] = formatRegistrationDate(bikeData?.[field.name]);
       } else if (
         field.name === "powerWindow" ||
         field.name === "insurance" ||
         field.name === "airConditioner"
       ) {
-        acc[field.name] = booleanToYesNo(stepsData?.[field.name] || carData?.[field.name]);
+        acc[field.name] = booleanToYesNo(bikeData?.[field.name]);
       } else {
-        acc[field.name] = (stepsData?.[field.name] || carData?.[field.name] || "");
+        acc[field.name] = bikeData?.[field.name] || "";
       }
       return acc;
     }, {}),
   };
-
+  const bikeImagesRef = useRef<HTMLInputElement | null>(null);
+  const videoRef = useRef<HTMLInputElement | null>(null);
   const validationSchema = Yup.object().shape({
     ...fields.reduce((acc, field) => {
       acc[field.name] = Yup.string().required(
@@ -126,11 +129,66 @@ const Step1: React.FC<Step1Props> = ({
         Yup.string().required("Enter Insurance Validity Date is required"),
     }),
   });
-  const handleSubmit = (values: any, { setSubmitting }) => {
-    console.log("Form data", values);
-    setStepsData(values);
-    setShowActiveStep(2);
-    setSubmitting(false);
+  const handleSubmit = async (values: any, { setSubmitting }) => {
+    try {
+      const formData = new FormData();
+      
+      // Combine values with any other data you need to send
+      const allData = { ...values };
+  
+      Object.keys(allData).forEach((key) => {
+        if (key === "bikeImages") {
+          if (Array.isArray(allData[key])) {
+            allData[key].forEach((file, index) => {
+              if (file instanceof File) {
+                formData.append(`bikeImages`, file);
+              } else if (typeof file === 'string') {
+                formData.append(`bikeImages`, file);
+              }
+            });
+          }
+        } else if (allData[key] instanceof File) {
+          formData.append(key, allData[key]);
+        } else if (typeof allData[key] === 'object' && allData[key] !== null) {
+          formData.append(key, JSON.stringify(allData[key]));
+        } else {
+          formData.append(key, allData[key]);
+        }
+      });
+  
+      console.log(formData);
+  
+      let token = cookies.get("token");
+      let response;
+  
+      if (bikeData) {
+        // Edit existing bike
+        response = await instance.put(`/api/bikes/update-bike/${bikeData._id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      } else {
+        // Add new bike
+        response = await instance.post("/api/bikes/addbike", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
+  
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        router.push("/");
+      }
+    } catch (error) {
+      console.error("API Error:", error);
+      toast.error(error.message || "An error occurred");
+    } finally {
+      setSubmitting(false);
+    }
   };
   const [selectedOptions, setSelectedOptions] = useState<{
     [key: string]: any;
@@ -144,10 +202,9 @@ const Step1: React.FC<Step1Props> = ({
   };
 
   const checkFilledFields = (values: any) => {
-    console.log(values,"fil vae");
-    const filledFields = Object.values(values).filter(value =>  value ).length;
-    console.log(filledFields,"filledFields")
-    setStep1DataFilled(filledFields >= 4);
+    console.log(values, "fil vae");
+    const filledFields = Object.values(values).filter((value) => value).length;
+    console.log(filledFields, "filledFields");
   };
 
   const handleRemoveImage = (
@@ -157,6 +214,54 @@ const Step1: React.FC<Step1Props> = ({
     setScratchAndDentImagePreview(null);
     if (profileImageInputRef.current) {
       profileImageInputRef.current.value = "";
+    }
+  };
+
+  const handleFileChange = (setFieldValue, fieldName, event) => {
+    const files = event.currentTarget.files;
+    if (files && files.length > 0) {
+      if (fieldName === "video") {
+        const supportedVideoTypes = [
+          "video/mp4",
+          "video/avi",
+          "video/mkv",
+          "video/mov",
+          "video/wmv",
+          "video/flv",
+          "video/webm",
+          "video/mpeg",
+          "video/3gpp",
+          "video/ogg",
+          "video/quicktime",
+          "video/x-msvideo",
+          "video/x-ms-wmv",
+        ];
+  
+        if (!supportedVideoTypes.includes(files[0].type)) {
+          toast.error(
+            "Unsupported video format. Please upload a supported format."
+          );
+          return;
+        }
+  
+        setFieldValue(fieldName, files[0]);
+        const previewUrl = URL.createObjectURL(files[0]);
+        setVideoPreview(previewUrl);
+      } else if (fieldName === "bikeImages") {
+        const fileList = Array.from(files);
+        const filePreviews = fileList.map((file) => URL.createObjectURL(file));
+        setBikeImagesPreview((prev) => [...prev, ...filePreviews]);
+        setFieldValue(fieldName, [...bikeImagesPreview, ...fileList]);
+      }
+    }
+  };
+  
+  const handleDeleteBikeImage = (index, setFieldValue) => {
+    setBikeImagesPreview((prev) => prev.filter((_, i) => i !== index));
+    setFieldValue("bikeImages", (prev) => prev.filter((_, i) => i !== index));
+  
+    if (bikeImagesRef.current) {
+      bikeImagesRef.current.value = "";
     }
   };
 
@@ -179,12 +284,12 @@ const Step1: React.FC<Step1Props> = ({
 
   useEffect(() => {
     console.log("useEffect");
-    console.log(carData ? carData : "ifh");
+    console.log(bikeData ? bikeData : "ifh");
 
-    // if (carData) {
+    // if (bikeData) {
     //   console.log("wef");
-    //   if (carData.scratchAndDentDetails?.image) {
-    //     setScratchAndDentImagePreview(carData?.scratchAndDentDetails?.image);
+    //   if (bikeData.scratchAndDentDetails?.image) {
+    //     setScratchAndDentImagePreview(bikeData?.scratchAndDentDetails?.image);
     //     console.log("scratchAndDentImage", scratchAndDentImagePreview);
     //   }
     // }
@@ -193,7 +298,7 @@ const Step1: React.FC<Step1Props> = ({
     //   console.log("ekf")
     //   URL.revokeObjectURL(scratchAndDentImagePreview);
     // }
-  }, [scratchAndDentImagePreview, carData]);
+  }, [scratchAndDentImagePreview, bikeData]);
   return (
     <div>
       {/* <ToastContainer /> */}
@@ -204,7 +309,6 @@ const Step1: React.FC<Step1Props> = ({
         onSubmit={handleSubmit}
       >
         {({ values, isSubmitting, setFieldValue }) => {
-
           return (
             <Form className="w-full sm:px-6">
               {/* Basic Details */}
@@ -227,26 +331,21 @@ const Step1: React.FC<Step1Props> = ({
                         options={field.options}
                         // defaultValue={() => {
                         //   const value = booleanToYesNo(
-                        //     (stepsData && stepsData[field.name]) || 
-                        //     (carData && carData[field.name])
+                        //     ([||
+                        //     (bikeData && bikeData[field.name])
                         //   );
                         //   return { value: value, label: value };
                         // }}
 
                         defaultValue={
-                          carData
+                          bikeData
                             ? () => {
                                 const value = booleanToYesNo(
                                   values[field.name]
                                 );
                                 return { value: value, label: value };
                               }
-                            : stepsData ? () => {
-                              const value = booleanToYesNo(
-                                values[field.name]
-                              );
-                              return { value: value, label: value };
-                            } : undefined
+                            : undefined
                         }
                         placeholder={field.placeholder}
                         selectedOption={selectedOptions[field.name]}
@@ -254,7 +353,12 @@ const Step1: React.FC<Step1Props> = ({
                           handleChange(field.name, option);
                           console.log(field.name, option);
                           setFieldValue(field.name, option ? option.value : "");
-                          checkFilledFields({ ...values, [field.name]: option.value.value ? option.value.value : "" });
+                          checkFilledFields({
+                            ...values,
+                            [field.name]: option?.value?.value
+                              ? option?.value?.value
+                              : "",
+                          });
                         }}
                         className={styles.field_style}
                         isCreatable={["company", "modelName", "color"].includes(
@@ -285,7 +389,10 @@ const Step1: React.FC<Step1Props> = ({
                           } else {
                             setFieldValue(field.name, event.target.value); // Limit to first two digits
                           }
-                          checkFilledFields({ ...values, [field.name]: event.target.value });
+                          checkFilledFields({
+                            ...values,
+                            [field.name]: event.target.value,
+                          });
                         }}
                         onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
                           if (field.name === "numberPlate") {
@@ -293,7 +400,10 @@ const Step1: React.FC<Step1Props> = ({
                               .replace(/\s+/g, "")
                               .toUpperCase();
                             setFieldValue(field.name, value);
-                            checkFilledFields({ ...values, [field.name]: value });
+                            checkFilledFields({
+                              ...values,
+                              [field.name]: value,
+                            });
                           }
                         }}
                       />
@@ -323,6 +433,149 @@ const Step1: React.FC<Step1Props> = ({
                     />
                   </div>
                 )}
+              </div>
+
+              {/* Bike Images */}
+              <div className="flex flex-col w-full">
+                <div className={styles.basic_detail_heading}>
+                  <p className={styles.sub_heading}>Bike Images</p>
+                  <p className={styles.line}></p>
+                </div>
+                <div className="flex w-full md:flex-row flex-col items-center">
+                  <div
+                    className={`${styles.dotted_box_step2} w-full md:!max-w-[224px] md:min-w-[200px] !max-h-[224px] h-[200px]`}
+                    onClick={() => bikeImagesRef.current?.click()}
+                  >
+                    <Image
+                      src={Images.uploadImg}
+                      alt="img"
+                      className="w-8 h-8 mx-auto"
+                    />
+                    <Button otherStyles={styles.btn_step2}>
+                      <Image
+                        src={Images.plus}
+                        alt="plus"
+                        width={20}
+                        height={20}
+                        className={styles.step2_btn_img}
+                      />
+                      Add Images
+                    </Button>
+                    <input
+                      type="file"
+                      multiple={true}
+                      className="hidden"
+                      name="bikeImages"
+                      accept="image/*"
+                      ref={bikeImagesRef}
+                      onChange={(event) =>
+                        handleFileChange(setFieldValue, "bikeImages", event)
+                      }
+                    />
+                  </div>
+
+                  <div className="flex max-w-full flex-col w-fit overflow-x-scroll ml-4 custome-scrollbar scroll-smooth">
+                    <div className="w-full flex gap-2">
+                      {bikeImagesPreview.map((previewUrl, index) => (
+                        <div
+                          key={index}
+                          className="mt-2 max-w-[224px] max-h-[224px] h-[224px] min-w-[224px] flex"
+                        >
+                          <div style={{ position: "relative" }}>
+                            <Image
+                              src={previewUrl}
+                              width={224}
+                              height={150}
+                              alt="bike image"
+                              className="!h-full !max-h-[224px]"
+                            />
+                            <button
+                              className="text-black bg-white rounded-full text-[24px] font-semibold absolute top-0 right-2 rotate-45"
+                              onClick={() =>
+                                handleDeleteBikeImage(index, setFieldValue)
+                              }
+                            >
+                              <FaCross />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <ErrorMessage
+                  name="bikeImages"
+                  component="div"
+                  className="error_msg"
+                />
+              </div>
+
+              {/* Video */}
+              <div className="w-full">
+                <div className={styles.basic_detail_heading}>
+                  <p className={styles.sub_heading}>Video</p>
+                  <p className={styles.line}></p>
+                </div>
+                <div className={`${styles.dotted_box_step2} relative`}>
+                  {videoPreview ? (
+                    <>
+                      <video
+                        src={videoPreview}
+                        controls
+                        className="w-full h-auto max-h-64 object-contain"
+                      >
+                        Your browser does not support the video tag.
+                      </video>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setVideoPreview(null);
+                          setFieldValue("video", null);
+                          if (videoRef.current) {
+                            videoRef.current.value = "";
+                          }
+                        }}
+                        className="absolute top-2 right-2 p-1 bg-primary text-white rounded-full"
+                      >
+                        &times;
+                      </button>
+                    </>
+                  ) : (
+                    <div onClick={() => videoRef.current?.click()}>
+                      <Image
+                        src={Images.uploadImg}
+                        alt="img"
+                        className="w-8 h-8"
+                      />
+                      <Button otherStyles={styles.btn_step2}>
+                        <Image
+                          src={Images.plus}
+                          alt="plus"
+                          width={20}
+                          height={20}
+                          
+                          className={styles.step2_btn_img}
+                        />
+                        Add Video
+                      </Button>
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    className="hidden"
+                    ref={videoRef}
+                    name="video"
+                    accept="video/mp4,video/x-m4v,video/*"
+                    onChange={(event) =>
+                      handleFileChange(setFieldValue, "video", event)
+                    }
+                  />
+                  <ErrorMessage
+                    name="video"
+                    component="div"
+                    className="error_msg"
+                  />
+                </div>
               </div>
 
               {/* Description */}
@@ -440,7 +693,7 @@ const Step1: React.FC<Step1Props> = ({
                   <div className="my-4">
                     <div className={styles.field_wrapper}>
                       <label className={styles.label_Style}>
-                        Other Description related to car
+                        Other Description related to Bike
                       </label>
                       <Field
                         as="textarea"
@@ -462,6 +715,7 @@ const Step1: React.FC<Step1Props> = ({
                 </div>
               </div>
               {/* Submit Button */}
+              {/* <div><ClipSpinner loading/></div> */}
               <button
                 type="submit"
                 className="mx-auto w-full"
@@ -480,4 +734,4 @@ const Step1: React.FC<Step1Props> = ({
   );
 };
 
-export default Step1;
+export default AddBikeForm;

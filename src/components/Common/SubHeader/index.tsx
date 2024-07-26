@@ -132,7 +132,7 @@ export default function SubHeader({
           />
           Add car
         </Button>
-        <Button otherStyles={styles.fill_btn}>
+        <Button otherStyles={styles.fill_btn} onclick={() => router.push("/addbike")}>
           <Image
             src={Images.whitePlus}
             alt="img"
