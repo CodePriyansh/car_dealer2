@@ -56,7 +56,7 @@ const AddBikeForm: React.FC<AddBikeProps> = ({ bikeData }) => {
   const initialValues = {
     description: bikeData?.description || "",
     scratchAndDentImage:
-      bikeData?.scratchAndDentDetails?.scratchAndDentImage || "",
+      bikeData?.scratchAndDentDetails?.image || "",
     scratchAndDentDescription:
       bikeData?.scratchAndDentDetails?.description || "",
       bikeImages: bikeData?.bikeImages || [],
@@ -163,7 +163,7 @@ const AddBikeForm: React.FC<AddBikeProps> = ({ bikeData }) => {
   
       if (bikeData) {
         // Edit existing bike
-        response = await instance.put(`/api/bikes/update-bike/${bikeData._id}`, formData, {
+        response = await instance.put(`/api/bikes/update/${bikeData._id}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
@@ -181,7 +181,7 @@ const AddBikeForm: React.FC<AddBikeProps> = ({ bikeData }) => {
   
       if (response.status === 200) {
         toast.success(response.data.message);
-        router.push("/");
+        // router.push("/");
       }
     } catch (error) {
       console.error("API Error:", error);

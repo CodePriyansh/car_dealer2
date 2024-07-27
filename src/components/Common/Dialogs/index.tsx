@@ -5,6 +5,7 @@ import { Images } from "@/assets/Images";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import styles from './styles.module.css';
 import Image from "next/image";
+import { useFilter } from "@/context/FilterContext";
 
 const DynamicDialog = ({ open, type, onClose, onConfirm, onDeleteCar }) => {
   const DialogTypes = {
@@ -13,11 +14,12 @@ const DynamicDialog = ({ open, type, onClose, onConfirm, onDeleteCar }) => {
     FEATURE_COMING_SOON: "FEATURE_COMING_SOON",
   };
 
+     const {activeFilter} = useFilter()
   const renderDialogContent = () => {
     switch (type) {
       case DialogTypes.DELETE_CAR:
         return {
-          title: "Are you sure you want to Delete this car?",
+          title: `Are you sure you want to Delete this ${activeFilter}?`,
           message: "",
           buttons: [
             {

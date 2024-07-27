@@ -4,11 +4,13 @@ import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import instance from "@/network/axios";
 import Cookies from "universal-cookie";
+import { useFilter } from "@/context/FilterContext";
 
 function SearchBar({ setCars, setCarNotFoundtext }) {
   const [searchTerm, setSearchTerm] = useState("");
   const cookies = new Cookies();
-  let token = cookies.get("authToken");
+  const token = cookies.get("authToken");
+  const { activeFilter } = useFilter();
 
   const handleSearch = (e) => {
     const key = e.target.value.toLowerCase();
@@ -19,12 +21,12 @@ function SearchBar({ setCars, setCarNotFoundtext }) {
     if (searchTerm) {
       apiCallForSearch(searchTerm);
     }
-  }, [searchTerm]);
+  }, [searchTerm, activeFilter]);
 
-  const apiCallForSearch = async (searchTerm: string) => {
+  const apiCallForSearch = async (searchTerm) => {
     try {
       const response = await instance.post(
-        "/api/cars/all",
+        activeFilter === "car" ? "/api/cars/all" : "/api/bikes/all",
         {
           searchKey: searchTerm,
         },
@@ -37,7 +39,6 @@ function SearchBar({ setCars, setCarNotFoundtext }) {
       );
       setCars(response?.data?.data);
     } catch (error) {
-      console.log(error, "wkef");
       if (error.response.status == 404) {
         setCars([]);
         setCarNotFoundtext(`Cars not found for ${searchTerm}`);
@@ -45,6 +46,7 @@ function SearchBar({ setCars, setCarNotFoundtext }) {
       }
     }
   };
+
   return (
     <div className={`${styles.field_style} justify-between`}>
       <div className="flex items-center">

@@ -9,7 +9,7 @@ import FilterDrawer from "@/components/HomePage/FilterDrawer";
 import CarApi from "@/components/HomePage/CarApi";
 import SearchBar from "./SearchBar";
 import DynamicDialog from "../Dialogs";
-
+import { useFilter } from "@/context/FilterContext";
 export default function SubHeader({
   clickWebClear,
   setClickWebClear,
@@ -21,27 +21,27 @@ export default function SubHeader({
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogType, setDialogType] = useState('');
   const router = useRouter();
-  const [activeMidFilter, setActiveMidFilter] = useState("car");
+  const { activeFilter, setActiveFilter } = useFilter();
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const handleActiveMidFilter = (filter) => {
-    if (filter == "bike") {
-      setCarNotFoundtext("Comming Soon...")
-      setDialogType("FEATURE_COMING_SOON");
-      setDialogOpen(true);
-    }
-    setActiveMidFilter(filter);
+    // if (filter === "bike") {
+    //   setCarNotFoundtext("Coming Soon...");
+    //   setDialogType("FEATURE_COMING_SOON");
+    //   setDialogOpen(true);
+    // }
+    setActiveFilter(filter);
   };
 
   const handleDialogClose = () => {
     setDialogOpen(false);
-    setCarNotFoundtext("There Is No Car Added")
-    setActiveMidFilter("car");
+    setCarNotFoundtext("There Is No Car Added");
+    setActiveFilter("car");
   };
 
   return (
     <div className={`${styles.wrapper} container_space large_layout`}>
-      {/* left  */}
+      {/* left */}
       <div className={styles.left}>
         <SearchBar setCars={setCars} setCarNotFoundtext={setCarNotFoundtext} />
         <div
@@ -54,7 +54,7 @@ export default function SubHeader({
           <Image
             src={Images.responsiveFilter}
             alt="img"
-            className="sm:w-[18px] sm:h-[18px] h-4 w-4 "
+            className="sm:w-[18px] sm:h-[18px] h-4 w-4"
           />
         </div>
       </div>
@@ -67,12 +67,12 @@ export default function SubHeader({
         />
       )}
 
-      {/* mid  */}
+      {/* mid */}
       <div className={styles.mid}>
         <div className={styles.mid_btn_wrapper}>
           <Button
             otherStyles={`uppercase md:w-[215px] w-1/2 m-[1px] ${
-              activeMidFilter === "car"
+              activeFilter === "car"
                 ? "bg-primary text-white"
                 : "bg-transparent !text-subHeading"
             }`}
@@ -82,7 +82,7 @@ export default function SubHeader({
           </Button>
           <button
             className={`md:w-[190px] w-1/2 m-[1px] uppercase text-20 font-bold font-rajdhani rounded-[50px] ${
-              activeMidFilter === "bike"
+              activeFilter === "bike"
                 ? "text-white bg-primary"
                 : "text-subHeading bg-transparent"
             }`}
@@ -93,8 +93,9 @@ export default function SubHeader({
         </div>
       </div>
 
-      <DynamicDialog open={dialogOpen}  type={dialogType} onClose={handleDialogClose} onConfirm={handleDialogClose} />
-      {/* right  */}
+      <DynamicDialog open={dialogOpen} type={dialogType} onClose={handleDialogClose} onConfirm={handleDialogClose} />
+      
+      {/* right */}
       <div className={styles.right}>
         <Button
           otherStyles={styles.clear_fil_btn}

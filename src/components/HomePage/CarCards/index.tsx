@@ -9,68 +9,70 @@ import Link from "next/link";
 import instance from "@/network/axios";
 import toast, { Toaster } from 'react-hot-toast';
 import DynamicDialog from "@/components/Common/Dialogs";
-export default function CarCards({ car, onDelete }) {
+import { useFilter } from "@/context/FilterContext";
+
+export default function CarCards({ item, onDelete }) {
   const router = useRouter();
+  const { activeFilter } = useFilter(); // Use the custom hook to get activeFilter
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogType, setDialogType] = useState('');
+
   const handleClick = () => {
-    router.push(`/car_details/${car._id}`);
+    router.push(`/${activeFilter}_details/${item._id}`);
   };
 
-  const handleDelete = async (carId) => {
+  const handleDelete = async (itemId) => {
     try {
-      const response = await instance.delete(`/api/cars/delete/${carId}`);
+      const response = await instance.delete(`/api/${activeFilter}s/delete/${itemId}`);
       if (response.status === 200) {
-        toast.success("Car deleted successfully!");
+        toast.success(`${activeFilter.charAt(0).toUpperCase() + activeFilter.slice(1)} deleted successfully!`);
         if (onDelete) {
-          onDelete(carId);
-  setDialogOpen(false);
-
+          onDelete(itemId);
+          setDialogOpen(false);
         }
       }
     } catch (error) {
-      toast.error("Failed to delete car. Please try again.");
-      console.error("Delete car error:", error);
+      toast.error(`Failed to delete ${activeFilter}. Please try again.`);
+      console.error("Delete item error:", error);
     }
   };
 
-
   const handleDialogOpen = () => {
-    setDialogType("DELETE_CAR");
+    setDialogType(`DELETE_CAR`);
     setDialogOpen(true);
-};
+  };
 
-const handleDialogClose = () => {
-  setDialogOpen(false);
-};
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
 
   return (
     <div className={styles.card_wrapper}>
       <div className={styles.status_tag}>
-        <div className={car.sold ? styles.status_sold : styles.status_avail}>
-          <Image src={Images.availSoldSymbol} alt="Sell"></Image>
-          {car.sold ? "Sold" : "Avail"}
+        <div className={item.sold ? styles.status_sold : styles.status_avail}>
+          <Image src={Images.availSoldSymbol} alt="Sell" />
+          {item.sold ? "Sold" : "Avail"}
         </div>
       </div>
-      <Link href={`/car_details/${car._id}`} passHref>
+      <Link href={`/${activeFilter}_details/${item._id}`} passHref>
         <div className={styles.card_img_wrapper}>
           <img
             className="w-full h-full"
-            src={car?.images?.front_image || Images.demoCarfrom}
+            src={item?.images?.front_image || item?.bikeImages?.[0] || Images.demoCarfrom.src}
             alt="image"
           />
         </div>
       </Link>
 
       <div className={styles.car_header}>
-        <div
-          className={styles.header_left}
-        >{`${car.company} ${car.modelName} ${car.variant}`}</div>
+        <div className={styles.header_left}>
+          {`${item.company} ${item.modelName} ${item.variant}`}
+        </div>
         <div className={styles.header_right}>
-          <Link href={`/car_details/${car._id}`} passHref>
+          <Link href={`/${activeFilter}_details/${item._id}`} passHref>
             <Image src={Images.cardView} alt="view" width={24} height={24} className={styles.cardActions} />
           </Link>
-          <Link href={`/edit-car/${car._id}`} passHref>
+          <Link href={`/edit-${activeFilter}/${item._id}`} passHref>
             <Image src={Images.cardEdit} alt="edit" width={24} height={24} className={styles.cardActions} />
           </Link>
 
@@ -80,27 +82,34 @@ const handleDialogClose = () => {
             className={styles.cardActions}
             width={24}
             height={24}
-            onClick={ handleDialogOpen}
+            onClick={handleDialogOpen}
             style={{ cursor: "pointer" }}
           />
         </div>
       </div>
-      <DynamicDialog open={dialogOpen}  type={dialogType} onClose={handleDialogClose} onConfirm={handleDialogClose} onDeleteCar={()=> handleDelete(car._id)} />
+      <DynamicDialog
+        open={dialogOpen}
+        type={dialogType}
+        onClose={handleDialogClose}
+        onConfirm={handleDialogClose}
+        onDeleteCar={() => handleDelete(item._id)}
+      />
       <div className={styles.card_price_row}>
-        <div className={styles.price_left}>₹{car?.price?.toLocaleString('en-IN')}</div>
+        <div className={styles.price_left}>₹{item?.price?.toLocaleString('en-IN')}</div>
         <div className={styles.price_right}>
-          {moment(car?.registrationDate).format("DD/MM/YYYY")}
+          {moment(item?.registrationDate).format("DD/MM/YYYY")}
         </div>
       </div>
 
       <div className={`${styles.features_row}`}>
         <div className={styles.feature_item}>
-          {car?.yearOfManufacture.split("-")[0]}
+          {item?.yearOfManufacture.split("-")[0]}
         </div>
-        {[car?.transmission, car?.color, car?.fuelType]?.map((item, index) => {
+        {[item?.transmission, item?.color, item?.fuelType]?.map((itemDetail, index) => {
           return (
+            itemDetail &&
             <div key={index.toString()} className={styles.feature_item}>
-              {item}
+              {itemDetail}
             </div>
           );
         })}

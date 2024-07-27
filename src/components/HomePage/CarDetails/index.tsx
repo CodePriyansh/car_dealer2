@@ -15,11 +15,12 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Link from "next/link";
 import DynamicDialog from "@/components/Common/Dialogs";
+import { useFilter } from "@/context/FilterContext";
 const CarDetails = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
   const [car, setCar] = useState(null);
-  const [car2, setCar2] = useState(null);
   let { id } = params;
+  const { activeFilter } = useFilter();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [similarCars, setSimilarCars] = useState([]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -28,18 +29,20 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
   const handleImageClick = (index) => {
     setCurrentImageIndex(index);
     // Update image name based on index (you'll need to define these names)
-    const imageNames = Object.keys(car.images);
-    setImageName(imageNames[index] || `View ${index + 1}`);
+    if (activeFilter == "car") {
+      const imageNames = Object.keys(car.images);
+      setImageName(imageNames[index] || `View ${index + 1}`);
+    }
   };
 
   const fetchSimilarCars = async (dealerId) => {
     try {
       const response = await instance.get(
-        `/api/cars/car-by-dealer-id/${dealerId._id}`
+        `/api/${activeFilter}s/${activeFilter}-by-dealer-id/${dealerId._id}`
       );
       setSimilarCars(response.data.data);
     } catch (error) {
-      console.error("Error fetching similar cars:", error);
+      console.error("Error fetching similar " + activeFilter + "s:", error);
       // toast.error("Failed to fetch similar cars");
     }
   };
@@ -47,12 +50,13 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
   const updateSoldStatus = async (carId: string) => {
     try {
       const response = await instance.patch(
-        `/api/cars/update-sold-status/${carId}`,{
-          soldStatus: true
+        `/api/${activeFilter}s/update-sold-status/${carId}`,
+        {
+          soldStatus: true,
         }
       );
       id = carId;
-      toast.success("Car status updated successfully!");
+      toast.success(activeFilter + " status updated successfully!");
     } catch (error) {
       console.error("Error updating status", error);
       toast.error("Failed to update");
@@ -63,18 +67,17 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const response = await instance.get(`/api/cars/car-by-id/${id}`);
-        console.log(response.data.data);
-        console.log(response.data.data);
-        console.log(Object.values(response.data.data));
+        const response = await instance.get(
+          `/api/${activeFilter}s/${activeFilter}-by-id/${id}`
+        );
+
         setCar(response.data.data);
-        console.log(Object.values(response?.data?.data?.images).length, "woff");
         if (response.data.data.dealerId) {
           fetchSimilarCars(response.data.data.dealerId);
         }
       } catch (error) {
-        console.error("Error fetching car details:", error);
-        toast.error("Failed to fetch car details");
+        console.error(`Error fetching ${activeFilter} details`, error);
+        toast.error(`Failed to fetch ${activeFilter} details`);
       }
     };
 
@@ -94,9 +97,11 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
   const handleDelete = async () => {
     try {
       console.log(car._id, "idfghjkly");
-      const response = await instance.delete(`/api/cars/delete/${car._id}`);
+      const response = await instance.delete(
+        `/api/${activeFilter}s/delete/${car._id}`
+      );
       if (response.status === 200) {
-        toast.success("Car deleted successfully!");
+        toast.success(activeFilter.toUpperCase() + " deleted successfully!");
         router.push("/");
       }
     } catch (error) {
@@ -114,10 +119,13 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
     setDialogOpen(false);
   };
 
+  const images =
+    activeFilter === "car" ? Object.values(car.images) : car.bikeImages;
+
   return (
     <>
       <Header page="addcar" />
-      <Toaster/>
+      <Toaster />
 
       <div className={styles.backButton} onClick={() => router.back()}>
         <Image
@@ -145,8 +153,10 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
               selectedItem={currentImageIndex}
               onChange={(index) => {
                 setCurrentImageIndex(index);
-                const imageNames = Object.keys(car.images);
-                setImageName(imageNames[index] || `View ${index + 1}`);
+                if (activeFilter === "car") {
+                  const imageNames = Object.keys(car?.images);
+                  setImageName(imageNames[index] || `View ${index + 1}`);
+                }
               }}
               showArrows={true}
               showStatus={false}
@@ -154,24 +164,26 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
               showThumbs={false}
               className="custom-carousel"
             >
-              {Object.values(car.images).map((image, index) => (
+              {images?.map((image, index) => (
                 <div key={index} className="relative w-full  ">
                   <img
                     src={image}
                     alt={`Car part ${index + 1}`}
                     className={styles.mainImage}
                   />
-                  <div className="font-rajdhani font-bold absolute text-[14px] h-5 md:bottom-4 md:left-4 bottom-3 left-3 bg-[#FFFFFF] bg-opacity-50 text-para px-2 py-1 rounded capitalize ">
-                    {imageName.replaceAll("_", " ")}
-                  </div>
+                  {activeFilter == "car" && (
+                    <div className="font-rajdhani font-bold absolute text-[14px] h-5 md:bottom-4 md:left-4 bottom-3 left-3 bg-[#FFFFFF] bg-opacity-50 text-para px-2 py-1 rounded capitalize ">
+                      {imageName?.replaceAll("_", " ")}
+                    </div>
+                  )}
                   <div className="font-rajdhani font-bold absolute text-[14px] h-5 md:bottom-4 md:right-4 bottom-3 right-3 bg-[#FFFFFF] bg-opacity-50 text-para px-2 py-1 rounded">
-                    {index + 1}/{Object.values(car?.images).length}
+                    {index + 1}/{images?.length}
                   </div>
                 </div>
               ))}
             </Carousel>
             <div className={styles.thumbnailContainer}>
-              {Object.values(car.images).map((image, index) => (
+              {images?.map((image, index) => (
                 <img
                   key={index}
                   src={image}
@@ -187,14 +199,14 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
               <span
                 className={`h-2 w-2 rounded-full mx-1 ${
                   currentImageIndex === 0 ||
-                  currentImageIndex < Object.values(car?.images).length - 1
+                  currentImageIndex < images?.length - 1
                     ? "bg-orange-500"
                     : "bg-gray-300"
                 }`}
               ></span>
               <span
                 className={`h-2 w-2 rounded-full mx-1 ${
-                  currentImageIndex === Object.values(car?.images).length - 1
+                  currentImageIndex === images?.length - 1
                     ? "bg-orange-500"
                     : "bg-gray-300"
                 }`}
@@ -207,7 +219,7 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
             <div className={`${styles.sectionBorder}`}>
               <h1 className={styles.carTitle}>
                 {moment(car?.yearOfManufacture).format("YYYY")} {car.company}{" "}
-                {car.type} {car.variant} 1.2L
+                {car.type} {car.variant}
               </h1>
               <div className={styles.carInfo}>
                 <span>{car.kmDriven}</span>
@@ -218,13 +230,15 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
               <hr className={styles.separator} />
               <h1 className={styles.carPrice}>
                 {+car.price > 99000
-                  ? ` Rs. ${car?.price?.toLocaleString("en-IN")} Lakh`
-                  : `Rs. ${car?.price?.toLocaleString("en-IN")} Thausand`}
+                  ? ` Rs. ${car?.price?.toLocaleString("en-IN")}`
+                  : `Rs. ${car?.price?.toLocaleString("en-IN")}`}
               </h1>
               <div className={styles.actionButtons}>
                 <button
                   className={styles.editButton}
-                  onClick={() => router.push(`/edit-car/${car._id}`)}
+                  onClick={() =>
+                    router.push(`/edit-${activeFilter}/${car._id}`)
+                  }
                 >
                   <MdEdit className={styles.icon} />
                   <span>Edit</span>
@@ -237,7 +251,10 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
                   <span>Delete</span>
                 </button>
                 {!car?.sold && (
-                  <button className={`${styles.soldButton}`} onClick={()=> updateSoldStatus(car?._id)}>
+                  <button
+                    className={`${styles.soldButton}`}
+                    onClick={() => updateSoldStatus(car?._id)}
+                  >
                     <span>Sold</span>
                   </button>
                 )}
@@ -251,10 +268,7 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
             >
               <h1 className={styles.descriptionTitle}>Description</h1>
               <p className={styles.descriptionText}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
+               {car?.description}
               </p>
             </div>
           </div>
@@ -265,18 +279,18 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
           <div className={`${styles.overviewPanel} ${styles.sectionBorder}`}>
             <h1 className={styles.overviewTitle}>Car Overview</h1>
             <div className={styles.overviewDetails}>
-              <div key={car.id} className={styles.overviewItem}>
+              <div key={car?.id} className={styles.overviewItem}>
                 <div className={styles.overviewField}>
                   <p className={styles.overviewHeadings}>Company</p>
-                  <p className={styles.overviewValues}>{car.company}</p>
+                  <p className={styles.overviewValues}>{car?.company}</p>
                 </div>
                 <div className={styles.overviewField}>
                   <p className={styles.overviewHeadings}>Model</p>
-                  <p className={styles.overviewValues}>{car.modelName}</p>
+                  <p className={styles.overviewValues}>{car?.modelName}</p>
                 </div>
                 <div className={styles.overviewField}>
                   <p className={styles.overviewHeadings}>Variant</p>
-                  <p className={styles.overviewValues}>{car.variant}</p>
+                  <p className={styles.overviewValues}>{car?.variant}</p>
                 </div>
                 <div className={styles.overviewField}>
                   <p className={styles.overviewHeadings}>Year of Manufacture</p>
@@ -292,54 +306,64 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
                 </div>
                 <div className={styles.overviewField}>
                   <p className={styles.overviewHeadings}>Number Plate</p>
-                  <p className={styles.overviewValues}>{car.numberPlate}</p>
+                  <p className={styles.overviewValues}>{car?.numberPlate}</p>
                 </div>
                 <div className={styles.overviewField}>
                   <p className={styles.overviewHeadings}>Color</p>
-                  <p className={styles.overviewValues}>{car.color}</p>
+                  <p className={styles.overviewValues}>{car?.color}</p>
                 </div>
-                <div className={styles.overviewField}>
-                  <p className={styles.overviewHeadings}>Transmission</p>
-                  <p className={styles.overviewValues}>{car.transmission}</p>
-                </div>
+                {activeFilter == "car" && (
+                  <>
+                    <div className={styles.overviewField}>
+                      <p className={styles.overviewHeadings}>Transmission</p>
+                      <p className={styles.overviewValues}>
+                        {car?.transmission}
+                      </p>
+                    </div>
+                  </>
+                )}
                 <div className={styles.overviewField}>
                   <p className={styles.overviewHeadings}>Fuel Type</p>
-                  <p className={styles.overviewValues}>{car.fuelType}</p>
+                  <p className={styles.overviewValues}>{car?.fuelType}</p>
                 </div>
                 <div className={styles.overviewField}>
                   <p className={styles.overviewHeadings}>Cubic Capacity</p>
                   <p className={styles.overviewValues}>
-                    {car.cubicCapacity} cc
+                    {car?.cubicCapacity} cc
                   </p>
                 </div>
                 <div className={styles.overviewField}>
                   <p className={styles.overviewHeadings}>Average Approx.</p>
-                  <p className={styles.overviewValues}>{car.mileage}</p>
+                  <p className={styles.overviewValues}>{car?.mileage}</p>
                 </div>
                 <div className={styles.overviewField}>
                   <p className={styles.overviewHeadings}>Km Driven</p>
-                  <p className={styles.overviewValues}>{car.kmDriven}</p>
+                  <p className={styles.overviewValues}>{car?.kmDriven}</p>
                 </div>
-                <div className={styles.overviewField}>
-                  <p className={styles.overviewHeadings}>Air Conditioner</p>
-                  <p className={styles.overviewValues}>
-                    {car.airConditioner ? "Yes" : "No"}
-                  </p>
-                </div>
-                <div className={styles.overviewField}>
-                  <p className={styles.overviewHeadings}>Power Window</p>
-                  <p className={styles.overviewValues}>
-                    {car.powerWindow ? "Yes" : "No"}
-                  </p>
-                </div>
+                {activeFilter == "car" && (
+                  <>
+                    <div className={styles.overviewField}>
+                      <p className={styles.overviewHeadings}>Air Conditioner</p>
+                      <p className={styles.overviewValues}>
+                        {car?.airConditioner ? "Yes" : "No"}
+                      </p>
+                    </div>
+                    <div className={styles.overviewField}>
+                      <p className={styles.overviewHeadings}>Power Window</p>
+                      <p className={styles.overviewValues}>
+                        {car?.powerWindow ? "Yes" : "No"}
+                      </p>
+                    </div>
+                  </>
+                )}
                 <div className={styles.overviewField}>
                   <p className={styles.overviewHeadings}>Owner</p>
-                  <p className={styles.overviewValues}>{car.ownerType}</p>
+                  <p className={styles.overviewValues}>{car?.ownerType}</p>
                 </div>
                 <div className={styles.overviewField}>
                   <p className={styles.overviewHeadings}>Insurance</p>
                   <p className={styles.overviewValues}>
-                    {car.insurance ? "Yes" : "No"}
+                    {car?.insurance ? "Yes" : "No"}
                   </p>
                 </div>
                 <div className={styles.overviewField}>
@@ -356,12 +380,7 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
             className={`${styles.descriptionContainer} ${styles.sectionBorder} sm:hidden col-span-5 !px-6 !mt-0`}
           >
             <h1 className={styles.descriptionTitle}>Description</h1>
-            <p className={styles.descriptionText}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </p>
+            <p className={styles.descriptionText}>{car?.description}</p>
           </div>
 
           {/* Right Panel (Scratch & Dent) */}
@@ -369,17 +388,25 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
             <div className={`${styles.scratchDentPanel} md:h-[80%]`}>
               <h1 className={styles.scratchDentTitle}>Scratch & Dent</h1>
               <div className={styles.scratchDentContent}>
-                <p className={styles.scratchDentText}>Dent on Left Gate</p>
-                <img
-                  src={car.interiorImages[0]}
-                  alt="Dent on Left Gate"
-                  className={styles.scratchDentImage}
-                />
+                <p className={styles.scratchDentText}>
+                  {car?.scratchAndDentDetails?.description}
+                </p>
+
+                {car?.scratchAndDentDetails?.image && (
+                  <img
+                    src={car?.scratchAndDentDetails?.image}
+                    alt="Dent on Left Gate"
+                    className={styles.scratchDentImage}
+                  />
+                )}
               </div>
             </div>
 
             {!car?.sold && (
-              <div className="h-[20%] flex justify-center items-center" onClick={()=> updateSoldStatus(car?._id)}>
+              <div
+                className="h-[20%] flex justify-center items-center"
+                onClick={() => updateSoldStatus(car?._id)}
+              >
                 <button type="button" className={`${styles.soldButton2}`}>
                   Sold
                 </button>
@@ -393,19 +420,22 @@ const CarDetails = ({ params }: { params: { id: string } }) => {
           className={`${styles.similarCarsContainer} custome-scrollbar scroll-smooth`}
         >
           <h1 className={styles.similarCarsTitle}>Similarly Added</h1>
-          {!similarCars?.length ?  <div className="text-2xl text-greyy text-center"> NO Similar Car Found. </div> :
-          <div className={styles.similarCarsList}>
-          
-             <>
-            {similarCars.map((car, index) => (
-              <div key={index} className={styles.similarCarCard}>
-                <CarCards car={car} />
-              </div>
-            ))}
-            </>
-          </div>
-          }
-
+          {!similarCars?.length ? (
+            <div className="text-2xl text-greyy text-center">
+              {" "}
+              NO Similar Car Found.{" "}
+            </div>
+          ) : (
+            <div className={styles.similarCarsList}>
+              <>
+                {similarCars.map((car, index) => (
+                  <div key={index} className={styles.similarCarCard}>
+                    <CarCards item={car} />
+                  </div>
+                ))}
+              </>
+            </div>
+          )}
         </div>
       </div>
     </>

@@ -8,17 +8,18 @@ import Image from "next/image";
 import { Images } from "@/assets/Images";
 import { useRouter } from "next/navigation";
 import PlanExpiredBanner from "@/components/Subscription/SubscriptionBanner";
+import { useFilter } from "@/context/FilterContext";
 
 const HomeEnteries = () => {
   const showPlanExpiredBanner = false;
   const [cars, setCars] = useState([]);
-  const [carNotFoundtext, setCarNotFoundtext] = useState(
-    "There Is No Car Added"
-  );
+  const [carNotFoundtext, setCarNotFoundtext] = useState("There Is No Car Added");
+  const { activeFilter } = useFilter();
   const router = useRouter();
+
   useEffect(() => {
-    // console.log(cars,"pppppppppppppppppppppppppppppp")
-  }, [cars]);
+    // Fetch data based on the activeFilter
+  }, [activeFilter]);
 
   const handleDeleteCar = (carId) => {
     setCars((prevCars) => prevCars.filter((car) => car._id !== carId));
@@ -28,9 +29,9 @@ const HomeEnteries = () => {
     <div>
       <Filters setCars={setCars} setCarNotFoundtext={setCarNotFoundtext} />
       {showPlanExpiredBanner && <PlanExpiredBanner />}
-      <HomePageCards cars={cars} carNotFoundtext={carNotFoundtext} onDelete={handleDeleteCar}  />
+      <HomePageCards cars={cars} carNotFoundtext={carNotFoundtext} onDelete={handleDeleteCar} />
       <button className="fixed md:hidden bottom-4 right-4 bg-primary  text-white px-1 py-1 rounded-[20%] shadow-lg hover:bg-primary-dark">
-        <Button onclick={() => router.push("/addcar")}>
+        <Button onclick={() => router.push(activeFilter === "car" ? "/addcar" : "/addbike")}>
           <Image
             src={Images.whitePlus}
             alt="img"

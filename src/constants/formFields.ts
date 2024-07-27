@@ -312,3 +312,125 @@ export const AddBikeFields = [
     ],
   },
 ];
+
+
+export const carFilter = [
+  {
+    name: "company",
+    type: "select",
+    placeholder: "Company",
+    options: [
+      { value: "Ford", label: "Ford" },
+      { value: "Honda", label: "Honda" },
+      { value: "Hyundai", label: "Hyundai" },
+      { value: "Kia", label: "Kia" },
+      { value: "Mahindra", label: "Mahindra" },
+      { value: "Maruti Suzuki", label: "Maruti Suzuki" },
+      { value: "Skoda", label: "Skoda" },
+      { value: "Tata Motors", label: "Tata" },
+      { value: "Toyota", label: "Toyota" },
+      { value: "Volkswagen", label: "Volkswagen" },
+    ],
+  },
+  {
+    name: "modelName",
+    type: "select",
+    placeholder: "Car Model",
+    options: [
+      { value: "Renault Kwid", label: "Renault Kwid" },
+      { value: "Datsun Redi-GO", label: "Datsun Redi-GO" },
+      { value: "Maruti Suzuki S-Presso", label: "Maruti Suzuki S-Presso" },
+    ],
+  },
+  {
+    name: "modelYear",
+    type: "select",
+    placeholder: "Model Year",
+    options: [
+      { value: "2022 - 2024", label: "2022 - 2024" },
+      { value: "2019 - 2021", label: "2019 - 2021" },
+      { value: "2016 - 2018", label: "2016 - 2018" },
+      { value: "2013 - 2015", label: "2013 - 2015" },
+      { value: "Before - 2013", label: "Before - 2013" },
+    ],
+  },
+];
+
+export const bikeFilter = [
+  {
+    name: "company",
+    type: "select",
+    placeholder: "Company",
+    options: [
+      { value: "Bajaj", label: "Bajaj" },
+      { value: "Hero", label: "Hero" },
+      { value: "Honda", label: "Honda" },
+      { value: "Royal Enfield", label: "Royal Enfield" },
+      { value: "TVS", label: "TVS" },
+      { value: "Yamaha", label: "Yamaha" },
+      { value: "Suzuki", label: "Suzuki" },
+      { value: "KTM", label: "KTM" },
+      { value: "Mahindra", label: "Mahindra" },
+      { value: "Jawa", label: "Jawa" },
+    ],
+  },
+  {
+    name: "modelName",
+    type: "select",
+    placeholder: "Bike Model",
+    options: [
+      // Bajaj Models
+      { value: "Pulsar", label: "Pulsar" },
+      { value: "Dominar", label: "Dominar" },
+      { value: "Avenger", label: "Avenger" },
+      // Hero Models
+      { value: "Splendor", label: "Splendor" },
+      { value: "Glamour", label: "Glamour" },
+      { value: "Xtreme", label: "Xtreme" },
+      // Honda Models
+      { value: "CB Shine", label: "CB Shine" },
+      { value: "Unicorn", label: "Unicorn" },
+      { value: "Hornet", label: "Hornet" },
+      // Royal Enfield Models
+      { value: "Classic 350", label: "Classic 350" },
+      { value: "Bullet 350", label: "Bullet 350" },
+      { value: "Meteor 350", label: "Meteor 350" },
+      // TVS Models
+      { value: "Apache", label: "Apache" },
+      { value: "Jupiter", label: "Jupiter" },
+      { value: "Star City", label: "Star City" },
+      // Yamaha Models
+      { value: "FZ", label: "FZ" },
+      { value: "R15", label: "R15" },
+      { value: "Fascino", label: "Fascino" },
+      // Suzuki Models
+      { value: "Gixxer", label: "Gixxer" },
+      { value: "Access", label: "Access" },
+      { value: "Intruder", label: "Intruder" },
+      // KTM Models
+      { value: "Duke", label: "Duke" },
+      { value: "RC", label: "RC" },
+      { value: "Adventure", label: "Adventure" },
+      // Mahindra Models
+      { value: "Mojo", label: "Mojo" },
+      { value: "Centuro", label: "Centuro" },
+      { value: "Gusto", label: "Gusto" },
+      // Jawa Models
+      { value: "Jawa 42", label: "Jawa 42" },
+      { value: "Perak", label: "Perak" },
+      { value: "Jawa", label: "Jawa" },
+    ],
+  },
+  {
+    name: "modelYear",
+    type: "select",
+    placeholder: "Model Year",
+    options: [
+      { value: "2022 - 2024", label: "2022 - 2024" },
+      { value: "2019 - 2021", label: "2019 - 2021" },
+      { value: "2016 - 2018", label: "2016 - 2018" },
+      { value: "2013 - 2015", label: "2013 - 2015" },
+      { value: "Before - 2013", label: "Before - 2013" },
+    ],
+  },
+];

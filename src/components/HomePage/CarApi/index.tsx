@@ -1,24 +1,45 @@
 import React, { useEffect, useState } from "react";
 import instance from "@/network/axios";
 import Cookies from "universal-cookie";
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
+import { useFilter } from "@/context/FilterContext"; // Import the custom hook
 
-const CarApi = ({ selectedOptions, initial, setCars }) => {
+interface SelectedOptions {
+  priceRange?: [number, number];
+  carType?: string[];
+  color?: string[];
+  company?: string;
+  modelName?: string;
+  modelYear?: string;
+  transmission?: string[];
+}
+
+interface CarApiProps {
+  selectedOptions: SelectedOptions;
+  initial: boolean;
+  setCars: (cars: any[]) => void;
+}
+
+const CarApi: React.FC<CarApiProps> = ({ selectedOptions, initial, setCars }) => {
+  const { activeFilter } = useFilter(); // Use the custom hook to get activeFilter
   const [storeInitialValue, setStoreInitialValue] = useState(false);
-  const [payload, setPayload] = useState({});
+  const [payload, setPayload] = useState<any>({});
   const [text, setText] = useState("Apply Filter");
+  const [loading, setLoading] = useState(false); // Added loading state
   const cookies = new Cookies();
   let token = cookies.get("authToken");
 
   useEffect(() => {
-    console.log(selectedOptions)
     setStoreInitialValue(initial);
     if (initial) {
       setText(" ");
     }
-  }, [initial]);
+  }, [initial, activeFilter]);
+
 
   useEffect(() => {
+    console.log("jenf222lorem ipus")
+    console.log(activeFilter,"ehwiohfiehuwiuuuuuuuuuuuuuuuuuuuu")
     if (storeInitialValue) {
       setPayload({});
     } else {
@@ -26,8 +47,6 @@ const CarApi = ({ selectedOptions, initial, setCars }) => {
 
       if (selectedOptions?.priceRange) {
         updatedPayload.priceMax = selectedOptions.priceRange[1];
-      }
-      if (selectedOptions?.priceRange) {
         updatedPayload.priceMin = selectedOptions.priceRange[0];
       }
       if (selectedOptions?.carType?.length) {
@@ -36,13 +55,13 @@ const CarApi = ({ selectedOptions, initial, setCars }) => {
       if (selectedOptions?.color?.length) {
         updatedPayload.color = selectedOptions.color;
       }
-      if (selectedOptions?.company?.length) {
+      if (selectedOptions?.company) {
         updatedPayload.company = selectedOptions.company;
       }
       if (selectedOptions?.modelName) {
         updatedPayload.modelName = selectedOptions.modelName;
       }
-      if (selectedOptions?.modelYear?.length) {
+      if (selectedOptions?.modelYear) {
         updatedPayload.modelYear = selectedOptions.modelYear;
       }
       if (selectedOptions?.transmission?.length) {
@@ -51,11 +70,13 @@ const CarApi = ({ selectedOptions, initial, setCars }) => {
 
       setPayload(updatedPayload);
     }
-  }, [selectedOptions, initial]);
+  }, [selectedOptions, initial, activeFilter]);
 
-  const ApplyFilterApiCall = async () => {
+  const applyFilterApiCall = async () => {
+    setLoading(true); // Set loading to true
     try {
-      const response = await instance.post("/api/cars/all", payload, {
+      const endpoint = activeFilter === "car" ? "/api/cars/all" : "/api/bikes/all"; // Conditional endpoint
+      const response = await instance.post(endpoint, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -65,33 +86,32 @@ const CarApi = ({ selectedOptions, initial, setCars }) => {
       setStoreInitialValue(false);
     } catch (error) {
       console.error("Error applying filters:", error);
-
-      if(!initial && error.response.status == 404){
-        console.error("No cars found matching the selected criteria.")
-        toast.error("No cars found matching the selected criteria.")
+      if (!initial && error.response?.status === 404) {
+        toast.error("No items found matching the selected criteria.");
         setCars([]);
-      }else{
-        console.log("No cars found")
+      } else {
+        toast.error("An unexpected error occurred.");
       }
+    } finally {
+      setLoading(false); // Set loading to false
     }
   };
 
   const handleApply = () => {
-    ApplyFilterApiCall();
+    applyFilterApiCall();
   };
 
   useEffect(() => {
     if (storeInitialValue === true) {
-      ApplyFilterApiCall();
+      applyFilterApiCall();
     }
-  }, [storeInitialValue]);
+  }, [storeInitialValue, activeFilter]);
 
   return (
     <>
-      <div onClick={handleApply} >
+      <div onClick={handleApply} className={`apply-filter-button ${loading ? 'loading' : ''}`}>
         {text}
       </div>
-      {/* <ToastContainer/> */}
     </>
   );
 };

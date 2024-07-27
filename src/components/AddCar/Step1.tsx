@@ -57,7 +57,7 @@ const Step1: React.FC<Step1Props> = ({
   // console.log(carData?.images,"scratchAndDentImagePreview")
   const initialValues = {
     description: stepsData?.description || carData?.description || "",
-    scratchAndDentImage: stepsData?.scratchAndDentImage || carData?.scratchAndDentDetails?.scratchAndDentImage || "",
+    scratchAndDentImage: stepsData?.scratchAndDentImage || carData?.scratchAndDentDetails?.image || "",
     scratchAndDentDescription: stepsData?.scratchAndDentDescription || carData?.scratchAndDentDetails?.description || "",
     insuranceValidity: formatRegistrationDate(stepsData?.insuranceValidity || carData?.insuranceValidity),
     ...fields.reduce((acc, field) => {
