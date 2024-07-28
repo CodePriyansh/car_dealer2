@@ -313,7 +313,6 @@ export const AddBikeFields = [
   },
 ];
 
-
 export const carFilter = [
   {
     name: "company",
@@ -431,6 +430,115 @@ export const bikeFilter = [
       { value: "2016 - 2018", label: "2016 - 2018" },
       { value: "2013 - 2015", label: "2013 - 2015" },
       { value: "Before - 2013", label: "Before - 2013" },
+    ],
+  },
+];
+
+export const bikeDrawerFilters = [
+  {
+    filterName: "company",
+    label: "company",
+    filters: [
+      "Bajaj",
+      "Hero",
+      "Honda",
+      "Royal Enfield",
+      "TVS",
+      "Yamaha",
+      "Suzuki",
+      "KTM",
+      "Mahindra",
+      "Jawa",
+    ],
+  },
+  {
+    filterName: "modelYear",
+    label: "Model Year",
+    filters: [
+      "2022 - 2024",
+      "2019 - 2021",
+      "2016 - 2018",
+      "2013 - 2015",
+      "Before - 2013",
+    ],
+  },
+  {
+    filterName: "color",
+    label: "color",
+    filters: [
+      "Red",
+      "Blue",
+      "Black",
+      "White",
+      "Silver",
+      "Gray",
+      "Green",
+      "Yellow",
+      "Orange",
+    ],
+  },
+];
+
+export const carDrawerFilters = [
+  {
+    filterName: "company",
+    label: "company",
+    filters: [
+      "Ford",
+      "Honda",
+      "Hyundai",
+      "Kia",
+      "Mahindra",
+      "Skoda",
+      "Suzuki",
+      "Tata Motors",
+      "Toyota",
+      "Volkswagen",
+    ],
+  },
+  {
+    filterName: "modelYear",
+    label: "Model Year",
+    filters: [
+      "2022 - 2024",
+      "2019 - 2021",
+      "2016 - 2018",
+      "2013 - 2015",
+      "Before - 2013",
+    ],
+  },
+  {
+    filterName: "color",
+    label: "color",
+    filters: [
+      "Red",
+      "Blue",
+      "Black",
+      "White",
+      "Silver",
+      "Gray",
+      "Green",
+      "Yellow",
+      "Orange",
+    ],
+  },
+  {
+    filterName: "transmission",
+    label: "transmission",
+    filters: ["Manual", "Automatic"],
+  },
+  {
+    filterName: "carType",
+    label: "Car Type",
+    filters: [
+      "Compact SUV",
+      "Coupe",
+      "Crossover SUV",
+      "Hatchback",
+      "Pickup",
+      "Sedan",
+      "SUV",
+      "Van",
     ],
   },
 ];

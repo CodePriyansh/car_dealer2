@@ -30,7 +30,7 @@ const AddBikeForm: React.FC<AddBikeProps> = ({ bikeData }) => {
   );
   const [videoPreview, setVideoPreview] = useState(bikeData?.video);
   console.log(bikeData, "oeihehrh");
-   const cookies = new Cookies()
+  const cookies = new Cookies();
   const formatYearOfManufacture = (date: any) => {
     if (!date) return "";
     const d = new Date(date);
@@ -38,7 +38,7 @@ const AddBikeForm: React.FC<AddBikeProps> = ({ bikeData }) => {
       .toString()
       .padStart(2, "0")}`;
   };
-  const router = useRouter()
+  const router = useRouter();
   const formatRegistrationDate = (date: any) => {
     if (!date) return "";
     const d = new Date(date);
@@ -55,12 +55,11 @@ const AddBikeForm: React.FC<AddBikeProps> = ({ bikeData }) => {
   // console.log(bikeData?.images,"scratchAndDentImagePreview")
   const initialValues = {
     description: bikeData?.description || "",
-    scratchAndDentImage:
-      bikeData?.scratchAndDentDetails?.image || "",
+    scratchAndDentImage: bikeData?.scratchAndDentDetails?.image || "",
     scratchAndDentDescription:
       bikeData?.scratchAndDentDetails?.description || "",
-      bikeImages: bikeData?.bikeImages || [],
-      video: bikeData?.video || null,
+    bikeImages: bikeData?.bikeImages || [],
+    video: bikeData?.video || null,
     insuranceValidity: formatRegistrationDate(bikeData?.insuranceValidity),
     ...fields.reduce((acc, field) => {
       if (field.name === "yearOfManufacture") {
@@ -129,46 +128,58 @@ const AddBikeForm: React.FC<AddBikeProps> = ({ bikeData }) => {
         Yup.string().required("Enter Insurance Validity Date is required"),
     }),
   });
+
+  useEffect(() => {
+    // Clean up object URLs to prevent memory leaks
+    return () => {
+      bikeImagesPreview.forEach((url) => URL.revokeObjectURL(url));
+      if (videoPreview) URL.revokeObjectURL(videoPreview);
+    };
+  }, [bikeImagesPreview, videoPreview]);
   const handleSubmit = async (values: any, { setSubmitting }) => {
     try {
       const formData = new FormData();
-      
+
       // Combine values with any other data you need to send
       const allData = { ...values };
-  
+
       Object.keys(allData).forEach((key) => {
         if (key === "bikeImages") {
           if (Array.isArray(allData[key])) {
             allData[key].forEach((file, index) => {
               if (file instanceof File) {
                 formData.append(`bikeImages`, file);
-              } else if (typeof file === 'string') {
+              } else if (typeof file === "string") {
                 formData.append(`bikeImages`, file);
               }
             });
           }
         } else if (allData[key] instanceof File) {
           formData.append(key, allData[key]);
-        } else if (typeof allData[key] === 'object' && allData[key] !== null) {
+        } else if (typeof allData[key] === "object" && allData[key] !== null) {
           formData.append(key, JSON.stringify(allData[key]));
         } else {
           formData.append(key, allData[key]);
         }
       });
-  
+
       console.log(formData);
-  
+
       let token = cookies.get("token");
       let response;
-  
+
       if (bikeData) {
         // Edit existing bike
-        response = await instance.put(`/api/bikes/update/${bikeData._id}`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        response = await instance.put(
+          `/api/bikes/update/${bikeData._id}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
       } else {
         // Add new bike
         response = await instance.post("/api/bikes/addbike", formData, {
@@ -178,7 +189,7 @@ const AddBikeForm: React.FC<AddBikeProps> = ({ bikeData }) => {
           },
         });
       }
-  
+
       if (response.status === 200) {
         toast.success(response.data.message);
         // router.push("/");
@@ -236,14 +247,14 @@ const AddBikeForm: React.FC<AddBikeProps> = ({ bikeData }) => {
           "video/x-msvideo",
           "video/x-ms-wmv",
         ];
-  
+
         if (!supportedVideoTypes.includes(files[0].type)) {
           toast.error(
             "Unsupported video format. Please upload a supported format."
           );
           return;
         }
-  
+
         setFieldValue(fieldName, files[0]);
         const previewUrl = URL.createObjectURL(files[0]);
         setVideoPreview(previewUrl);
@@ -255,11 +266,11 @@ const AddBikeForm: React.FC<AddBikeProps> = ({ bikeData }) => {
       }
     }
   };
-  
+
   const handleDeleteBikeImage = (index, setFieldValue) => {
     setBikeImagesPreview((prev) => prev.filter((_, i) => i !== index));
     setFieldValue("bikeImages", (prev) => prev.filter((_, i) => i !== index));
-  
+
     if (bikeImagesRef.current) {
       bikeImagesRef.current.value = "";
     }
@@ -553,7 +564,6 @@ const AddBikeForm: React.FC<AddBikeProps> = ({ bikeData }) => {
                           alt="plus"
                           width={20}
                           height={20}
-                          
                           className={styles.step2_btn_img}
                         />
                         Add Video

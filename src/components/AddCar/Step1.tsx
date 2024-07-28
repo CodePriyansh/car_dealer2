@@ -28,7 +28,9 @@ const Step1: React.FC<Step1Props> = ({
 }) => {
   const profileImageInputRef = useRef<HTMLInputElement | null>(null);
   const [scratchAndDentImagePreview, setScratchAndDentImagePreview] = useState<string | null>(
-    stepsData?.scratchAndDentImage ? URL.createObjectURL(stepsData.scratchAndDentImage) : carData?.scratchAndDentDetails?.image || null
+    typeof stepsData?.scratchAndDentImage === "object" 
+      ? URL.createObjectURL(stepsData.scratchAndDentImage) 
+      : carData?.scratchAndDentDetails?.image || null
   );
   
   console.log(carData, "oeihehrh");

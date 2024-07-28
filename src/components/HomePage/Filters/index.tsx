@@ -90,6 +90,12 @@ function Filters({ setCars, setCarNotFoundtext }) {
     }));
   }, [updatedPriceRange]);
 
+
+  useEffect(() => {
+    setUpdatedPriceRange([0, 2500000])
+  }, [activeFilter]);
+  
+
   return (
     <>
       {clickMobileClear && (

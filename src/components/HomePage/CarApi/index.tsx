@@ -55,13 +55,13 @@ const CarApi: React.FC<CarApiProps> = ({ selectedOptions, initial, setCars }) =>
       if (selectedOptions?.color?.length) {
         updatedPayload.color = selectedOptions.color;
       }
-      if (selectedOptions?.company) {
+      if (selectedOptions?.company?.length) {
         updatedPayload.company = selectedOptions.company;
       }
       if (selectedOptions?.modelName) {
         updatedPayload.modelName = selectedOptions.modelName;
       }
-      if (selectedOptions?.modelYear) {
+      if (selectedOptions?.modelYear?.length) {
         updatedPayload.modelYear = selectedOptions.modelYear;
       }
       if (selectedOptions?.transmission?.length) {

@@ -225,7 +225,7 @@ const Step2: React.FC<Step2Props> = ({
       if (response.status === 200) {
         setShowActiveStep((prevStep) => prevStep + 1);
         toast.success(response.data.message);
-        // router.push("/");
+        router.push("/");
       }
     } catch (error) {
       console.error("API Error:", error);
