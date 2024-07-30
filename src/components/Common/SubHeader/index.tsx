@@ -64,6 +64,7 @@ export default function SubHeader({
           openDrawer={openDrawer}
           setOpenDrawer={setOpenDrawer}
           setCars={setCars}
+          setCarNotFoundtext={setCarNotFoundtext}
         />
       )}
 

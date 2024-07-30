@@ -93,13 +93,21 @@ function Filters({ setCars, setCarNotFoundtext }) {
 
   useEffect(() => {
     setUpdatedPriceRange([0, 2500000])
+    setSelectedOptions({
+      carType: [],
+      color: [],
+      priceRange: updatedPriceRange,
+      modelName: "",
+      company: "",
+      modelYear: "",
+    });
   }, [activeFilter]);
   
 
   return (
     <>
       {clickMobileClear && (
-        <CarApi selectedOptions={null} initial={true} setCars={setCars} />
+        <CarApi setCarNotFoundtext={setCarNotFoundtext} selectedOptions={null} initial={true} setCars={setCars} />
       )}
       <SubHeader
         setCars={setCars}
@@ -124,7 +132,7 @@ function Filters({ setCars, setCarNotFoundtext }) {
                 otherStyles="absolute top-0 right-0 !rounded-[10px] !py-2"
                 onclick={() => setClickWebClear(false)}
               >
-                <CarApi
+                <CarApi setCarNotFoundtext={setCarNotFoundtext}
                   selectedOptions={selectedOptions}
                   initial={false}
                   setCars={setCars}

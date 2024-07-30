@@ -41,7 +41,7 @@ function SearchBar({ setCars, setCarNotFoundtext }) {
     } catch (error) {
       if (error.response.status == 404) {
         setCars([]);
-        setCarNotFoundtext(`Cars not found for ${searchTerm}`);
+        setCarNotFoundtext(`${activeFilter.toUpperCase()}s not found for ${searchTerm}`);
         console.error("Error applying filters:", error);
       }
     }

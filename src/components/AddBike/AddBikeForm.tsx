@@ -142,7 +142,7 @@ const AddBikeForm: React.FC<AddBikeProps> = ({ bikeData }) => {
 
       // Combine values with any other data you need to send
       const allData = { ...values };
-
+      console.log(values, "values");
       Object.keys(allData).forEach((key) => {
         if (key === "bikeImages") {
           if (Array.isArray(allData[key])) {
@@ -192,7 +192,7 @@ const AddBikeForm: React.FC<AddBikeProps> = ({ bikeData }) => {
 
       if (response.status === 200) {
         toast.success(response.data.message);
-        // router.push("/");
+        router.push("/");
       }
     } catch (error) {
       console.error("API Error:", error);
@@ -267,14 +267,26 @@ const AddBikeForm: React.FC<AddBikeProps> = ({ bikeData }) => {
     }
   };
 
-  const handleDeleteBikeImage = (index, setFieldValue) => {
+  const handleDeleteBikeImage = (index, setFieldValue, e, images) => {
+    console.log(images)
+    e.preventDefault();
+    e.stopPropagation();
+  
     setBikeImagesPreview((prev) => prev.filter((_, i) => i !== index));
-    setFieldValue("bikeImages", (prev) => prev.filter((_, i) => i !== index));
-
+    // Update the form values
+    setFieldValue("bikeImages", (prevImages) => {
+      console.log(prevImages,"preparing")
+      if (Array.isArray(prevImages)) {
+        return prevImages.filter((_, i) => i !== index);
+      }
+      return prevImages;
+    });
+  
     if (bikeImagesRef.current) {
       bikeImagesRef.current.value = "";
     }
   };
+  
 
   const handleImageChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -309,7 +321,7 @@ const AddBikeForm: React.FC<AddBikeProps> = ({ bikeData }) => {
     //   console.log("ekf")
     //   URL.revokeObjectURL(scratchAndDentImagePreview);
     // }
-  }, [scratchAndDentImagePreview, bikeData]);
+  }, []);
   return (
     <div>
       {/* <ToastContainer /> */}
@@ -502,8 +514,8 @@ const AddBikeForm: React.FC<AddBikeProps> = ({ bikeData }) => {
                             />
                             <button
                               className="text-black bg-white rounded-full text-[24px] font-semibold absolute top-0 right-2 rotate-45"
-                              onClick={() =>
-                                handleDeleteBikeImage(index, setFieldValue)
+                              onClick={(e) =>
+                                handleDeleteBikeImage(index, setFieldValue, e, values.bikeImages)
                               }
                             >
                               <FaCross />

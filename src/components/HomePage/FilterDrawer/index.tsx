@@ -11,7 +11,7 @@ import CarApi from "../CarApi/index";
 import { useFilter } from "@/context/FilterContext";
 import { bikeDrawerFilters, carDrawerFilters } from "@/constants/formFields";
 
-export default function FilterDrawer({ setOpenDrawer, openDrawer,setCars }) {
+export default function FilterDrawer({ setOpenDrawer, openDrawer,setCars, setCarNotFoundtext }) {
   const cookies = new Cookies();
   const [isOpen, setIsOpen] = React.useState(true);
   const [updatedPriceRange, setUpdatedPriceRange] = React.useState([0, 2500000]);
@@ -49,7 +49,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer,setCars }) {
     setUpdatedPriceRange([0, 2500000]);
   };
   React.useEffect(() => {
-    setUpdatedPriceRange([0, 2500000])
+    handleClearFilters
   }, [activeFilter]);
    React.useEffect(() => {
     setSelectedFilters((prevFilters) => ({
@@ -117,7 +117,7 @@ export default function FilterDrawer({ setOpenDrawer, openDrawer,setCars }) {
                   setIsOpen(false)
                   setOpenDrawer(false)
                 }}>
-            <CarApi selectedOptions={selectedFilters} initial={false} setCars={setCars} />
+            <CarApi setCarNotFoundtext={setCarNotFoundtext} selectedOptions={selectedFilters} initial={false} setCars={setCars} />
               </Button>
             </div>
           </div>

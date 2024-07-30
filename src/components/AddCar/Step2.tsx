@@ -172,6 +172,7 @@ const Step2: React.FC<Step2Props> = ({
 
   const handleSubmit = async (values, { setSubmitting }) => {
     console.log(values, "values");
+    console.log(stepsData)
     try {
       const formData = new FormData();
       
@@ -353,7 +354,9 @@ const Step2: React.FC<Step2Props> = ({
     }
   };
 
-  const handleDeleteInteriorImage = (index, setFieldValue) => {
+  const handleDeleteInteriorImage = (index, setFieldValue,e) => {
+    e.preventDefault();
+    e.stopPropagation();
     setInteriorImagesPreview((prev) => prev.filter((_, i) => i !== index));
     setFieldValue((prev) => prev.filter((_, i) => i !== index));
 
@@ -542,8 +545,8 @@ const Step2: React.FC<Step2Props> = ({
                             />
                             <button
                               className="text-black bg-white rounded-full text-[24px] font-semibold absolute top-0 right-2 rotate-45"
-                              onClick={() =>
-                                handleDeleteInteriorImage(index, setFieldValue)
+                              onClick={(e) =>
+                                handleDeleteInteriorImage(index, setFieldValue, e)
                               }
                             >
                               <FaCross></FaCross>

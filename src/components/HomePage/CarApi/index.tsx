@@ -20,7 +20,7 @@ interface CarApiProps {
   setCars: (cars: any[]) => void;
 }
 
-const CarApi: React.FC<CarApiProps> = ({ selectedOptions, initial, setCars }) => {
+const CarApi: React.FC<CarApiProps> = ({ selectedOptions, initial, setCars, setCarNotFoundtext }) => {
   const { activeFilter } = useFilter(); // Use the custom hook to get activeFilter
   const [storeInitialValue, setStoreInitialValue] = useState(false);
   const [payload, setPayload] = useState<any>({});
@@ -84,6 +84,10 @@ const CarApi: React.FC<CarApiProps> = ({ selectedOptions, initial, setCars }) =>
       });
       setCars(response?.data?.data);
       setStoreInitialValue(false);
+      console.log(response?.data?.data,"yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
+      if(!response?.data?.data.length)
+      setCarNotFoundtext("No items found matching the selected criteria.")
+
     } catch (error) {
       console.error("Error applying filters:", error);
       if (!initial && error.response?.status === 404) {
