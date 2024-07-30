@@ -54,7 +54,7 @@ const AddCarForm = ({ params }: { params: { id: string } }) => {
   const handleBack = () => {
     if (showActiveStep === 2) {
       setShowActiveStep(1);
-    } else if (showActiveStep === 1 && step1DataFilled) {
+    } else if (showActiveStep === 1 && step1DataFilled && !carId) {
       if (window.confirm("Are you sure you want to go back? You will lose your entered data.")) {
         router.back();
       }
