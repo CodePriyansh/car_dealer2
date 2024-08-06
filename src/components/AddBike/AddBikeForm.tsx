@@ -192,7 +192,7 @@ const AddBikeForm: React.FC<AddBikeProps> = ({ bikeData }) => {
 
       if (response.status === 200) {
         toast.success(response.data.message);
-        router.push("/");
+        // router.push("/");
       }
     } catch (error) {
       console.error("API Error:", error);
@@ -228,7 +228,7 @@ const AddBikeForm: React.FC<AddBikeProps> = ({ bikeData }) => {
     }
   };
 
-  const handleFileChange = (setFieldValue, fieldName, event) => {
+  const handleFileChange = (setFieldValue, fieldName, event,values:any = undefined) => {
     const files = event.currentTarget.files;
     if (files && files.length > 0) {
       if (fieldName === "video") {
@@ -262,25 +262,23 @@ const AddBikeForm: React.FC<AddBikeProps> = ({ bikeData }) => {
         const fileList = Array.from(files);
         const filePreviews = fileList.map((file) => URL.createObjectURL(file));
         setBikeImagesPreview((prev) => [...prev, ...filePreviews]);
-        setFieldValue(fieldName, [...bikeImagesPreview, ...fileList]);
+        setFieldValue(fieldName, [...values, ...fileList]);
       }
     }
   };
 
   const handleDeleteBikeImage = (index, setFieldValue, e, images) => {
-    console.log(images)
     e.preventDefault();
     e.stopPropagation();
   
     setBikeImagesPreview((prev) => prev.filter((_, i) => i !== index));
+  
     // Update the form values
-    setFieldValue("bikeImages", (prevImages) => {
-      console.log(prevImages,"preparing")
-      if (Array.isArray(prevImages)) {
-        return prevImages.filter((_, i) => i !== index);
-      }
-      return prevImages;
-    });
+    const updatedImages = Array.isArray(images) 
+      ? images.filter((_, i) => i !== index) 
+      : [];
+    
+    setFieldValue("bikeImages", updatedImages);
   
     if (bikeImagesRef.current) {
       bikeImagesRef.current.value = "";
@@ -492,7 +490,7 @@ const AddBikeForm: React.FC<AddBikeProps> = ({ bikeData }) => {
                       accept="image/*"
                       ref={bikeImagesRef}
                       onChange={(event) =>
-                        handleFileChange(setFieldValue, "bikeImages", event)
+                        handleFileChange(setFieldValue, "bikeImages", event, values.bikeImages)
                       }
                     />
                   </div>

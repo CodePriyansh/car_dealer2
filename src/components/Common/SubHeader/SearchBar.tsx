@@ -38,11 +38,17 @@ function SearchBar({ setCars, setCarNotFoundtext }) {
         }
       );
       setCars(response?.data?.data);
+      if(!response?.data?.data.length)
+        setCarNotFoundtext("No items found matching the selected criteria.")
     } catch (error) {
       if (error.response.status == 404) {
         setCars([]);
         setCarNotFoundtext(`${activeFilter.toUpperCase()}s not found for ${searchTerm}`);
         console.error("Error applying filters:", error);
+      }else{
+        console.error("Error fetching data:", error);
+        setCars([]);
+        setCarNotFoundtext("An error occurred while fetching data.");
       }
     }
   };

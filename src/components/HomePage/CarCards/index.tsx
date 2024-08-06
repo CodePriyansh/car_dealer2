@@ -17,10 +17,6 @@ export default function CarCards({ item, onDelete }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogType, setDialogType] = useState('');
 
-  const handleClick = () => {
-    router.push(`/${activeFilter}_details/${item._id}`);
-  };
-
   const handleDelete = async (itemId) => {
     try {
       const response = await instance.delete(`/api/${activeFilter}s/delete/${itemId}`);

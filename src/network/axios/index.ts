@@ -8,7 +8,7 @@ const API_SECRET = process.env.NEXT_PUBLIC_API_SECRET; // Ensure this environmen
 console.log(process.env.NEXT_PUBLIC_API_BASE_URL, "public");
 
 const instance = axios.create({
-  baseURL: 'http://192.168.29.165:8000/', // Replace with your API base URL
+  baseURL: 'http://192.168.29.90:8000/', // Replace with your API base URL
 });
 
 // Add a request interceptor

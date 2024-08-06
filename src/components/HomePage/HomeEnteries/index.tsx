@@ -13,12 +13,14 @@ import { useFilter } from "@/context/FilterContext";
 const HomeEnteries = () => {
   const showPlanExpiredBanner = false;
   const [cars, setCars] = useState([]);
-  const [carNotFoundtext, setCarNotFoundtext] = useState("There Is No Car Added");
   const { activeFilter } = useFilter();
+  console.log(activeFilter,"woiefwoiewgioegiorrrrrrrrrrrrrrrrrrrrrrrr")
+
+  const [carNotFoundtext, setCarNotFoundtext] = useState(``);
   const router = useRouter();
 
   useEffect(() => {
-    // Fetch data based on the activeFilter
+    setCarNotFoundtext(`There Is No ${activeFilter.toUpperCase()} Added`);
   }, [activeFilter]);
 
   const handleDeleteCar = (carId) => {
